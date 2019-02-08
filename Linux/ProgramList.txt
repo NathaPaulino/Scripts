@@ -1,0 +1,70 @@
+Lista de Programas
+
+------------------------------------------------------------------
+Parte 1
+------------------------------------------------------------------
+Flash Player 9.0
+Node.js
+Npm
+Alien
+Curl
+Git
+Atom
+Cmake
+Compilador Haskell
+Freeglut
+G++
+Gcc
+Gedit
+GIMP
+Golang
+Google Chrome
+Interpretador Prolog
+JDK 8
+JDK 11
+Java3D
+LibreOffice
+Mozilla Firefox
+Octave
+Anaconda (Python)
+Qt
+R
+TexStudio
+Grub Customizer
+------------------------------------------------------------------
+Parte 2
+------------------------------------------------------------------
+OpenCV
+NetBeans
+Cisco Packett Tracer
+FileZilla
+VSCode
+Blender
+SQLDeveloper
+Gradle Support (Plugin NetBeans)
+Eletric
+PostgreSQL
+IBM ILOG CPLEX
+XMind
+------------------------------------------------------------------
+Parte 3
+------------------------------------------------------------------
+Arduino IDE
+Arquivos Eletrônica
+CodeBlocks
+Eclipse
+MongoDB
+MyOpenLab
+NetLogo
+Pentaho
+Pinta
+Portugol Studio
+Project Libre
+Robo 3T
+RPGBoss
+RStudio
+Scilab
+Virtualbox
+VLC
+Wireshark
+XAMP
