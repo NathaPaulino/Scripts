@@ -21,11 +21,11 @@ Golang
 Google Chrome
 Interpretador Prolog
 JDK 8
-JDK 11
+JDK 11				(Erro de permissão)
 Java3D
 LibreOffice
 Mozilla Firefox
-Octave
+Octave				(Roda até o Octave)
 Anaconda (Python)
 Qt
 R

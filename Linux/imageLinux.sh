@@ -3,8 +3,9 @@
 # Script de criação de imagem para Ubuntu 18.04.
 # ProgramList.txt contém todos os programas a serem instalados separados em partes que são referenciadas nos commits.
 # Apresenta funções e trechos devidamente comentados. 
-# Versão de teste 1.0 - Versões otimizadas serão postadas futuramente. 
-
+# Versão de teste 1.1 - Versões otimizadas serão postadas futuramente. 
+# Linhas 291 a 295 com problemas: Permissão negada. (Iniciar script como super usuário)
+#
 # Funções Gerais
 #----------------------------------------------------------------------------------
 #Função atualizar: Atualiza todos os repositórios e pacotes.
@@ -46,7 +47,7 @@ atualizar
 
 #Flash Player
 echo "Instalando Flash Player..."
-  if ! sudo sh -c "echo 'deb http://archive.canonical.com/ubuntu $(lsb_release -cs) partner' >> /etc/apt/sources.list"
+  if ! sudo sh -c "echo 'deb http://archive.canonical.com/ubuntu $(lsb_release -cs) partner' >> /etc/apt/sources.list" -y
   then
     echo "Não foi possível instalar o Flash Player."
     exit 1
@@ -136,7 +137,7 @@ echo "Instalando o Cmake..."
     exit 1
   fi
 cd cmake-3.12.4/
-  if ! (./bootstrap && make && make install)
+  if ! (sudo ./bootstrap && sudo make && sudo make install)
   then
     echo "Não foi possível instalar o Cmake."
     exit 1
@@ -157,7 +158,7 @@ echo "Compilador de Haskell instalado com sucesso!"
 #Freeglut
 atualizar
 echo "Instalando o Freeglut..."
-  if ! (sudo apt-get install sudo apt-get install freeglut3 freeglut3-dev libglew1.5-dev libglew-dev libsoil-dev libsdl2-dev libsdl2-mixer-dev -y)
+  if ! (sudo apt-get install freeglut3 freeglut3-dev libglew1.5-dev libglew-dev libsoil-dev libsdl2-dev libsdl2-mixer-dev -y)
   then
     echo "Não foi possível instalar o Freeglut."
     exit 1
@@ -229,12 +230,12 @@ then
   exit 1
 fi
 echo "Google Chrome instalado com sucesso!"
-rm google-chrome-stable_current_amd64.deb
+rm -rf google-chrome-stable_current_amd64.deb
 
 #Interpretador Prolog
 atualizar
 echo "Instalando o interpretador de Prolog..."
-  if ! (sudo apt-get install swipl -y)
+  if ! (sudo apt-get install swi-prolog -y)
   then
     echo "Não foi possível instalar o interpretador de Prolog."
     exit 1
@@ -250,13 +251,12 @@ echo "Instalando o JDK 8..."
      exit 1
   fi
   atualizar
-  if ! (sudo apt-get install oracle-java8-installer -y && sudo apt-get install oracle-java8-set-default)
+  if ! (sudo apt-get install oracle-java8-installer -y && sudo apt-get install oracle-java8-set-default -y)
   then
      echo "Não foi possível instalar JDK 8."
      exit 1
   fi
   echo "Verificando instalação"
-  java --version
 echo "JDK 8 instalado com sucesso!"
 
 #JDK 11 - Deixar pra mais tarde
@@ -264,35 +264,35 @@ echo "Instalando o JDK 11..."
 cd /tmp
   echo "Instalando pré-requisitos..."
     if ! (sudo wget --no-cookies --no-check-certificate --header "Cookie: oraclelicense=accept-securebackup-cookie" \
-    http://download.oracle.com/otn-pub/java/jdk/11+28/55eed80b163941c8885ad9298e6d786a/jdk-11_linux-x64_bin.deb)
+  http://download.oracle.com/otn-pub/java/jdk/11.0.2+9/f51449fcd52f4d52b93a989c5c56ed3c/jdk-11.0.2_linux-x64_bin.deb)
     then
       echo "Não foi possível instalar os pré-requisitos."
       exit 1
     fi
   echo "Pré-requisitos instalados com sucesso!"
-    if ! (sudo dpkg -i jdk-11_linux-x64_bin.deb)
+    if ! (sudo dpkg -i jdk-11.0.2_linux-x64_bin.deb)
     then
       echo "Não foi possível instalar o JDK 11."
       exit 1
     fi
   echo "Configurando o JDK 11..." #Nessa parte tem interação com usuário
-    if ! (sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/jdk-11/bin/java 2 && sudo update-alternatives --config java)
+    if ! (sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/jdk-11.0.2/bin/java 2 && sudo update-alternatives --config java)
     then
       echo "Não foi possível configurar o JDK 11."
       exit 1
     fi
-    sudo update-alternatives --install /usr/bin/jar jar /usr/lib/jvm/jdk-11/bin/jar 2
-    sudo update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/jdk-11/bin/javac 2
-    sudo update-alternatives --set jar /usr/lib/jvm/jdk-11/bin/jar
-    sudo update-alternatives --set javac /usr/lib/jvm/jdk-11/bin/javac
+    sudo update-alternatives --install /usr/bin/jar jar /usr/lib/jvm/jdk-11.0.2/bin/jar 2
+    sudo update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/jdk-11.0.2/bin/javac 2
+    sudo update-alternatives --set jar /usr/lib/jvm/jdk-11.0.2/bin/jar
+    sudo update-alternatives --set javac /usr/lib/jvm/jdk-11.0.2/bin/javac
   echo "Configuração realizada com sucesso!"
   java -version
   echo "Configurando variáveis de ambiente..."
-    sudo echo 'export J2SDKDIR=/usr/lib/jvm/java-11' >> /etc/profile.d/jdk.sh
-    sudo echo 'export J2REDIR=/usr/lib/jvm/java-11' >> /etc/profile.d/jdk.sh
-    sudo echo 'export PATH=$PATH:/usr/lib/jvm/java-11/bin:/usr/lib/jvm/java-11/db/bin' >> /etc/profile.d/jdk.sh
-    sudo echo 'export JAVA_HOME=/usr/lib/jvm/java-11' >> /etc/profile.d/jdk.sh
-    sudo echo 'export DERBY_HOME=/usr/lib/jvm/java-11/db' >> /etc/profile.d/jdk.sh
+    sudo echo 'export J2SDKDIR=/usr/lib/jvm/jdk-11.0.2' >> /etc/profile.d/jdk.sh
+    sudo echo 'export J2REDIR=/usr/lib/jvm/jdk-11.0.2' >> /etc/profile.d/jdk.sh
+    sudo echo 'export PATH=$PATH:/usr/lib/jvm/jdk-11.0.2/bin:/usr/lib/jvm/jdk-11.0.2/db/bin' >> /etc/profile.d/jdk.sh
+    sudo echo 'export JAVA_HOME=/usr/lib/jvm/jdk-11.0.2' >> /etc/profile.d/jdk.sh
+    sudo echo 'export DERBY_HOME=/usr/lib/jvm/jdk-11.0.2/db' >> /etc/profile.d/jdk.sh
     source /etc/profile.d/jdk.sh
   echo "Configuração de variáveis de ambiente realizada com sucesso!"
 echo "JDK 11 instalado com sucesso!"
@@ -311,7 +311,7 @@ echo "Java3D instalado com sucesso!"
 atualizar
 echo "Instalando o LibreOffice..."
   echo "Retirando LibreOffice que vem com o sistema operacional!"
-  if ! (sudo apt-get remove libreoffice-core --purge)
+  if ! (sudo apt-get remove libreoffice-core --purge -y)
   then
     echo "Não foi possível deinstalar o LibreOffice."
     exit 1
@@ -334,7 +334,7 @@ change
 atualizar
 echo "Instalando o Mozilla Firefox..."
 echo "Desinstalando o Mozilla Firefox que vem com o sistema Operacional!"
-  if ! (sudo apt-get remove firefox --purge)
+  if ! (sudo apt-get remove firefox --purge -y)
   then
     echo "Não foi possível desinstalar o Mozilla Firefox."
     exit 1
@@ -350,7 +350,7 @@ echo "Mozilla Firefox instalado com sucesso!"
 #Octave
 atualizar
 echo "Instalando o Octave..."
-  if ! (sudo apt-get install ocatave -y)
+  if ! (sudo apt-get install octave -y)
   then
     echo "Não foi possível instalar o Octave."
     exit 1
