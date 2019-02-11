@@ -3,8 +3,10 @@
 # Script de criação de imagem para Ubuntu 18.04.
 # ProgramList.txt contém todos os programas a serem instalados separados em partes que são referenciadas nos commits.
 # Apresenta funções e trechos devidamente comentados. 
-# Versão de teste 1.1 - Versões otimizadas serão postadas futuramente. 
+# Versão de teste 1.2 - Realizar teste da parte 1.Início da parte 3. 
+# Versões otimizadas serão postadas futuramente. 
 # Linhas 291 a 295 com problemas: Permissão negada. (Iniciar script como super usuário)
+# Descoberta do -C através do comando tar que permite escolher o diretório output
 #
 # Funções Gerais
 #----------------------------------------------------------------------------------
@@ -27,15 +29,16 @@ function atualizar(){
 }
 
 #Função change: Troca para o diretório padrão de Downloads.
- 
 function change(){
   cd /home/${USERNAME}/Downloads
 }
 
-#Função remover: Remove pacotes não mais necessários
+#Função remover: Remove pacotes não mais necessários.
 function remover(){
   sudo apt autoremove -y
 }
+
+
 #-------------------------------------------------------------------------------
 # Instalação de programas:
 
@@ -429,7 +432,7 @@ atualizar
 echo "Instalando o TexStudio..."
   if ! sudo apt-get install texstudio -y
   then
-    echo "Não foi possível instalar o TexStudo."
+    echo "Não foi possível instalar o TexStudio."
     exit 1
   fi
 echo "TexStudio instalado com sucesso!"
@@ -453,5 +456,98 @@ echo "Grub Customizer instalado com sucesso!"
 remover
 change
 
-echo "Sucesso ao terminar a primeira parte!"
-exit 0
+#-----------------------------------------------------------------------------
+# Parte 2: Programas com instalação complicada
+#-----------------------------------------------------------------------------
+
+#-----------------------------------------------------------------------------
+# Parte 3: Programas com instalação tranquila
+#-----------------------------------------------------------------------------
+
+atualizar
+change
+
+#Arduino IDE
+echo "Instalando o Arduino IDE..."
+  if ! (wget https://downloads.arduino.cc/arduino-1.8.8-linux64.tar.xz && tar xvf arduino-1.8.8-linux64.tar.xz)
+  then
+    echo "Não foi possível baixar o pacote do Arduino."
+    exit 1
+  fi
+  cd arduino*/
+  if ! (sudo sh ./install.sh)
+  then
+    echo "Não foi possível instalar o Arduino IDE."
+    exit 1
+  fi
+echo "Arduino IDE instalado com sucesso!"
+
+#Arquivos de Eletrônica
+
+#Codeblocks
+atualizar
+echo "Instalando o CodeBlocks..."
+  if ! sudo apt-get install codeblocks -y
+  then
+    echo "Não foi possível instalar o CodeBlocks."
+    exit 1
+  fi
+echo "CodeBlocks instalado com sucesso!"
+
+#Eclipse
+atualizar
+echo "Instalando o Eclipse..."
+  if ! sudo apt-get install eclipse -y
+  then
+    echo "Não foi possível instalar o Eclipse."
+    exit 1
+  fi
+echo "Eclipse instalado com sucesso!"
+
+#MongoDB
+atualizar
+echo "Instalando o MongoDB..."
+  if ! (sudo apt-get install mongodb -y && sudo systemctl status mongodb && mongo --eval 'db.runCOmmand({ connectionStatus: 1 })')
+  then
+    echo "Não foi possível instalar o MongoDB."
+    exit 1
+  fi
+echo "MongoDB instalado com sucesso!"
+
+#MyOpenLab
+change
+echo "Instalando o MyOpenLab..."
+  if ! (sudo wget https://myopenlab.org/distribution_linux_3.11.0.zip -y && unzip distribution_linux_3.11.0.zip -d distribution_linux_3.11.0)
+  then
+    echo "Não foi possível instalar o MongoDB."
+    exit 1
+  fi
+  cd distribution_linux_3.11.0/
+  if ! (sudo sh ./start_linux)
+  then
+    echo "Não foi possível instalar o MongoDB."
+    exit 1
+  fi
+  if ! (sudo update-java-alternatives --set \java-1.8.0-openjdk-$(dpkg --print-architecture))
+  then
+    echo "Não foi possível configurar o MongoDB para usar o JDK 8."
+    exit 1
+  fi 
+echo "MyOpenLab instalado com sucesso!"
+
+#NetLogo
+atualizar
+change
+echo "Instalando o NetLogo..."
+  if ! (sudo wget https://ccl.northwestern.edu/netlogo/6.0.4/NetLogo-6.0.4-64.tgz)
+  then
+    echo "Não foi possível baixar o tar do NetLogo."
+    exit 1
+  fi
+  if ! tar -xf NetLogo-6.0.4-64.tgz -C /home/${USERNAME}/ 
+  then
+    echo "Não foi possível extrair o tar do NetLogo."
+    exit 1
+  fi 
+#Criação do .desktop do NetLogo
+echo "NetLogo instalado com sucesso!"

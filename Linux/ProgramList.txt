@@ -50,12 +50,12 @@ XMind
 Parte 3
 ------------------------------------------------------------------
 Arduino IDE
-Arquivos Eletrônica
+Arquivos Eletrônica         (Verificar ocorrência no FTP)
 CodeBlocks
 Eclipse
 MongoDB
 MyOpenLab
-NetLogo
+NetLogo                     (Feito até aqui sem a parte 2. Necessário .desktop)
 Pentaho
 Pinta
 Portugol Studio
