@@ -429,7 +429,7 @@ atualizar
 echo "Instalando o TexStudio..."
   if ! sudo apt-get install texstudio -y
   then
-    echo "Não foi possível instalar o TexStudo."
+    echo "Não foi possível instalar o TexStudio."
     exit 1
   fi
 echo "TexStudio instalado com sucesso!"
@@ -453,5 +453,75 @@ echo "Grub Customizer instalado com sucesso!"
 remover
 change
 
-echo "Sucesso ao terminar a primeira parte!"
-exit 0
+#-------------------------------------------------------------------------------------------------------
+#Parte 2 - Programas Chatos
+#-------------------------------------------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------------------------------
+#Parte 3 - Programas parte 3
+#-------------------------------------------------------------------------------------------------------
+
+#Arduino IDE
+echo "Instalando o Arduino IDE..."
+  if ! (sudo wget https://downloads.arduino.cc/arduino-1.8.8-linux64.tar.xz && tar xvf arduino-1.8.8-linux64.tar.xz)
+  then
+    echo "Não foi possível baixar e extrair o arquivo do Arduino."
+    exit 1
+  fi
+  cd arduino*/
+  if ! (sudo ./install.sh)
+  then
+    echo "Não foi possível instalar ou rodar o script do Arduino IDE."
+    exit 1
+  fi
+echo "Arduino IDE instalado com sucesso!"
+
+atualizar
+change
+
+#CodeBlocks
+echo "Instalando o CodeBlocks..."
+  if ! (sudo apt-get install codeblocks)
+  then
+    echo "Não foi possível instalar o CodeBlocks."
+    exit 1
+  fi
+echo "Codeblocks instalado com sucesso!"
+
+atualizar
+
+#Eclipse
+echo "Instalando o Eclipse..."
+  if ! (sudo apt-get install eclipse)
+  then
+    echo "Não foi possível instalar o Eclipse."
+    exit 1
+  fi
+echo "Eclipse instalado com sucesso!"
+
+atualizar
+
+#MongoDB
+echo "Instalando o MongoDB..."
+  if ! (sudo apt-get install mongodb -y && sudo systemctl status mongodb && mongo --eval 'db.runCommand({ connectionStatus: 1})')
+  then
+    echo "Não foi possível instalar o MongoDB."
+    exit 1
+  fi
+echo "MongoDB instalado com sucesso!"
+
+#MyOpenLab
+echo "Instalando o MyOpenLab..."
+  if ! (sudo wget https://myopenlab.org/distribution_linux_3.11.0.zip && unzip distribution_linux_3.11.0.zip -d distribution_linux_3.11.0 && cd distribution_linux_3.11.0)
+  then
+    echo "Não foi possível entrar na pasta do MyOpenLab."
+    exit 1
+  fi
+   if ! (sudo ./start_linux)
+  then
+    echo "Não foi possível instalar ou rodar o script do MyOpenLab."
+    exit 1
+  fi
+  sudo update-java-alternatives --set \java-1.8.0-openjdk-$(dpkg --print-architecture)
+echo "MyOpenLab instalado com sucesso!"
+
