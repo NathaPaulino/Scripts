@@ -3,16 +3,20 @@
 # Script de criação de imagem para Ubuntu 18.04.
 # ProgramList.txt contém todos os programas a serem instalados separados em partes que são referenciadas nos commits.
 # Apresenta funções e trechos devidamente comentados. 
-# Versão de teste 1.4 - Testes realizados na parte 1.Erros não resolvidos e com solução não testada encontra-se na descrição de Suporte a erros. Quaisquer erros resolvidos serão colocados nessa seção.  
+# Versão de teste 2.0 - Parte 1 testada e funcionando com sucesso. Iniciar script da parte 2 e pausar script da parte 3. 
 # Descoberta do -C através do comando tar que permite escolher o diretório output
 # Problema nas antigas linhas 297 - 301 (atualmente linhas 307 a 312) resolvido: Foi criado um arquivo no diretório atual e este depois movido com a pasta no qual precisava estar com os comandos sudo mv
 # Problema na antiga linha 327: Diretório não era estabecido corretamente. Foi utilizado a função change para consertar o problema.
 # Instalação forçada do Anaconda pode ser feito com -b
+# Qt instalado não interativamente criando um script de acordo com o link https://stackoverflow.com/questions/25105269/silent-install-qt-run-installer-on-ubuntu-server 
+# Problema do conda list resolvido, echo "PATH=$PATH:$HOME/anaconda3/bin" >> /home/${USERNAME}/.bashrc e execução normal. 
+#
 #----------------------------------------------------------------------------------
 # Suporte a erros
-# Linha 387 e 388 - Conda list não feito pois instalação forçada não especifica diretório 
-# Linha 391 - Qt tem interface com o usuário. Tentar reproduzir o mesmo que a solução presente no link https://stackoverflow.com/questions/25105269/silent-install-qt-run-installer-on-ubuntu-server (Tentativa de solução é criar um arquivo não interativo e executar ele dessa forma)
-#
+#----------------------------------------------------------------------------------
+# 1ª Parte concluída sem erro.
+# 2ª Parte - Começar ela e terminar o quanto antes.
+# 3ª Parte - Iniciada, porém parada enquanto não terminar a parte 2
 #----------------------------------------------------------------------------------
 # Funções Gerais
 #----------------------------------------------------------------------------------
@@ -43,7 +47,6 @@ function change(){
 function remover(){
   sudo apt autoremove -y
 }
-
 
 #-------------------------------------------------------------------------------
 # Instalação de programas:
@@ -378,13 +381,14 @@ echo "Instalando o Anaconda..."
     echo "Não foi possível baixar o script de instalação do Anaconda."
     exit 1
   fi
-  if ! (bash Anaconda3-5.2.0-Linux-x86_64.sh) #Nesse passo há interface com o usuário
+  if ! (bash Anaconda3-5.2.0-Linux-x86_64.sh -b) 
   then
     echo "Não foi possível rodar o script de instalação do Anaconda ou foi cancelado pelo usuário."
     exit 1
   fi
-  source ~/.bashsrc
-  conda list
+  echo "PATH=$PATH:$HOME/anaconda3/bin" >> /home/${USERNAME}/.bashrc
+  source ~/.bashrc
+  conda -version
 echo "Anaconda instalado com sucesso!"
 
 #Qt
@@ -494,13 +498,13 @@ echo "TexStudio instalado com sucesso!"
 #Grub Customizer
 atualizar
 echo "Instalando o Grub Customizer..."
-  if ! (sudo add-apt-repository ppa:danielrichter2007/grub-customizer)
+  if ! (sudo add-apt-repository ppa:danielrichter2007/grub-customizer -y)
   then
     echo "Não foi possível instalar o repositório do Grub Customizer."
     exit 1
   fi
   atualizar
-  if ! (sudo apt-get install grub-customizer)
+  if ! (sudo apt-get install grub-customizer -y)
   then
     echo "Não foi possível instalar o Grub Customizer."
     exit 1
@@ -508,10 +512,9 @@ echo "Instalando o Grub Customizer..."
 echo "Grub Customizer instalado com sucesso!"
 
 remover
+atualizar
 change
 
-echo "Teste 1 concluído"
-exit 0
 #-----------------------------------------------------------------------------
 # Parte 2: Programas com instalação complicada
 #-----------------------------------------------------------------------------
@@ -519,6 +522,8 @@ exit 0
 #-----------------------------------------------------------------------------
 # Parte 3: Programas com instalação tranquila
 #-----------------------------------------------------------------------------
+echo "Término da Parte 2!"
+exit 0
 
 atualizar
 change

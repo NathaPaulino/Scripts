@@ -1,7 +1,7 @@
 Lista de Programas
 
 ------------------------------------------------------------------
-Parte 1
+Parte 1 - Terminou
 ------------------------------------------------------------------
 Flash Player 9.0
 Node.js
@@ -27,12 +27,12 @@ LibreOffice
 Mozilla Firefox
 Octave				
 Anaconda (Python)
-Qt				(Teste de solução não interativa)
+Qt				
 R				
 TexStudio			
 Grub Customizer
 ------------------------------------------------------------------
-Parte 2
+Parte 2 - Iniciar códigos da parte 2
 ------------------------------------------------------------------
 OpenCV
 NetBeans
@@ -47,7 +47,7 @@ PostgreSQL
 IBM ILOG CPLEX
 XMind
 ------------------------------------------------------------------
-Parte 3
+Parte 3 - Começou em partes, porém não foi feito testes
 ------------------------------------------------------------------
 Arduino IDE
 Arquivos Eletrônica         (Verificar ocorrência no FTP)
