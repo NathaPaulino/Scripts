@@ -3,11 +3,17 @@
 # Script de criação de imagem para Ubuntu 18.04.
 # ProgramList.txt contém todos os programas a serem instalados separados em partes que são referenciadas nos commits.
 # Apresenta funções e trechos devidamente comentados. 
-# Versão de teste 1.2 - Realizar teste da parte 1.Início da parte 3. 
-# Versões otimizadas serão postadas futuramente. 
-# Linhas 291 a 295 com problemas: Permissão negada. (Iniciar script como super usuário)
+# Versão de teste 1.4 - Testes realizados na parte 1.Erros não resolvidos e com solução não testada encontra-se na descrição de Suporte a erros. Quaisquer erros resolvidos serão colocados nessa seção.  
 # Descoberta do -C através do comando tar que permite escolher o diretório output
+# Problema nas antigas linhas 297 - 301 (atualmente linhas 307 a 312) resolvido: Foi criado um arquivo no diretório atual e este depois movido com a pasta no qual precisava estar com os comandos sudo mv
+# Problema na antiga linha 327: Diretório não era estabecido corretamente. Foi utilizado a função change para consertar o problema.
+# Instalação forçada do Anaconda pode ser feito com -b
+#----------------------------------------------------------------------------------
+# Suporte a erros
+# Linha 387 e 388 - Conda list não feito pois instalação forçada não especifica diretório 
+# Linha 391 - Qt tem interface com o usuário. Tentar reproduzir o mesmo que a solução presente no link https://stackoverflow.com/questions/25105269/silent-install-qt-run-installer-on-ubuntu-server (Tentativa de solução é criar um arquivo não interativo e executar ele dessa forma)
 #
+#----------------------------------------------------------------------------------
 # Funções Gerais
 #----------------------------------------------------------------------------------
 #Função atualizar: Atualiza todos os repositórios e pacotes.
@@ -260,6 +266,7 @@ echo "Instalando o JDK 8..."
      exit 1
   fi
   echo "Verificando instalação"
+  java -version
 echo "JDK 8 instalado com sucesso!"
 
 #JDK 11 - Deixar pra mais tarde
@@ -291,17 +298,19 @@ cd /tmp
   echo "Configuração realizada com sucesso!"
   java -version
   echo "Configurando variáveis de ambiente..."
-    sudo echo 'export J2SDKDIR=/usr/lib/jvm/jdk-11.0.2' >> /etc/profile.d/jdk.sh
-    sudo echo 'export J2REDIR=/usr/lib/jvm/jdk-11.0.2' >> /etc/profile.d/jdk.sh
-    sudo echo 'export PATH=$PATH:/usr/lib/jvm/jdk-11.0.2/bin:/usr/lib/jvm/jdk-11.0.2/db/bin' >> /etc/profile.d/jdk.sh
-    sudo echo 'export JAVA_HOME=/usr/lib/jvm/jdk-11.0.2' >> /etc/profile.d/jdk.sh
-    sudo echo 'export DERBY_HOME=/usr/lib/jvm/jdk-11.0.2/db' >> /etc/profile.d/jdk.sh
+     echo 'export J2SDKDIR=/usr/lib/jvm/jdk-11.0.2' >> /home/${USERNAME}/jdk.sh
+     echo 'export J2REDIR=/usr/lib/jvm/jdk-11.0.2' >> /home/${USERNAME}/jdk.sh
+     echo 'export PATH=$PATH:/usr/lib/jvm/jdk-11.0.2/bin:/usr/lib/jvm/jdk-11.0.2/db/bin' >> /home/${USERNAME}/jdk.sh
+     echo 'export JAVA_HOME=/usr/lib/jvm/jdk-11.0.2' >> /home/${USERNAME}/jdk.sh
+     echo 'export DERBY_HOME=/usr/lib/jvm/jdk-11.0.2/db' >> /home/${USERNAME}/jdk.sh
+     sudo mv /home/${USERNAME}/jdk.sh /etc/profile.d/
     source /etc/profile.d/jdk.sh
   echo "Configuração de variáveis de ambiente realizada com sucesso!"
 echo "JDK 11 instalado com sucesso!"
 
 #Java3D
 atualizar
+change
 echo "Instalando o Java3D..."
   if ! (sudo apt-get install libjava3d-java -y)
   then
@@ -324,7 +333,7 @@ echo "Instalando o LibreOffice..."
     echo "Não foi possível baixar o LibreOffice."
     exit 1
   fi
-  cd LibreOffice_6.1.4_2_Linux_x86-64_deb/DEBS
+  cd LibreOffice_6.1.4.2_Linux_x86-64_deb/DEBS
   if ! (sudo dpkg -i *.deb)
   then
     echo "Não foi possível instalar o LibreOffice."
@@ -362,7 +371,7 @@ echo "Octave instalado com sucesso!"
 
 #Python Anaconda
 atualizar
-echo "Instalando o Anaconda..."
+echo "Instalando o Anaconda..." 
   cd /tmp/
   if ! (sudo curl -O https://repo.anaconda.com/archive/Anaconda3-5.2.0-Linux-x86_64.sh)
   then
@@ -387,7 +396,58 @@ echo "Instalando o Qt..."
     echo "Não foi possível baixar o script de instalação do Qt ou alterar permissão do script."
     exit 1
   fi
-  if ! (sudo ./qt-opensource-linux-x64-5.12.1.run)
+#Criação do arquivo com o script não interativo .qs
+  echo "function Controller() {
+    installer.autoRejectMessageBoxes();
+    installer.installationFinished.connect(function() {
+        gui.clickButton(buttons.NextButton);
+    })
+}
+
+Controller.prototype.WelcomePageCallback = function() {
+    // click delay here because the next button is initially disabled for ~1 second
+    gui.clickButton(buttons.NextButton, 3000);
+}
+
+Controller.prototype.CredentialsPageCallback = function() {
+    gui.clickButton(buttons.NextButton);
+}
+
+Controller.prototype.IntroductionPageCallback = function() {
+    gui.clickButton(buttons.NextButton);
+}
+
+Controller.prototype.TargetDirectoryPageCallback = function()
+{
+    gui.currentPageWidget().TargetDirectoryLineEdit.setText(installer.value(\"HomeDir\") + \"/Qt\");
+    gui.clickButton(buttons.NextButton);
+}
+
+Controller.prototype.ComponentSelectionPageCallback = function() {
+    var widget = gui.currentPageWidget();
+
+    widget.selectAll();
+    gui.clickButton(buttons.NextButton);
+}
+
+Controller.prototype.LicenseAgreementPageCallback = function() {
+    gui.currentPageWidget().AcceptLicenseRadioButton.setChecked(true);
+    gui.clickButton(buttons.NextButton);
+}
+
+Controller.prototype.StartMenuDirectoryPageCallback = function() {
+    gui.clickButton(buttons.NextButton);
+}
+
+Controller.prototype.ReadyForInstallationPageCallback = function()
+{
+    gui.clickButton(buttons.NextButton);
+}
+Controller.prototype.FinishedPageCallback = function() {
+    gui.clickButton(buttons.FinishButton);
+}" >> /home/ntic/Downloads/qt-installer-noninteractive.qs	
+-------------------------------
+  if ! (sudo ./qt-opensource-linux-x64-5.12.1.run --script qt-installer-noninteractive.qs)
   then
     echo "Não foi possível executar o script de instalação do Qt."
     exit 1
@@ -397,13 +457,7 @@ echo "Qt instalado com sucesso!"
 #R
 atualizar
 echo "Instalando o R..."
-  if ! (sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9 && dd-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu bionic-cran35/')
-  then
-    echo "Não foi possível adicionar os repositórios de instalação do R."
-    exit 1
-  fi
-  atualizar
-  if ! (sudo apt-get install r-base -y && sudo -i R)
+  if ! (sudo apt-get install r-base -y)
   then
     echo "Não foi possível instalar o R."
     exit 1
@@ -456,6 +510,8 @@ echo "Grub Customizer instalado com sucesso!"
 remover
 change
 
+echo "Teste 1 concluído"
+exit 0
 #-----------------------------------------------------------------------------
 # Parte 2: Programas com instalação complicada
 #-----------------------------------------------------------------------------
@@ -550,4 +606,7 @@ echo "Instalando o NetLogo..."
     exit 1
   fi 
 #Criação do .desktop do NetLogo
+  echo "Fazendo o .desktop..."
 echo "NetLogo instalado com sucesso!"
+
+

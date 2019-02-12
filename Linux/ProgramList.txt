@@ -21,15 +21,15 @@ Golang
 Google Chrome
 Interpretador Prolog
 JDK 8
-JDK 11				(Erro de permissão)
+JDK 11				
 Java3D
 LibreOffice
 Mozilla Firefox
-Octave				(Roda até o Octave)
+Octave				
 Anaconda (Python)
-Qt
-R
-TexStudio
+Qt				(Teste de solução não interativa)
+R				
+TexStudio			
 Grub Customizer
 ------------------------------------------------------------------
 Parte 2
