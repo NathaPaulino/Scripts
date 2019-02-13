@@ -530,7 +530,7 @@ echo "Instalando OpenCV..."
 	echo "Falha ao instalar primeira parte dos requisitos."
 	exit 1
     fi
-    if ! (sudo apt-get install python3.5-dev python3-numpy libtbb2 libtbb-dev -y)
+    if ! (sudo apt-get install python3.7-dev python3-numpy libtbb2 libtbb-dev -y)
     then
 	echo "Falha ao instalar segunda parte dos requisitos."
 	exit 1
@@ -547,7 +547,7 @@ echo "Instalando OpenCV..."
     fi
   echo "Pré-requisitos instalados com sucesso!"
   echo "Começando a instalação do OpenCV."  
-  if ! (sudo -s && cd /opt && git clone https://github.com/Itseez/opencv.git && git clone https://github.com/Itseez/opencv_contrib.git && cd opencv && mkdir release && cd release && cmake -D BUILD_TIFF=ON -D WITH_CUDA=OFF -D ENABLE_AVX=OFF -D WITH_OPENGL=OFF -D WITH_OPENCL=OFF -D WITH_IPP=OFF -D WITH_TBB=ON -D BUILD_TBB=ON -D WITH_EIGEN=OFF -D WITH_V4L=OFF -D WITH_VTK=OFF -D BUILD_TESTS=OFF -D BUILD_PERF_TESTS=OFF -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D OPENCV_EXTRA_MODULES_PATH=/opt/opencv_contrib/modules /opt/opencv/ && make -j4 && make install && ldconfig && exit && change && pkg-config --modversion opencv)
+  if ! (sudo -s && cd /opt && git clone https://github.com/Itseez/opencv.git && git clone https://github.com/Itseez/opencv_contrib.git && cd opencv && mkdir release && cd release && cmake -D BUILD_TIFF=ON -D WITH_CUDA=OFF -D ENABLE_AVX=OFF -D WITH_OPENGL=OFF -D WITH_OPENCL=OFF -D WITH_IPP=OFF -D WITH_TBB=ON -D BUILD_TBB=ON -D WITH_EIGEN=OFF -D WITH_V4L=OFF -D WITH_VTK=OFF -D BUILD_TESTS=OFF -D BUILD_PERF_TESTS=OFF -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D OPENCV_EXTRA_MODULES_PATH=/opt/opencv_contrib/modules /opt/opencv/ && make -j4 && make install && ldconfig && change && pkg-config --modversion opencv)
   then
     	echo "Falha ao instalar o OpenCV.Provavelmente no exit para sair da permissão de super usuário."
 	exit 1
@@ -576,7 +576,36 @@ echo "Instalando o NetBeans 8.2..."
   fi
 echo "NetBeans instalado e Gradle Support baixado o arquivo (Tem que fazer na mão)!"
 
-#Blender 
+#Blender
+#Erros anteriores de dar update e upgrade não foram mais notados. 
+echo "Instalando o Blender..."
+  if ! (sudo apt-get install blender) 
+  then
+	echo "Falha ao baixar o Blender."
+	exit 1
+  fi
+  if ! (atualizar)
+  then
+	echo "Falha ao dar upgrade no pacote do Blender"
+	exit 1
+  fi
+echo "Blender instalado com sucesso!" 
+
+#Visual Code
+#Erros apresentados anteriormente não estão sendo mais notados.
+echo "Instalando o VSCode..."
+  if ! (sudo wget https://go.microsoft.com/fwlink/?LinkID=760868 -O visualstudio.deb && sudo dpkg -i visualstudio.deb)
+  then 
+	echo "Falha ao instalar o VSCode."
+	exit 1
+  fi
+echo "Visual Code instalado com sucesso!."
+
+#Cisco Packett Tracer
+#Problema 1: Achar o downloader na internet
+#
+echo "Instalando o Cisco Packett Tracer..."
+
 #-----------------------------------------------------------------------------
 # Parte 3: Programas com instalação tranquila
 #-----------------------------------------------------------------------------
