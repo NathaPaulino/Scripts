@@ -125,7 +125,7 @@ echo "Git instalado com sucesso!"
 
 #Atom
 atualizar
-echo "Instalando o Atom..."
+echo "Instalando o Atom..."chmod +x netbeans-8.2-linux.sh 
   echo "Instalando dependências do Atom..."
   if ! (sudo apt-get install gconf2 -y && sudo apt-get install gconf-service -y)
   then
@@ -519,6 +519,64 @@ change
 # Parte 2: Programas com instalação complicada
 #-----------------------------------------------------------------------------
 
+#OpenCV 
+# Pacote python3.5-dev desativado. Foi substituído pelo pacote python3.7-dev.
+# Biblioteca libjasper-dev necessária para funcionamento não estava disponível no Ubuntu 18.04,portanto é necessário pegar de uma versão diferente, mais informações: https://researchxuyc.wordpress.com/2018/09/26/install-libjasper-in-ubuntu-18-04/.
+#
+echo "Instalando OpenCV..."
+  echo "Instalando pré-requisitos..."
+    if ! (sudo apt-get install build-essential cmake git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev)
+    then
+	echo "Falha ao instalar primeira parte dos requisitos."
+	exit 1
+    fi
+    if ! (sudo apt-get install python3.5-dev python3-numpy libtbb2 libtbb-dev -y)
+    then
+	echo "Falha ao instalar segunda parte dos requisitos."
+	exit 1
+    fi
+    if ! (sudo add-apt-repository "deb http://security.ubuntu.com/ubuntu xenial-security main" && atualizar && sudo apt-get install libjasper1 libjasper-dev -y)
+    then
+	echo "Falha ao instalar biblioteca libjasper-dev."
+	exit 1
+    fi
+    if ! (sudo apt-get install libjpeg-dev libpng-dev libtiff5-dev libdc1394-22-dev libeigen3-dev libtheora-dev libvorbis-dev libxvidcore-dev libx264-dev sphinx-common libtbb-dev yasm libfaac-dev libopencore-amrnb-dev libopencore-amrwb-dev libopenexr-dev libgstreamer-plugins-base1.0-dev libavutil-dev libavfilter-dev libavresample-dev -y)
+    then
+	echo "Falha ao instalar a terceira parte dos requisitos."
+	exit 1
+    fi
+  echo "Pré-requisitos instalados com sucesso!"
+  echo "Começando a instalação do OpenCV."  
+  if ! (sudo -s && cd /opt && git clone https://github.com/Itseez/opencv.git && git clone https://github.com/Itseez/opencv_contrib.git && cd opencv && mkdir release && cd release && cmake -D BUILD_TIFF=ON -D WITH_CUDA=OFF -D ENABLE_AVX=OFF -D WITH_OPENGL=OFF -D WITH_OPENCL=OFF -D WITH_IPP=OFF -D WITH_TBB=ON -D BUILD_TBB=ON -D WITH_EIGEN=OFF -D WITH_V4L=OFF -D WITH_VTK=OFF -D BUILD_TESTS=OFF -D BUILD_PERF_TESTS=OFF -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D OPENCV_EXTRA_MODULES_PATH=/opt/opencv_contrib/modules /opt/opencv/ && make -j4 && make install && ldconfig && exit && change && pkg-config --modversion opencv)
+  then
+    	echo "Falha ao instalar o OpenCV.Provavelmente no exit para sair da permissão de super usuário."
+	exit 1
+  fi
+echo "OpenCV instalado com sucesso!"
+
+#NetBeans e Gradle Support
+# Instalando NetBeans 8.2 IDE e também o Gradle Support,infelizmente o Gradle Support terá de ser feito na mão 
+echo "Instalando o NetBeans 8.2..."
+  if ! (cd /tmp && sudo wget -c http://download.netbeans.org/netbeans/8.2/final/bundles/netbeans-8.2-linux.sh)
+  then
+	echo "Falha ao efetuar o download do script."
+	exit 1
+  fi
+  if ! (chmod 755 netbeans-8.2-linux.sh && sudo ./netbeans-8.2-linux.sh --silent)
+  then
+	echo "Não foi possível instalar o NetBeans."
+	exit 1
+  fi
+  change
+  echo "Baixando o Gradle Support"
+  if ! (sudo wget https://github.com/kelemen/netbeans-gradle-project/releases/download/v2.0.2/netbeans-gradle-plugin-2.0.2.nbm)
+  then
+	echo "Falha ao baixar o plugin"
+	exit 1
+  fi
+echo "NetBeans instalado e Gradle Support baixado o arquivo (Tem que fazer na mão)!"
+
+#Blender 
 #-----------------------------------------------------------------------------
 # Parte 3: Programas com instalação tranquila
 #-----------------------------------------------------------------------------
@@ -530,7 +588,7 @@ change
 
 #Arduino IDE
 echo "Instalando o Arduino IDE..."
-  if ! (wget https://downloads.arduino.cc/arduino-1.8.8-linux64.tar.xz && tar xvf arduino-1.8.8-linux64.tar.xz)
+  if ! (sudo wget https://downloads.arduino.cc/arduino-1.8.8-linux64.tar.xz && tar xvf arduino-1.8.8-linux64.tar.xz)
   then
     echo "Não foi possível baixar o pacote do Arduino."
     exit 1
