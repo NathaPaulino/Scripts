@@ -3,7 +3,7 @@
 # Script de criação de imagem para Ubuntu 18.04.
 # ProgramList.txt contém todos os programas a serem instalados separados em partes que são referenciadas nos commits.
 # Apresenta funções e trechos devidamente comentados. 
-# Versão de teste 2.1 - Todos os arquivos estão com script feito. Consertar problemas através do FTP de como conseguir os arquivos. 
+# Versão de teste 2.1 - Terminar de programar a instalação dos softwares da parte II. Função download realizada e criação de uma seção de variáveis globais.
 # Descoberta do -C através do comando tar que permite escolher o diretório output
 # Problema nas antigas linhas 297 - 301 (atualmente linhas 307 a 312) resolvido: Foi criado um arquivo no diretório atual e este depois movido com a pasta no qual precisava estar com os comandos sudo mv
 # Problema na antiga linha 327: Diretório não era estabecido corretamente. Foi utilizado a função change para consertar o problema.
@@ -11,15 +11,18 @@
 # Qt instalado não interativamente criando um script de acordo com o link https://stackoverflow.com/questions/25105269/silent-install-qt-run-installer-on-ubuntu-server 
 # Problema do conda list resolvido, echo "PATH=$PATH:$HOME/anaconda3/bin" >> /home/${USERNAME}/.bashrc e execução normal. 
 # Linha 618 apresenta a criação de um arquivo.desktop
+# Arquivos necessários foram colocados em um FTP. Função download criada
 #----------------------------------------------------------------------------------
 # Suporte a erros
 #----------------------------------------------------------------------------------
 # 1ª Parte concluída sem erro.
 # 2ª Parte  
-#    Problema linha 625 (PostgreSQL): Arquivo é necessário estar no FTP
-#    Problema linha 632	(Cisco Packett Tracer): Arquivo é necessário estar no FTP
-#    Problema linha 637 (IBM ILOG CPLEX): Arquivo é necessário estar no FTP
+#    Problema linha 637 (IBM ILOG CPLEX): Arquivo é necessário estar no FTP.
 # 3ª Parte - Iniciada, porém parada enquanto não terminar a parte 2
+#----------------------------------------------------------------------------------
+# Variáveis Globais
+#----------------------------------------------------------------------------------
+ARGC=4 
 #----------------------------------------------------------------------------------
 # Funções Gerais
 #----------------------------------------------------------------------------------
@@ -51,12 +54,26 @@ function remover(){
   sudo apt autoremove -y
 }
 
+#Função download: Baixa arquivos necessários presentes no FTP e os move para a pasta Downloads do Username
+function download(){
+  if (${#} -eq ${ARGC})
+  then
+	wget -r ftp://${1}:${2}@${3}/${4}/*
+	mv /home/${USERNAME}/Downloads/${4}/* /home/${USERNAME}/Downloads
+  else
+   	echo "Passe quatro parâmetros para o script,onde:"
+	echo "Primeiro parâmetro é o nome de usuário do FTP."
+	echo "Segundo parâmetro é a senha do usuário do FTP."
+	echo "Terceiro parâmetro é o IP de acesso do FTP."
+	echo "Quarto parâmetro é o diretório no FTP, onde os arquivos se encontram (não usar barra inicial e nem a final de um diretório)."
+	exit 1
+  fi;
+	
+}
 #-------------------------------------------------------------------------------
 # Instalação de programas:
 
-#Assumindo permissões de usuário
-sudo echo
-
+download
 change
 atualizar
 
@@ -257,7 +274,7 @@ echo "Instalando o interpretador de Prolog..."
   fi
 echo "Interpretador de Prolog instalado com sucesso!"
 
-#JDK 11 - Deixar pra mais tarde
+#JDK 11
 echo "Instalando o JDK 11..."
 cd /tmp
   echo "Instalando pré-requisitos..."
@@ -617,7 +634,6 @@ atualizar
 change
 
 #Eletric
-#Programa de instalação simples. Aparenta ser mais complicado.
 echo "Instalando o Eletric..."
   mkdir /home/${USERNAME}/Eletric 
   cd /home/${USERNAME}/Eletric
@@ -640,9 +656,7 @@ atualizar
 change
 
 #PostgreSQL
-#Problema 1: Instalador deverá ficar no FTP. Falhou baixar direto utilizando o wget.
 echo "Instalando o PostgreSQL..."
-#Pegar o arquivo do FTP
   if ! (chmod 755 postgresql-10.6-1-linux-x64.run && sudo ./postgresql-10.6-1-linux-x64.run --unattendedmodeui minimalWithDialogs --superaccount aluno --serviceaccount aluno --superpassword 123456 --mode unattended --prefix /opt/PostgreSQL/10 --datadir /opt/PostgreSQL/10/data)
   then
 	echo "Não foi possível instalar o PostgreSQL."
@@ -654,7 +668,6 @@ atualizar
 change
 
 #Cisco Packett Tracer
-#Problema 1: Programa necessita de cadastro para baixar. Solução: Colocar o arquivo em um servidor e usar o FTP. Deixar esse programa para ser instalado por último.
 echo "Instalando o Cisco Packett Tracer..."
 echo "Cisco Packett Tracer instalado com sucesso!"
 
@@ -662,7 +675,6 @@ atualizar
 change
 
 #IBM ILOG CPLEX
-#Problema 1: Programa necessita de cadastro para baixar. Solução: Colocar o arquivo em um servidor e usar o FTP. Deixar esse programa para ser instalado por último.
 echo "Instalando o IBM ILOG CPLEX..."
 echo "IBM ILOG CPLEX instalado com sucesso!"
 
@@ -670,14 +682,12 @@ atualizar
 change
 
 #XMind
-#Problema 1: Arquivo deverá ficar no servidor e usar o FTP. Falhou baixar direto utilizando o wget.
 echo "Instalando o XMind..."
   if ! (sudo apt-get install libwebkitgtk-1.0-0 -y && sudo apt-get install lame -y)
   then
 	echo "Não foi possível instalar pré-requisitos do XMind."
 	exit 1
   fi
-#Pegar o arquivo do servidor
   if ! (sudo dpkg -i xmind-8-beta-linux_amd64.deb -y)
   then
 	echo "Não foi possível instalar o XMind."
@@ -688,11 +698,7 @@ atualizar
 change
 
 #SQLDeveloper
-#Problema 1: Uso dele se dá apenas por sudo ./sqldeveloper
-#Problema 2: Arquivo .desktop não funciona.
-#Problema 3: Necessita de cadastro. Pegar o arquivo via FTP
 echo "Instalando o SQLDeveloper..."
-
   if ! (sudo alien --scripts sqldeveloper*.rpm && sudo dpkg -i sqldeveloper*.deb && remover && sudo apt-get remove icedtea-*-plugin)
   then
 	echo "Não foi possível instalar o SQLDeveloper."
