@@ -3,19 +3,22 @@
 # Script de criação de imagem para Ubuntu 18.04.
 # ProgramList.txt contém todos os programas a serem instalados separados em partes que são referenciadas nos commits.
 # Apresenta funções e trechos devidamente comentados. 
-# Versão de teste 2.0 - Parte 1 testada e funcionando com sucesso. Iniciar script da parte 2 e pausar script da parte 3. 
+# Versão de teste 2.1 - Todos os arquivos estão com script feito. Consertar problemas através do FTP de como conseguir os arquivos. 
 # Descoberta do -C através do comando tar que permite escolher o diretório output
 # Problema nas antigas linhas 297 - 301 (atualmente linhas 307 a 312) resolvido: Foi criado um arquivo no diretório atual e este depois movido com a pasta no qual precisava estar com os comandos sudo mv
 # Problema na antiga linha 327: Diretório não era estabecido corretamente. Foi utilizado a função change para consertar o problema.
 # Instalação forçada do Anaconda pode ser feito com -b
 # Qt instalado não interativamente criando um script de acordo com o link https://stackoverflow.com/questions/25105269/silent-install-qt-run-installer-on-ubuntu-server 
 # Problema do conda list resolvido, echo "PATH=$PATH:$HOME/anaconda3/bin" >> /home/${USERNAME}/.bashrc e execução normal. 
-#
+# Linha 618 apresenta a criação de um arquivo.desktop
 #----------------------------------------------------------------------------------
 # Suporte a erros
 #----------------------------------------------------------------------------------
 # 1ª Parte concluída sem erro.
-# 2ª Parte - Começar ela e terminar o quanto antes.
+# 2ª Parte  
+#    Problema linha 625 (PostgreSQL): Arquivo é necessário estar no FTP
+#    Problema linha 632	(Cisco Packett Tracer): Arquivo é necessário estar no FTP
+#    Problema linha 637 (IBM ILOG CPLEX): Arquivo é necessário estar no FTP
 # 3ª Parte - Iniciada, porém parada enquanto não terminar a parte 2
 #----------------------------------------------------------------------------------
 # Funções Gerais
@@ -254,24 +257,6 @@ echo "Instalando o interpretador de Prolog..."
   fi
 echo "Interpretador de Prolog instalado com sucesso!"
 
-#JDK 8
-atualizar
-echo "Instalando o JDK 8..."
-  if ! (sudo add-apt-repository ppa:webupd8team/java -y)
-  then
-	   echo "Não foi possível adicionar o repositório do JDK 8."
-     exit 1
-  fi
-  atualizar
-  if ! (sudo apt-get install oracle-java8-installer -y && sudo apt-get install oracle-java8-set-default -y)
-  then
-     echo "Não foi possível instalar JDK 8."
-     exit 1
-  fi
-  echo "Verificando instalação"
-  java -version
-echo "JDK 8 instalado com sucesso!"
-
 #JDK 11 - Deixar pra mais tarde
 echo "Instalando o JDK 11..."
 cd /tmp
@@ -310,6 +295,24 @@ cd /tmp
     source /etc/profile.d/jdk.sh
   echo "Configuração de variáveis de ambiente realizada com sucesso!"
 echo "JDK 11 instalado com sucesso!"
+
+#JDK 8
+atualizar
+echo "Instalando o JDK 8..."
+  if ! (sudo add-apt-repository ppa:webupd8team/java -y)
+  then
+	   echo "Não foi possível adicionar o repositório do JDK 8."
+     exit 1
+  fi
+  atualizar
+  if ! (sudo apt-get install oracle-java8-installer -y && sudo apt-get install oracle-java8-set-default -y)
+  then
+     echo "Não foi possível instalar JDK 8."
+     exit 1
+  fi
+  echo "Verificando instalação"
+  java -version
+echo "JDK 8 instalado com sucesso!"
 
 #Java3D
 atualizar
@@ -554,6 +557,9 @@ echo "Instalando OpenCV..."
   fi
 echo "OpenCV instalado com sucesso!"
 
+atualizar
+change
+
 #NetBeans e Gradle Support
 # Instalando NetBeans 8.2 IDE e também o Gradle Support,infelizmente o Gradle Support terá de ser feito na mão 
 echo "Instalando o NetBeans 8.2..."
@@ -576,6 +582,9 @@ echo "Instalando o NetBeans 8.2..."
   fi
 echo "NetBeans instalado e Gradle Support baixado o arquivo (Tem que fazer na mão)!"
 
+atualizar
+change
+
 #Blender
 #Erros anteriores de dar update e upgrade não foram mais notados. 
 echo "Instalando o Blender..."
@@ -591,6 +600,9 @@ echo "Instalando o Blender..."
   fi
 echo "Blender instalado com sucesso!" 
 
+atualizar
+change
+
 #Visual Code
 #Erros apresentados anteriormente não estão sendo mais notados.
 echo "Instalando o VSCode..."
@@ -601,16 +613,104 @@ echo "Instalando o VSCode..."
   fi
 echo "Visual Code instalado com sucesso!."
 
-#Cisco Packett Tracer
-#Problema 1: Achar o downloader na internet
-#
-echo "Instalando o Cisco Packett Tracer..."
+atualizar
+change
 
+#Eletric
+#Programa de instalação simples. Aparenta ser mais complicado.
+echo "Instalando o Eletric..."
+  mkdir /home/${USERNAME}/Eletric 
+  cd /home/${USERNAME}/Eletric
+  if ! (sudo wget https://ftp.gnu.org/pub/gnu/electric/electricBinary-9.07.jar -O electric.jar)
+  then
+   	echo "Falha ao baixar a máquina Java do Electric."
+	exit 1
+  fi
+  cp electric.jar /usr/share/java/
+  unzip electric.jar
+  echo "Criando o .Desktop..."
+  if ! (echo "[Desktop Entry]" >> /home/${USERNAME}/.local/share/applications/Electric.desktop && echo "Type=Application" >> /home/${USERNAME}/.local/share/applications/Electric.desktop && echo "Name=Electric" >> /home/${USERNAME}/.local/share/applications/Electric.desktop && echo "GenericName=Electric" >> /home/${USERNAME}/.local/share/applications/Electric.desktop && echo "Path=/usr/share/java/" >> /home/${USERNAME}/.local/share/applications/Electric.desktop && echo "Exec=java -jar /usr/share/java/electric.jar" >> /home/${USERNAME}/.local/share/applications/Electric.desktop && echo "Icon=/home/${USERNAME}/Eletric/ElectricIcon64x64.png" >> /home/${USERNAME}/.local/share/applications/Electric.desktop && echo "Terminal=False" >> /home/${USERNAME}/.local/share/applications/Electric.desktop)
+  then
+	echo "Falha ao criar atalho para o Electric."
+	exit 1
+  fi
+echo "Eletric instalado com sucesso!"
+
+atualizar
+change
+
+#PostgreSQL
+#Problema 1: Instalador deverá ficar no FTP. Falhou baixar direto utilizando o wget.
+echo "Instalando o PostgreSQL..."
+#Pegar o arquivo do FTP
+  if ! (chmod 755 postgresql-10.6-1-linux-x64.run && sudo ./postgresql-10.6-1-linux-x64.run --unattendedmodeui minimalWithDialogs --superaccount aluno --serviceaccount aluno --superpassword 123456 --mode unattended --prefix /opt/PostgreSQL/10 --datadir /opt/PostgreSQL/10/data)
+  then
+	echo "Não foi possível instalar o PostgreSQL."
+	exit 1
+  fi
+echo "PostgreSQL instalado com sucesso!"
+
+atualizar
+change
+
+#Cisco Packett Tracer
+#Problema 1: Programa necessita de cadastro para baixar. Solução: Colocar o arquivo em um servidor e usar o FTP. Deixar esse programa para ser instalado por último.
+echo "Instalando o Cisco Packett Tracer..."
+echo "Cisco Packett Tracer instalado com sucesso!"
+
+atualizar
+change
+
+#IBM ILOG CPLEX
+#Problema 1: Programa necessita de cadastro para baixar. Solução: Colocar o arquivo em um servidor e usar o FTP. Deixar esse programa para ser instalado por último.
+echo "Instalando o IBM ILOG CPLEX..."
+echo "IBM ILOG CPLEX instalado com sucesso!"
+
+atualizar
+change
+
+#XMind
+#Problema 1: Arquivo deverá ficar no servidor e usar o FTP. Falhou baixar direto utilizando o wget.
+echo "Instalando o XMind..."
+  if ! (sudo apt-get install libwebkitgtk-1.0-0 -y && sudo apt-get install lame -y)
+  then
+	echo "Não foi possível instalar pré-requisitos do XMind."
+	exit 1
+  fi
+#Pegar o arquivo do servidor
+  if ! (sudo dpkg -i xmind-8-beta-linux_amd64.deb -y)
+  then
+	echo "Não foi possível instalar o XMind."
+  fi
+echo "XMind instalado com sucesso!"
+
+atualizar
+change
+
+#SQLDeveloper
+#Problema 1: Uso dele se dá apenas por sudo ./sqldeveloper
+#Problema 2: Arquivo .desktop não funciona.
+#Problema 3: Necessita de cadastro. Pegar o arquivo via FTP
+echo "Instalando o SQLDeveloper..."
+
+  if ! (sudo alien --scripts sqldeveloper*.rpm && sudo dpkg -i sqldeveloper*.deb && remover && sudo apt-get remove icedtea-*-plugin)
+  then
+	echo "Não foi possível instalar o SQLDeveloper."
+	exit 1
+  fi
+  sudo echo "JAVA_HOME=/usr/lib/jvm/java-8-oracle" >> /home/${USERNAME}/.sqldeveloper/18.4.0/product.conf 
+  echo "Configuração realizada com sucesso."
+echo "SQLDeveloper instalado com sucesso!" 
+
+atualizar
+change
+remove
+
+echo "Término da Parte 2!"
+exit 0
 #-----------------------------------------------------------------------------
 # Parte 3: Programas com instalação tranquila
 #-----------------------------------------------------------------------------
-echo "Término da Parte 2!"
-exit 0
 
 atualizar
 change

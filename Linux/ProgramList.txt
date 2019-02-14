@@ -32,7 +32,7 @@ R
 TexStudio			
 Grub Customizer
 ------------------------------------------------------------------
-Parte 2 - Iniciar códigos da parte 2
+Parte 2 - Terminou
 ------------------------------------------------------------------
 OpenCV
 NetBeans
