@@ -1,74 +1,66 @@
 #!/bin/bash
 
-# Script de criação de imagem para Ubuntu 18.04.
-# ProgramList.txt contém todos os programas a serem instalados separados em partes que são referenciadas nos commits.
-# Apresenta funções e trechos devidamente comentados. 
-# Versão de teste 2.1 - Terminar de programar a instalação dos softwares da parte II. Função download realizada e criação de uma seção de variáveis globais.
-# Descoberta do -C através do comando tar que permite escolher o diretório output
+# This script creates an image with the files present in Software.txt for Ubuntu 18.04.
+# This code presents parts that are properly commented out and separated by global variables,functions, and error issues.
+# Version 2.1.0 - Translating the files into English.
+
+#--------------------------------------------------------------------------------------------------
+# Error Issues
+#--------------------------------------------------------------------------------------------------
+# Tar command have a -C option specifying the output directory.
 # Problema nas antigas linhas 297 - 301 (atualmente linhas 307 a 312) resolvido: Foi criado um arquivo no diretório atual e este depois movido com a pasta no qual precisava estar com os comandos sudo mv
 # Problema na antiga linha 327: Diretório não era estabecido corretamente. Foi utilizado a função change para consertar o problema.
 # Instalação forçada do Anaconda pode ser feito com -b
 # Qt instalado não interativamente criando um script de acordo com o link https://stackoverflow.com/questions/25105269/silent-install-qt-run-installer-on-ubuntu-server 
 # Problema do conda list resolvido, echo "PATH=$PATH:$HOME/anaconda3/bin" >> /home/${USERNAME}/.bashrc e execução normal. 
 # Linha 618 apresenta a criação de um arquivo.desktop
-# Arquivos necessários foram colocados em um FTP. Função download criada
-#----------------------------------------------------------------------------------
+
+#-------------------------------------------------------------------------------------------------
 # Suporte a erros
 #----------------------------------------------------------------------------------
 # 1ª Parte concluída sem erro.
 # 2ª Parte  
 #    Problema linha 637 (IBM ILOG CPLEX): Arquivo é necessário estar no FTP.
 # 3ª Parte - Iniciada, porém parada enquanto não terminar a parte 2
+
 #----------------------------------------------------------------------------------
-# Variáveis Globais
+# Global variables
 #----------------------------------------------------------------------------------
 ARGC=4 
 #----------------------------------------------------------------------------------
-# Funções Gerais
+# Functions
 #----------------------------------------------------------------------------------
-#Função atualizar: Atualiza todos os repositórios e pacotes.
-function atualizar(){
-  echo "Atualizando repositórios..."
-  if ! sudo apt-get update -y
+#Update function: Update all repositories and packages.
+function update(){
+  echo "Updating all repositories..."
+  if ! (sudo apt-get update -y && sudo apt-get dist-upgrade -y) 
   then
-      echo "Não foi possível atualizar os repositórios. Verifique o arquivo /etc/apt/sources.list"
+      echo "Couldn't update all repositories."
       exit 1
   fi
-  echo "Atualização de repositórios feita com sucesso!"
-  echo "Atualizando pacotes instalados..."
-  if ! sudo apt-get dist-upgrade -y
-  then
-      echo "Não foi possível atualizar os pacotes."
-      exit 1
-  fi
-  echo "Atualização dos pacotes realizada com sucesso!"
+  echo "Successful update on all repositories and packages."
 }
 
-#Função change: Troca para o diretório padrão de Downloads.
+#Change function: Switches to the default user downloads directory.
 function change(){
   cd /home/${USERNAME}/Downloads
 }
 
-#Função remover: Remove pacotes não mais necessários.
-function remover(){
+#Autoremove function: Remove packages that are no longer needed.
+function autoremove(){
   sudo apt autoremove -y
 }
 
-#Função download: Baixa arquivos necessários presentes no FTP e os move para a pasta Downloads do Username
+#Download function: Download files from the FTP server based on the script parameters and move those files to the Downloads folder.
 function download(){
   if (${#} -eq ${ARGC})
   then
-	wget -r ftp://${1}:${2}@${3}/${4}/*
-	mv /home/${USERNAME}/Downloads/${4}/* /home/${USERNAME}/Downloads
+	wget -r ftp://${1}:${2}@${3}/${4}
+	mv /home/${USERNAME}/Downloads/${4} /home/${USERNAME}/Downloads
   else
-   	echo "Passe quatro parâmetros para o script,onde:"
-	echo "Primeiro parâmetro é o nome de usuário do FTP."
-	echo "Segundo parâmetro é a senha do usuário do FTP."
-	echo "Terceiro parâmetro é o IP de acesso do FTP."
-	echo "Quarto parâmetro é o diretório no FTP, onde os arquivos se encontram (não usar barra inicial e nem a final de um diretório)."
+   	echo "Four arguments are required, respectively: Username,password,FTP server ip address and path file."
 	exit 1
   fi;
-	
 }
 #-------------------------------------------------------------------------------
 # Instalação de programas:
