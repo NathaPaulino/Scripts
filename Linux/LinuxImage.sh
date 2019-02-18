@@ -2,40 +2,40 @@
 
 # This script creates an image with the files present in Software.txt for Ubuntu 18.04.
 # This code presents parts that are properly commented out and separated by global variables,functions, and error issues.
-# Version 2.1.0 - Translating the files into English.
+# Version 2.1.1 - Translating the files into English. Stop at JDK 8
 
 #--------------------------------------------------------------------------------------------------
 # Error Issues
 #--------------------------------------------------------------------------------------------------
 # Tar command have a -C option specifying the output directory.
-# Problema nas antigas linhas 297 - 301 (atualmente linhas 307 a 312) resolvido: Foi criado um arquivo no diretório atual e este depois movido com a pasta no qual precisava estar com os comandos sudo mv
-# Problema na antiga linha 327: Diretório não era estabecido corretamente. Foi utilizado a função change para consertar o problema.
-# Instalação forçada do Anaconda pode ser feito com -b
-# Qt instalado não interativamente criando um script de acordo com o link https://stackoverflow.com/questions/25105269/silent-install-qt-run-installer-on-ubuntu-server 
-# Problema do conda list resolvido, echo "PATH=$PATH:$HOME/anaconda3/bin" >> /home/${USERNAME}/.bashrc e execução normal. 
-# Linha 618 apresenta a criação de um arquivo.desktop
+# Problems in lines 295 to 300: A file was created and then moved using sudo and mv.
+# Problem in line 327: Directory wasn't established correctly. The change function was used and the problem was solved.
+# Anaconda's silent installation is done using the -b flag in the script.
+# Using a silent Qt install script according to the link: https://stackoverflow.com/questions/25105269/silent-install-qt-run-installer-on-ubuntu-server 
+# Conda list problem solved: echo "PATH=$PATH:$HOME/anaconda3/bin" >> /home/${USERNAME}/.bashrc and normal execution. 
+# Line 637 introduces the creation of a .desktop file.
 
 #-------------------------------------------------------------------------------------------------
 # Suporte a erros
 #----------------------------------------------------------------------------------
-# 1ª Parte concluída sem erro.
-# 2ª Parte  
-#    Problema linha 637 (IBM ILOG CPLEX): Arquivo é necessário estar no FTP.
-# 3ª Parte - Iniciada, porém parada enquanto não terminar a parte 2
-
+# All requirements have been successfully installed.
+# Softwares problems:
+#    - Cisco Packett Tracer and IBM ILOG CPLEX. (Lines 662 and 669)
 #----------------------------------------------------------------------------------
 # Global variables
 #----------------------------------------------------------------------------------
 ARGC=4 
+
 #----------------------------------------------------------------------------------
 # Functions
 #----------------------------------------------------------------------------------
 #Update function: Update all repositories and packages.
+
 function update(){
   echo "Updating all repositories..."
   if ! (sudo apt-get update -y && sudo apt-get dist-upgrade -y) 
   then
-      echo "Couldn't update all repositories."
+      echo "Couldn't update all repositories and packages."
       exit 1
   fi
   echo "Successful update on all repositories and packages."
@@ -63,250 +63,233 @@ function download(){
   fi;
 }
 #-------------------------------------------------------------------------------
-# Instalação de programas:
+# Installing requirements:
 
 download
 change
-atualizar
+update
 
 #Flash Player
-echo "Instalando Flash Player..."
+echo "Installing Flash Player..."
   if ! sudo sh -c "echo 'deb http://archive.canonical.com/ubuntu $(lsb_release -cs) partner' >> /etc/apt/sources.list" -y
   then
-    echo "Não foi possível instalar o Flash Player."
+    echo "The package containing the Flash Player couldn't be downloaded.."
+    exit 1
+  elif ! (update && sudo apt-get install adobe-flashplugin -y)
+  then
+    echo "Couldn't install Flash Player plugin."
     exit 1
   fi
-atualizar
-if ! sudo apt-get install adobe-flashplugin -y
-then
-    echo "Não foi possível baixar o plugin."
-    exit 1
-fi
-echo "Flash Player instalado com sucesso!"
+echo "Flash Player successfully installed!"
 
 #Node.js
-atualizar
-echo "Instalando Node.js e Npm..."
-  if ! sudo apt-get install nodejs -y
+update
+echo "Installing Node.js and Npm..."
+  if ! (sudo apt-get install nodejs -y && sudo apt-get install npm -y)
   then
-    if ! nodejs --version
+    if ! (nodejs --version && npm --version)
     then
-      echo "Não foi possível instalar o Node.js."
+      echo "Couldn't install Node.js and Npm."
       exit 1
     fi
   fi
-  if ! sudo apt-get install npm -y
-  then
-    if ! npm --version
-    then
-      echo "Não foi possível instalar o npm."
-      exit 1
-    fi
-  fi
-echo "Node.js e Npm instalados com sucesso!"
+echo "Node.js and Npm successfully installed!"
 
 #Alien
-atualizar
-echo "Instalando Alien..."
-  if ! sudo apt-get install alien -y
+update
+echo "Installing Alien..."
+  if ! (sudo apt-get install alien -y)
     then
-      echo "Não foi possível instalar o pacote Alien."
+      echo "Couldn't install Alien."
       exit 1
   fi
-echo "Alien instalado com sucesso!"
+echo "Alien successfully installed!"
 
 #Curl
-atualizar
-echo "Instalando Curl..."
+update
+echo "Installing Curl..."
   if ! (sudo apt-get install curl -y)
   then
-    echo "Não foi possível instalar o pacote Curl."
+    echo "Couldn't install the Curl package."
     exit 1
   fi
-echo "Curl instalado com sucesso!"
+echo "Curl successfully installed!"
 
 #Git
-atualizar
-echo "Instalando Git..."
-  if ! sudo apt-get install git-all -y
+update
+echo "Installing Git..."
+  if ! (sudo apt-get install git -y)
   then
-    echo "Não foi possível instalar o git."
+    echo "Couldn't install git."
     exit 1
   fi
-echo "Git instalado com sucesso!"
+echo "Git successfully installed!"
 
 #Atom
-atualizar
-echo "Instalando o Atom..."chmod +x netbeans-8.2-linux.sh 
-  echo "Instalando dependências do Atom..."
+update
+echo "Installing Atom..." 
+  echo "Installing dependencies..."
   if ! (sudo apt-get install gconf2 -y && sudo apt-get install gconf-service -y)
   then
-    echo "Não foi possível instalar pré-requisitos do Atom."
-  fi
-  if ! (sudo wget https://atom.io/download/deb && sudo dpkg -i deb)
+    echo "Couldn't download the dependencies."
+    exit 1
+  elif (sudo wget https://atom.io/download/deb && sudo dpkg -i deb)
   then
-    echo "Não foi possível instalar o Atom."
+    echo "Couldn't install Atom."
     exit 1
   fi
-
-echo "Atom instalado com sucesso!"
+echo "Atom successfully installed!"
 rm -rf deb
 
 #Cmake
-atualizar
-echo "Instalando o Cmake..."
+update
+echo "Installing Cmake..."
   if ! (sudo wget https://github.com/Kitware/CMake/releases/download/v3.12.4/cmake-3.12.4.tar.gz && tar -xvf cmake-3.12.4.tar.gz)
   then
-    echo "Não foi possível baixar e descompactar o arquivo Cmake."
+    echo "Couldn't download and unzip the Cmake file."
     exit 1
-  fi
-cd cmake-3.12.4/
-  if ! (sudo ./bootstrap && sudo make && sudo make install)
+  elif ! (cd cmake-3.12.4/ && sudo ./bootstrap && sudo make && sudo make install)
   then
-    echo "Não foi possível instalar o Cmake."
+    echo "Couldn't install Cmake."
     exit 1
   fi
-echo "Cmake instalado com sucesso!"
+echo "Cmake successfully installed!"
 
-#Compilador Haskell
-atualizar
+#Haskell compiler
+update
 change
-echo "Instalando o compilador de Haskell..."
+echo "Installing Haskell compiler..."
   if ! (sudo apt-get install ghc -y)
   then
-    echo "Não foi possível instalar o compilador de Haskell."
+    echo "Couldn't install Haskell compiler."
     exit 1
   fi
-echo "Compilador de Haskell instalado com sucesso!"
+echo "Haskell compiler successfully installed!"
 
 #Freeglut
-atualizar
-echo "Instalando o Freeglut..."
+update
+echo "Installing Freeglut..."
   if ! (sudo apt-get install freeglut3 freeglut3-dev libglew1.5-dev libglew-dev libsoil-dev libsdl2-dev libsdl2-mixer-dev -y)
   then
-    echo "Não foi possível instalar o Freeglut."
+    echo "Couldn't install Freeglut."
     exit 1
   fi
-echo "Freeglut instalado com sucesso!"
+echo "Freeglut successfully installed!"
 
 #G++
-atualizar
-echo "Instalando o g++..."
+update
+echo "Installing g++..."
   if ! (sudo apt-get install g++ -y)
   then
-    echo "Não foi possível instalar o g++."
+    echo "Couldn't install g++."
     exit 1
   fi
-echo "G++ instalado com sucesso!"
+echo "G++ successfully installed!"
 
 #Gcc
-atualizar
-echo "Instalando o gcc..."
+update
+echo "Installing gcc..."
   if ! (sudo apt-get install gcc -y)
   then
-    echo "Não foi possível instalar o gcc."
+    echo "Couldn't install gcc."
     exit 1
   fi
-echo "Gcc instalado com sucesso!"
+echo "Gcc successfully installed!"
 
 #Gedit
-atualizar
-echo "Instalando o gedit..."
+update
+echo "Installing gedit..."
   if ! (sudo apt-get install gedit -y)
   then
-    echo "Não foi possível instalar o gedit."
+    echo "Couldn't install gedit."
     exit 1
   fi
-echo "Gedit instalado com sucesso!"
+echo "Gedit successfully installed!"
 
 #GIMP
-atualizar
-echo "Instalando o GIMP..."
+update
+echo "Installing GIMP..."
   if ! (sudo apt-get install gimp -y)
   then
-    echo "Não foi possível instalar o GIMP."
+    echo "Couldn't install GIMP."
     exit 1
   fi
-echo "GIMP instalado com sucesso!"
+echo "GIMP successfully installed!"
 
 #Golang
-atualizar
-echo "Instalando o compilador de Go..."
+update
+echo "Installing Go compiler..."
   if ! (sudo apt-get install golang-go -y && sudo apt-get install gccgo-go -y)
   then
-    echo "Não foi possível instalar o compilador de Go."
+    echo "Couldn't install Go compiler."
     exit 1
   fi
-echo "Golang instalado com sucesso!"
+echo "Golang successfully installed!"
 
 #Google Chrome
-atualizar
-echo "Instalando o Google Chrome..."
-if ! (sudo wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb)
-then
-	echo "Não foi possível adicionar o repositório do Google Chrome."
-  exit 1
-fi
-atualizar
-if ! (sudo dpkg -i google-chrome-stable_current_amd64.deb)
-then
-	echo "Não foi possível instalar o Google Chrome."
-  exit 1
-fi
-echo "Google Chrome instalado com sucesso!"
+update
+echo "Installing Google Chrome..."
+  if ! (sudo wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb)
+  then
+	echo "Couldn't add Google Chrome repository."
+  	exit 1
+  elif ! (update && sudo dpkg -i google-chrome-stable_current_amd64.deb)
+  then
+	echo "Couldn't install Google Chrome."
+  	exit 1
+  fi
+echo "Google Chrome sucessfully installed!"
 rm -rf google-chrome-stable_current_amd64.deb
 
 #Interpretador Prolog
-atualizar
-echo "Instalando o interpretador de Prolog..."
+update
+echo "Installing Prolog interpreter..."
   if ! (sudo apt-get install swi-prolog -y)
   then
-    echo "Não foi possível instalar o interpretador de Prolog."
+    echo "Couldn't install Prolog interpreter."
     exit 1
   fi
-echo "Interpretador de Prolog instalado com sucesso!"
+echo "Prolog interpreter successfully installed!"
 
 #JDK 11
-echo "Instalando o JDK 11..."
+echo "Installing JDK 11..."
 cd /tmp
-  echo "Instalando pré-requisitos..."
-    if ! (sudo wget --no-cookies --no-check-certificate --header "Cookie: oraclelicense=accept-securebackup-cookie" \
+  echo "Installing requirements..."
+  if ! (sudo wget --no-cookies --no-check-certificate --header "Cookie: oraclelicense=accept-securebackup-cookie" \
   http://download.oracle.com/otn-pub/java/jdk/11.0.2+9/f51449fcd52f4d52b93a989c5c56ed3c/jdk-11.0.2_linux-x64_bin.deb)
-    then
-      echo "Não foi possível instalar os pré-requisitos."
-      exit 1
-    fi
-  echo "Pré-requisitos instalados com sucesso!"
-    if ! (sudo dpkg -i jdk-11.0.2_linux-x64_bin.deb)
-    then
-      echo "Não foi possível instalar o JDK 11."
-      exit 1
-    fi
-  echo "Configurando o JDK 11..." #Nessa parte tem interação com usuário
-    if ! (sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/jdk-11.0.2/bin/java 2 && sudo update-alternatives --config java)
-    then
-      echo "Não foi possível configurar o JDK 11."
-      exit 1
-    fi
-    sudo update-alternatives --install /usr/bin/jar jar /usr/lib/jvm/jdk-11.0.2/bin/jar 2
-    sudo update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/jdk-11.0.2/bin/javac 2
-    sudo update-alternatives --set jar /usr/lib/jvm/jdk-11.0.2/bin/jar
-    sudo update-alternatives --set javac /usr/lib/jvm/jdk-11.0.2/bin/javac
-  echo "Configuração realizada com sucesso!"
+  then
+     echo "Couldn't install the requirements."
+     exit 1
+  elif ! (sudo dpkg -i jdk-11.0.2_linux-x64_bin.deb)
+  then
+     echo "Couldn't install JDK 11."
+     exit 1
+  fi
+  echo "Configuring JDK..." #Nessa parte tem interação com usuário
+  if ! (sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/jdk-11.0.2/bin/java 2 && sudo update-alternatives --config java)
+  then
+     echo "Couldn't configure JDK 11."
+     exit 1
+  fi
+     sudo update-alternatives --install /usr/bin/jar jar /usr/lib/jvm/jdk-11.0.2/bin/jar 2
+     sudo update-alternatives --install /usr/bin/javac javac /usr/lib/jvm/jdk-11.0.2/bin/javac 2
+     sudo update-alternatives --set jar /usr/lib/jvm/jdk-11.0.2/bin/jar
+     sudo update-alternatives --set javac /usr/lib/jvm/jdk-11.0.2/bin/javac
+  echo "Configuration successfully completed!"
   java -version
-  echo "Configurando variáveis de ambiente..."
+  echo "Configuring environment variables..."
      echo 'export J2SDKDIR=/usr/lib/jvm/jdk-11.0.2' >> /home/${USERNAME}/jdk.sh
      echo 'export J2REDIR=/usr/lib/jvm/jdk-11.0.2' >> /home/${USERNAME}/jdk.sh
      echo 'export PATH=$PATH:/usr/lib/jvm/jdk-11.0.2/bin:/usr/lib/jvm/jdk-11.0.2/db/bin' >> /home/${USERNAME}/jdk.sh
      echo 'export JAVA_HOME=/usr/lib/jvm/jdk-11.0.2' >> /home/${USERNAME}/jdk.sh
      echo 'export DERBY_HOME=/usr/lib/jvm/jdk-11.0.2/db' >> /home/${USERNAME}/jdk.sh
      sudo mv /home/${USERNAME}/jdk.sh /etc/profile.d/
-    source /etc/profile.d/jdk.sh
-  echo "Configuração de variáveis de ambiente realizada com sucesso!"
-echo "JDK 11 instalado com sucesso!"
+     source /etc/profile.d/jdk.sh
+  echo "Configuration of environment variables performed successfully!"
+echo "JDK 11 successfully installed!"
 
 #JDK 8
-atualizar
+update
 echo "Instalando o JDK 8..."
   if ! (sudo add-apt-repository ppa:webupd8team/java -y)
   then
