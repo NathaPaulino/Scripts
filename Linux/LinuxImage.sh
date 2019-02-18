@@ -2,7 +2,7 @@
 
 # This script creates an image with the files present in Software.txt for Ubuntu 18.04.
 # This code presents parts that are properly commented out and separated by global variables,functions, and error issues.
-# Version 2.1.1 - Translating the files into English. Stop at JDK 8
+# Version 2.2 - All translated. Start the tests and verifying a few things
 
 #--------------------------------------------------------------------------------------------------
 # Error Issues
@@ -11,29 +11,25 @@
 # Problems in lines 295 to 300: A file was created and then moved using sudo and mv.
 # Problem in line 327: Directory wasn't established correctly. The change function was used and the problem was solved.
 # Anaconda's silent installation is done using the -b flag in the script.
-# Using a silent Qt install script according to the link: https://stackoverflow.com/questions/25105269/silent-install-qt-run-installer-on-ubuntu-server 
-# Conda list problem solved: echo "PATH=$PATH:$HOME/anaconda3/bin" >> /home/${USERNAME}/.bashrc and normal execution. 
+# Using a silent Qt install script according to the link: https://stackoverflow.com/questions/25105269/silent-install-qt-run-installer-on-ubuntu-server
+# Conda list problem solved: echo "PATH=$PATH:$HOME/anaconda3/bin" >> /home/${USERNAME}/.bashrc and normal execution.
 # Line 637 introduces the creation of a .desktop file.
-
-#-------------------------------------------------------------------------------------------------
-# Suporte a erros
-#----------------------------------------------------------------------------------
 # All requirements have been successfully installed.
 # Softwares problems:
 #    - Cisco Packett Tracer and IBM ILOG CPLEX. (Lines 662 and 669)
-#----------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------
 # Global variables
-#----------------------------------------------------------------------------------
-ARGC=4 
+#------------------------------------------------------------------------------------------------
+ARGC=4
 
-#----------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------
 # Functions
-#----------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------
 #Update function: Update all repositories and packages.
 
 function update(){
   echo "Updating all repositories..."
-  if ! (sudo apt-get update -y && sudo apt-get dist-upgrade -y) 
+  if ! (sudo apt-get update -y && sudo apt-get dist-upgrade -y)
   then
       echo "Couldn't update all repositories and packages."
       exit 1
@@ -62,7 +58,9 @@ function download(){
 	exit 1
   fi;
 }
-#-------------------------------------------------------------------------------
+
+#
+#------------------------------------------------------------------------------------------------
 # Installing requirements:
 
 download
@@ -127,7 +125,7 @@ echo "Git successfully installed!"
 
 #Atom
 update
-echo "Installing Atom..." 
+echo "Installing Atom..."
   echo "Installing dependencies..."
   if ! (sudo apt-get install gconf2 -y && sudo apt-get install gconf-service -y)
   then
@@ -265,7 +263,7 @@ cd /tmp
      echo "Couldn't install JDK 11."
      exit 1
   fi
-  echo "Configuring JDK..." #Nessa parte tem interação com usuário
+  echo "Configuring JDK..." #User interaction
   if ! (sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/jdk-11.0.2/bin/java 2 && sudo update-alternatives --config java)
   then
      echo "Couldn't configure JDK 11."
@@ -290,112 +288,100 @@ echo "JDK 11 successfully installed!"
 
 #JDK 8
 update
-echo "Instalando o JDK 8..."
+echo "Installing JDK 8..."
   if ! (sudo add-apt-repository ppa:webupd8team/java -y)
   then
-	   echo "Não foi possível adicionar o repositório do JDK 8."
+     echo "Couldn't install the requirement."
      exit 1
-  fi
-  atualizar
-  if ! (sudo apt-get install oracle-java8-installer -y && sudo apt-get install oracle-java8-set-default -y)
+  elif ! (update && sudo apt-get install oracle-java8-installer -y && sudo apt-get install oracle-java8-set-default -y)
   then
-     echo "Não foi possível instalar JDK 8."
+     echo "Couldn't install JDK 8."
      exit 1
   fi
-  echo "Verificando instalação"
+  echo "Verifying installation."
   java -version
-echo "JDK 8 instalado com sucesso!"
+echo "JDK 8 successfully installed!"
 
 #Java3D
-atualizar
+update
 change
-echo "Instalando o Java3D..."
+echo "Installing Java3D..."
   if ! (sudo apt-get install libjava3d-java -y)
   then
-    echo "Não foi possível instalar o Java3D."
+    echo "Couldn't install Java3D."
     exit 1
   fi
-echo "Java3D instalado com sucesso!"
+echo "Java3D successfully installed!"
 
 #LibreOffice
-atualizar
-echo "Instalando o LibreOffice..."
-  echo "Retirando LibreOffice que vem com o sistema operacional!"
+update
+echo "Installing LibreOffice..."
+  echo "Purging LibreOffice!"
   if ! (sudo apt-get remove libreoffice-core --purge -y)
   then
-    echo "Não foi possível deinstalar o LibreOffice."
+    echo "Unable to uninstall LibreOffice."
     exit 1
-  fi
-  if ! (sudo wget https://download.documentfoundation.org/libreoffice/stable/6.1.4/deb/x86_64/LibreOffice_6.1.4_Linux_x86-64_deb.tar.gz && tar -xvzf LibreOffice_6.1.4_Linux_x86-64_deb.tar.gz)
+  elif ! (sudo wget https://download.documentfoundation.org/libreoffice/stable/6.1.4/deb/x86_64/LibreOffice_6.1.4_Linux_x86-64_deb.tar.gz && tar -xvzf LibreOffice_6.1.4_Linux_x86-64_deb.tar.gz)
   then
-    echo "Não foi possível baixar o LibreOffice."
+    echo "Couldn't download LibreOffice."
     exit 1
-  fi
-  cd LibreOffice_6.1.4.2_Linux_x86-64_deb/DEBS
-  if ! (sudo dpkg -i *.deb)
+  elif ! (LibreOffice_6.1.4.2_Linux_x86-64_deb/DEBS && sudo dpkg -i *.deb)
   then
-    echo "Não foi possível instalar o LibreOffice."
+    echo "Couldn't install LibreOffice."
     exit 1
   fi
-echo "LibreOffice instalado com sucesso!"
+echo "LibreOffice successfully installed!"
 
 #Mozilla Firefox
 change
-atualizar
-echo "Instalando o Mozilla Firefox..."
-echo "Desinstalando o Mozilla Firefox que vem com o sistema Operacional!"
+update
+echo "Installing Mozilla Firefox..."
+echo "Purging Mozilla Firefox!"
   if ! (sudo apt-get remove firefox --purge -y)
   then
-    echo "Não foi possível desinstalar o Mozilla Firefox."
+    echo "Unable to uninstall Mozilla Firefox."
     exit 1
-  fi
-atualizar
-  if ! (sudo apt-get install firefox -y)
+  elif ! (update && sudo apt-get install firefox -y)
   then
-    echo "Não foi possível instalar o Mozilla Firefox."
+    echo "Couldn't install  Mozilla Firefox."
     exit 1
   fi
-echo "Mozilla Firefox instalado com sucesso!"
+echo "Mozilla Firefox successfully installed!"
 
 #Octave
-atualizar
-echo "Instalando o Octave..."
+update
+echo "Installing Octave..."
   if ! (sudo apt-get install octave -y)
   then
-    echo "Não foi possível instalar o Octave."
+    echo "Couldn't install  Octave."
     exit 1
   fi
-echo "Octave instalado com sucesso!"
+echo "Octave successfully installed!"
 
 #Python Anaconda
-atualizar
-echo "Instalando o Anaconda..." 
+update
+echo "Installing Anaconda..."
   cd /tmp/
   if ! (sudo curl -O https://repo.anaconda.com/archive/Anaconda3-5.2.0-Linux-x86_64.sh)
   then
-    echo "Não foi possível baixar o script de instalação do Anaconda."
+    echo "Unable to donwload Anaconda's script."
     exit 1
   fi
-  if ! (bash Anaconda3-5.2.0-Linux-x86_64.sh -b) 
+  if ! (bash Anaconda3-5.2.0-Linux-x86_64.sh -b)
   then
-    echo "Não foi possível rodar o script de instalação do Anaconda ou foi cancelado pelo usuário."
+    echo "Unable to run Anaconda's script."
     exit 1
   fi
   echo "PATH=$PATH:$HOME/anaconda3/bin" >> /home/${USERNAME}/.bashrc
   source ~/.bashrc
   conda -version
-echo "Anaconda instalado com sucesso!"
+echo "Anaconda successfully installed!"
 
 #Qt
 change
-atualizar
-echo "Instalando o Qt..."
-  if ! (sudo wget http://download.qt.io/official_releases/qt/5.12/5.12.1/qt-opensource-linux-x64-5.12.1.run && sudo chmod 755 qt-opensource-linux-x64-5.12.1.run)
-  then
-    echo "Não foi possível baixar o script de instalação do Qt ou alterar permissão do script."
-    exit 1
-  fi
-#Criação do arquivo com o script não interativo .qs
+update
+echo "Installing Qt..."
+#Creating a .qs script for no interaction of user
   echo "function Controller() {
     installer.autoRejectMessageBoxes();
     installer.installationFinished.connect(function() {
@@ -444,342 +430,477 @@ Controller.prototype.ReadyForInstallationPageCallback = function()
 }
 Controller.prototype.FinishedPageCallback = function() {
     gui.clickButton(buttons.FinishButton);
-}" >> /home/ntic/Downloads/qt-installer-noninteractive.qs	
--------------------------------
-  if ! (sudo ./qt-opensource-linux-x64-5.12.1.run --script qt-installer-noninteractive.qs)
+}" >> /home/ntic/Downloads/qt-installer-noninteractive.qs
+  if ! (sudo wget http://download.qt.io/official_releases/qt/5.12/5.12.1/qt-opensource-linux-x64-5.12.1.run && sudo chmod 755 qt-opensource-linux-x64-5.12.1.run)
   then
-    echo "Não foi possível executar o script de instalação do Qt."
+    echo "Unable to download Qt's script."
+    exit 1
+  elif ! (sudo ./qt-opensource-linux-x64-5.12.1.run --script qt-installer-noninteractive.qs)
+  then
+    echo "Unable to run Qt's script."
     exit 1
   fi
-echo "Qt instalado com sucesso!"
+echo "Qt successfully installed!"
 
 #R
-atualizar
-echo "Instalando o R..."
+update
+echo "Installing R..."
   if ! (sudo apt-get install r-base -y)
   then
-    echo "Não foi possível instalar o R."
+    echo "Couldn't install R."
     exit 1
   fi
-echo "R instalado com sucesso!"
+echo "R successfully installed!"
 
 #Sublime
-atualizar
+update
 change
-echo "Instalando o Sublime..."
+echo "Installing Sublime..."
   if ! ((sudo wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | sudo apt-key add -) && (echo "deb https://download.sublimetext.com/ apt/stable/" | sudo tee /etc/apt/sources.list.d/sublime-text.list))
   then
-    echo "Não foi possível instalar repositórios do Sublime."
+    echo "Unable to install the requirements."
     exit 1
-  fi
-atualizar
-  if ! sudo apt-get install sublime-text -y
+  elif ! (update && sudo apt-get install sublime-text -y)
   then
-    echo "Não foi possível instalar o Sublime."
+    echo "Couldn't install Sublime."
     exit 1
   fi
-echo "Sublime instalado com sucesso!"
+echo "Sublime successfully installed!"
 
 #TexStudio
-atualizar
-echo "Instalando o TexStudio..."
-  if ! sudo apt-get install texstudio -y
+update
+echo "Installing TexStudio..."
+  if ! (sudo apt-get install texstudio -y)
   then
-    echo "Não foi possível instalar o TexStudio."
+    echo "Couldn't install TexStudio."
     exit 1
   fi
-echo "TexStudio instalado com sucesso!"
+echo "TexStudio successfully installed!"
 
 #Grub Customizer
-atualizar
-echo "Instalando o Grub Customizer..."
+update
+echo "Installing Grub Customizer..."
   if ! (sudo add-apt-repository ppa:danielrichter2007/grub-customizer -y)
   then
-    echo "Não foi possível instalar o repositório do Grub Customizer."
+    echo "Unable to install the requirements."
     exit 1
-  fi
-  atualizar
-  if ! (sudo apt-get install grub-customizer -y)
+  elif ! (update && sudo apt-get install grub-customizer -y)
   then
-    echo "Não foi possível instalar o Grub Customizer."
+    echo "Couldn't install Grub Customizer."
     exit 1
   fi
-echo "Grub Customizer instalado com sucesso!"
+echo "Grub Customizer successfully installed!"
 
 remover
-atualizar
+update
 change
 
-#-----------------------------------------------------------------------------
-# Parte 2: Programas com instalação complicada
-#-----------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------
+# All remains softwares 
+#------------------------------------------------------------------------------------------------
 
-#OpenCV 
-# Pacote python3.5-dev desativado. Foi substituído pelo pacote python3.7-dev.
-# Biblioteca libjasper-dev necessária para funcionamento não estava disponível no Ubuntu 18.04,portanto é necessário pegar de uma versão diferente, mais informações: https://researchxuyc.wordpress.com/2018/09/26/install-libjasper-in-ubuntu-18-04/.
-#
-echo "Instalando OpenCV..."
-  echo "Instalando pré-requisitos..."
+#OpenCV
+# Unable to find the python3.5-dev package. Was replaced for python3.7-dev package.
+# Using another version of libjasper. More information on: https://researchxuyc.wordpress.com/2018/09/26/install-libjasper-in-ubuntu-18-04/.
+echo "Installing OpenCV..."
+  echo "Installing requirements..."
     if ! (sudo apt-get install build-essential cmake git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev)
     then
-	echo "Falha ao instalar primeira parte dos requisitos."
-	exit 1
-    fi
-    if ! (sudo apt-get install python3.7-dev python3-numpy libtbb2 libtbb-dev -y)
+	    echo "Unable to install requirements."
+    	exit 1
+    elif ! (sudo apt-get install python3.7-dev python3-numpy libtbb2 libtbb-dev -y)
     then
-	echo "Falha ao instalar segunda parte dos requisitos."
-	exit 1
-    fi
-    if ! (sudo add-apt-repository "deb http://security.ubuntu.com/ubuntu xenial-security main" && atualizar && sudo apt-get install libjasper1 libjasper-dev -y)
+	    echo "Unable to install requirements."
+	    exit 1
+    elif ! (sudo add-apt-repository "deb http://security.ubuntu.com/ubuntu xenial-security main" && update && sudo apt-get install libjasper1 libjasper-dev -y)
     then
-	echo "Falha ao instalar biblioteca libjasper-dev."
-	exit 1
-    fi
-    if ! (sudo apt-get install libjpeg-dev libpng-dev libtiff5-dev libdc1394-22-dev libeigen3-dev libtheora-dev libvorbis-dev libxvidcore-dev libx264-dev sphinx-common libtbb-dev yasm libfaac-dev libopencore-amrnb-dev libopencore-amrwb-dev libopenexr-dev libgstreamer-plugins-base1.0-dev libavutil-dev libavfilter-dev libavresample-dev -y)
+	    echo "Unable to install requirements."
+	    exit 1
+    elif ! (sudo apt-get install libjpeg-dev libpng-dev libtiff5-dev libdc1394-22-dev libeigen3-dev libtheora-dev libvorbis-dev libxvidcore-dev libx264-dev sphinx-common libtbb-dev yasm libfaac-dev libopencore-amrnb-dev libopencore-amrwb-dev libopenexr-dev libgstreamer-plugins-base1.0-dev libavutil-dev libavfilter-dev libavresample-dev -y)
     then
-	echo "Falha ao instalar a terceira parte dos requisitos."
-	exit 1
+	    echo "Unable to install requirements."
+	    exit 1
     fi
-  echo "Pré-requisitos instalados com sucesso!"
-  echo "Começando a instalação do OpenCV."  
+  echo "Requirements successfully installed!"
+  echo "Running install routine."
   if ! (sudo -s && cd /opt && git clone https://github.com/Itseez/opencv.git && git clone https://github.com/Itseez/opencv_contrib.git && cd opencv && mkdir release && cd release && cmake -D BUILD_TIFF=ON -D WITH_CUDA=OFF -D ENABLE_AVX=OFF -D WITH_OPENGL=OFF -D WITH_OPENCL=OFF -D WITH_IPP=OFF -D WITH_TBB=ON -D BUILD_TBB=ON -D WITH_EIGEN=OFF -D WITH_V4L=OFF -D WITH_VTK=OFF -D BUILD_TESTS=OFF -D BUILD_PERF_TESTS=OFF -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D OPENCV_EXTRA_MODULES_PATH=/opt/opencv_contrib/modules /opt/opencv/ && make -j4 && make install && ldconfig && change && pkg-config --modversion opencv)
   then
-    	echo "Falha ao instalar o OpenCV.Provavelmente no exit para sair da permissão de super usuário."
+    	echo "Couldn't install OpenCV."
 	exit 1
   fi
-echo "OpenCV instalado com sucesso!"
+echo "OpenCV successfully installed!"
 
-atualizar
+update
 change
 
-#NetBeans e Gradle Support
-# Instalando NetBeans 8.2 IDE e também o Gradle Support,infelizmente o Gradle Support terá de ser feito na mão 
-echo "Instalando o NetBeans 8.2..."
+#NetBeans and Gradle Support
+# Installing Netbeans8.2 and Gradle Support. Failure on auto install Gradle Support Plugin 
+echo "Installing NetBeans 8.2..."
   if ! (cd /tmp && sudo wget -c http://download.netbeans.org/netbeans/8.2/final/bundles/netbeans-8.2-linux.sh)
   then
-	echo "Falha ao efetuar o download do script."
-	exit 1
-  fi
-  if ! (chmod 755 netbeans-8.2-linux.sh && sudo ./netbeans-8.2-linux.sh --silent)
+	  echo "Unable to download the Netbeans script."
+	  exit 1
+  elif ! (chmod 755 netbeans-8.2-linux.sh && sudo ./netbeans-8.2-linux.sh --silent)
   then
-	echo "Não foi possível instalar o NetBeans."
-	exit 1
+	  echo "Couldn't install NetBeans."
+	  exit 1
   fi
-  change
-  echo "Baixando o Gradle Support"
+  echo "Downloading Gradle Support."
   if ! (sudo wget https://github.com/kelemen/netbeans-gradle-project/releases/download/v2.0.2/netbeans-gradle-plugin-2.0.2.nbm)
   then
-	echo "Falha ao baixar o plugin"
-	exit 1
+	  echo "Unable to download the plugin."
+	  exit 1
   fi
-echo "NetBeans instalado e Gradle Support baixado o arquivo (Tem que fazer na mão)!"
+echo "Netbeans successfully installed and Gradle Support successfully downloaded!"
 
-atualizar
+update
 change
 
 #Blender
-#Erros anteriores de dar update e upgrade não foram mais notados. 
-echo "Instalando o Blender..."
-  if ! (sudo apt-get install blender) 
+#Simple install.
+echo "Installing Blender..."
+  if ! (sudo apt-get install blender)
   then
-	echo "Falha ao baixar o Blender."
-	exit 1
+	  echo "Unable to download blender."
+	  exit 1
   fi
-  if ! (atualizar)
-  then
-	echo "Falha ao dar upgrade no pacote do Blender"
-	exit 1
-  fi
-echo "Blender instalado com sucesso!" 
+  update
+echo "Blender successfully installed!"
 
-atualizar
+update
 change
 
 #Visual Code
-#Erros apresentados anteriormente não estão sendo mais notados.
-echo "Instalando o VSCode..."
+#Simple install.
+echo "Installing VSCode..."
   if ! (sudo wget https://go.microsoft.com/fwlink/?LinkID=760868 -O visualstudio.deb && sudo dpkg -i visualstudio.deb)
-  then 
-	echo "Falha ao instalar o VSCode."
-	exit 1
+  then
+	  echo "Unable to install VSCode."
+	  exit 1
   fi
-echo "Visual Code instalado com sucesso!."
+echo "Visual Code successfully installed!."
 
-atualizar
+update
 change
 
 #Eletric
-echo "Instalando o Eletric..."
-  mkdir /home/${USERNAME}/Eletric 
+echo "Installing Eletric..."
+  mkdir /home/${USERNAME}/Eletric
   cd /home/${USERNAME}/Eletric
   if ! (sudo wget https://ftp.gnu.org/pub/gnu/electric/electricBinary-9.07.jar -O electric.jar)
   then
-   	echo "Falha ao baixar a máquina Java do Electric."
-	exit 1
+   	echo "Unable to download Electric Java machine."
+	  exit 1
   fi
   cp electric.jar /usr/share/java/
   unzip electric.jar
-  echo "Criando o .Desktop..."
+  echo "Creating a .desktop file..."
   if ! (echo "[Desktop Entry]" >> /home/${USERNAME}/.local/share/applications/Electric.desktop && echo "Type=Application" >> /home/${USERNAME}/.local/share/applications/Electric.desktop && echo "Name=Electric" >> /home/${USERNAME}/.local/share/applications/Electric.desktop && echo "GenericName=Electric" >> /home/${USERNAME}/.local/share/applications/Electric.desktop && echo "Path=/usr/share/java/" >> /home/${USERNAME}/.local/share/applications/Electric.desktop && echo "Exec=java -jar /usr/share/java/electric.jar" >> /home/${USERNAME}/.local/share/applications/Electric.desktop && echo "Icon=/home/${USERNAME}/Eletric/ElectricIcon64x64.png" >> /home/${USERNAME}/.local/share/applications/Electric.desktop && echo "Terminal=False" >> /home/${USERNAME}/.local/share/applications/Electric.desktop)
   then
-	echo "Falha ao criar atalho para o Electric."
-	exit 1
+	  echo "Unable to create a .desktop file."
+	  exit 1
   fi
-echo "Eletric instalado com sucesso!"
+echo "Eletric successfully installed!"
 
-atualizar
+update
 change
 
 #PostgreSQL
-echo "Instalando o PostgreSQL..."
+echo "Installing PostgreSQL..."
   if ! (chmod 755 postgresql-10.6-1-linux-x64.run && sudo ./postgresql-10.6-1-linux-x64.run --unattendedmodeui minimalWithDialogs --superaccount aluno --serviceaccount aluno --superpassword 123456 --mode unattended --prefix /opt/PostgreSQL/10 --datadir /opt/PostgreSQL/10/data)
   then
-	echo "Não foi possível instalar o PostgreSQL."
+	echo "Couldn't install PostgreSQL."
 	exit 1
   fi
-echo "PostgreSQL instalado com sucesso!"
+echo "PostgreSQL successfully installed!"
 
-atualizar
+update
 change
 
 #Cisco Packett Tracer
-echo "Instalando o Cisco Packett Tracer..."
-echo "Cisco Packett Tracer instalado com sucesso!"
+echo "Installing Cisco Packett Tracer..."
+echo "Cisco Packett Tracer successfully installed!"
 
-atualizar
+update
 change
 
 #IBM ILOG CPLEX
-echo "Instalando o IBM ILOG CPLEX..."
-echo "IBM ILOG CPLEX instalado com sucesso!"
+echo "Installing IBM ILOG CPLEX..."
+echo "IBM ILOG CPLEX successfully installed!"
 
-atualizar
+update
 change
 
 #XMind
-echo "Instalando o XMind..."
+echo "Installing XMind..."
   if ! (sudo apt-get install libwebkitgtk-1.0-0 -y && sudo apt-get install lame -y)
   then
-	echo "Não foi possível instalar pré-requisitos do XMind."
-	exit 1
-  fi
-  if ! (sudo dpkg -i xmind-8-beta-linux_amd64.deb -y)
+	  echo "Unable to install the requirements."
+	  exit 1
+  elif ! (sudo dpkg -i xmind-8-beta-linux_amd64.deb -y)
   then
-	echo "Não foi possível instalar o XMind."
+	  echo "Couldn't install  XMind."
+    exit 1
   fi
-echo "XMind instalado com sucesso!"
+echo "XMind successfully installed!"
 
-atualizar
+update
 change
 
 #SQLDeveloper
-echo "Instalando o SQLDeveloper..."
+echo "Installing SQLDeveloper..."
   if ! (sudo alien --scripts sqldeveloper*.rpm && sudo dpkg -i sqldeveloper*.deb && remover && sudo apt-get remove icedtea-*-plugin)
   then
-	echo "Não foi possível instalar o SQLDeveloper."
+	echo "Couldn't install SQLDeveloper."
 	exit 1
   fi
-  sudo echo "JAVA_HOME=/usr/lib/jvm/java-8-oracle" >> /home/${USERNAME}/.sqldeveloper/18.4.0/product.conf 
-  echo "Configuração realizada com sucesso."
-echo "SQLDeveloper instalado com sucesso!" 
+  sudo echo "JAVA_HOME=/usr/lib/jvm/java-8-oracle" >> /home/${USERNAME}/.sqldeveloper/18.4.0/product.conf
+  echo "Configuration successfully completed."
+echo "SQLDeveloper successfully installed!"
 
-atualizar
+update
 change
 remove
 
-echo "Término da Parte 2!"
-exit 0
-#-----------------------------------------------------------------------------
-# Parte 3: Programas com instalação tranquila
-#-----------------------------------------------------------------------------
-
-atualizar
-change
-
 #Arduino IDE
-echo "Instalando o Arduino IDE..."
+echo "Installing Arduino IDE..."
   if ! (sudo wget https://downloads.arduino.cc/arduino-1.8.8-linux64.tar.xz && tar xvf arduino-1.8.8-linux64.tar.xz)
   then
-    echo "Não foi possível baixar o pacote do Arduino."
+    echo "Unable to download the package for Arduino IDE."
     exit 1
-  fi
-  cd arduino*/
-  if ! (sudo sh ./install.sh)
+  elif ! (cd arduino*/ && sudo sh ./install.sh)
   then
-    echo "Não foi possível instalar o Arduino IDE."
+    echo "Couldn't install Arduino IDE."
     exit 1
   fi
-echo "Arduino IDE instalado com sucesso!"
+echo "Arduino IDE successfully installed!"
 
 #Arquivos de Eletrônica
+#Wget over FTP
 
 #Codeblocks
-atualizar
-echo "Instalando o CodeBlocks..."
-  if ! sudo apt-get install codeblocks -y
+update
+echo "Installing CodeBlocks..."
+  if ! (sudo apt-get install codeblocks -y)
   then
-    echo "Não foi possível instalar o CodeBlocks."
+    echo "Couldn't install CodeBlocks."
     exit 1
   fi
-echo "CodeBlocks instalado com sucesso!"
+echo "CodeBlocks successfully installed!"
 
 #Eclipse
-atualizar
-echo "Instalando o Eclipse..."
-  if ! sudo apt-get install eclipse -y
+update
+echo "Installing Eclipse..."
+  if ! (sudo apt-get install eclipse -y)
   then
-    echo "Não foi possível instalar o Eclipse."
+    echo "Couldn't install Eclipse."
     exit 1
   fi
-echo "Eclipse instalado com sucesso!"
+echo "Eclipse successfully installed!"
 
 #MongoDB
-atualizar
-echo "Instalando o MongoDB..."
+update
+echo "Installing MongoDB..."
   if ! (sudo apt-get install mongodb -y && sudo systemctl status mongodb && mongo --eval 'db.runCOmmand({ connectionStatus: 1 })')
   then
-    echo "Não foi possível instalar o MongoDB."
+    echo "Couldn't install  MongoDB."
     exit 1
   fi
-echo "MongoDB instalado com sucesso!"
+echo "MongoDB successfully installed!"
 
 #MyOpenLab
 change
-echo "Instalando o MyOpenLab..."
+echo "Installing MyOpenLab..."
   if ! (sudo wget https://myopenlab.org/distribution_linux_3.11.0.zip -y && unzip distribution_linux_3.11.0.zip -d distribution_linux_3.11.0)
   then
-    echo "Não foi possível instalar o MongoDB."
+    echo "Couldn't install  MongoDB."
+    exit 1
+  elif ! (cd distribution_linux_3.11.0/ && sudo sh ./start_linux)
+  then
+    echo "Couldn't install  MongoDB."
+    exit 1
+  elif ! (sudo update-java-alternatives --set \java-1.8.0-openjdk-$(dpkg --print-architecture))
+  then
+    echo "Couldn't configurate MongoDB with JDK 8."
     exit 1
   fi
-  cd distribution_linux_3.11.0/
-  if ! (sudo sh ./start_linux)
-  then
-    echo "Não foi possível instalar o MongoDB."
-    exit 1
-  fi
-  if ! (sudo update-java-alternatives --set \java-1.8.0-openjdk-$(dpkg --print-architecture))
-  then
-    echo "Não foi possível configurar o MongoDB para usar o JDK 8."
-    exit 1
-  fi 
-echo "MyOpenLab instalado com sucesso!"
+echo "MyOpenLab successfully installed!"
 
 #NetLogo
-atualizar
+update
 change
-echo "Instalando o NetLogo..."
+echo "Installing NetLogo..."
   if ! (sudo wget https://ccl.northwestern.edu/netlogo/6.0.4/NetLogo-6.0.4-64.tgz)
   then
-    echo "Não foi possível baixar o tar do NetLogo."
+    echo "Unable to download the file NetLogo."
+    exit 1
+  elif ! (tar -xf NetLogo-6.0.4-64.tgz -C /home/${USERNAME}/ )
+  then
+    echo "Unable to extract the NetLogo file."
     exit 1
   fi
-  if ! tar -xf NetLogo-6.0.4-64.tgz -C /home/${USERNAME}/ 
+  echo "Creating a .desktop file..."
+echo "NetLogo successfully installed!"
+
+#Pentaho
+update
+echo "Installing Pentaho..."
+		if ! (mkdir Pentaho && cd Pentaho && mkdir 3.1 && mkdir 3.2 && mkdir 3.3 && mkdir 3.4) 
+    then
+      echo "Unable to create files."
+      exit 1
+    elif ! (cd 3.1 && wget https://sourceforge.net/projects/pentaho/files/Business%20Intelligence%20Server/6.1/biserver-ce-6.1.0.1-196.zip && unzip biserver-ce-6.1.0.1-196.zip && rm biserver-ce-6.1.0.1-196.zip)
+		then
+      echo "Unable to download Pentaho version 3.1."
+      exit 1
+    elif ! (cd ~/Downloads/Pentaho/3.2/ && wget https://sourceforge.net/projects/pentaho/files/Report%20Designer/6.1/prd-ce-6.1.0.1-196.zip && unzip prd-ce-6.1.0.1-196.zip && rm prd-ce-6.1.0.1-196.zip)
+    then
+      echo "Unable to download Pentaho version 3.2."
+      exit 1
+    elif ! (cd ~/Downloads/Pentaho/3.3/ && wget https://sourceforge.net/projects/mondrian/files/schema%20workbench/3.12.0/psw-ce-3.12.0.1-196.zip && unzip psw-ce-3.12.0.1-196.zip && rm psw-ce-3.12.0.1-196.zip &&)
+    then
+      echo "Unable to download Pentaho version 3.3."
+      exit 1
+    elif ! (cd ~/Downloads/Pentaho/3.4 && wget https://sourceforge.net/projects/pentaho/files/Data%20Integration/6.1/pdi-ce-6.1.0.1-196.zip && unzip pdi-ce-6.1.0.1-196.zip && rm pdi-ce-6.1.0.1-196.zip)
+    then
+      echo "Unable to download Pentaho version 3.4."
+      exit 1
+    fi
+    change
+    mv Pentaho/ /home/${USERNAME}
+echo "Pentaho successfully installed!"
+
+#Pinta
+update
+change
+echo "Installing Pinta..."
+  if ! (sudo add-apt-repository ppa:pinta-maintainers/pinta-stable && update)
   then
-    echo "Não foi possível extrair o tar do NetLogo."
+    echo "Unable to install the requirements."
     exit 1
-  fi 
-#Criação do .desktop do NetLogo
-  echo "Fazendo o .desktop..."
-echo "NetLogo instalado com sucesso!"
+  elif ! (sudo apt-get install pinta -y)
+  then
+    echo "Unable to install Pinta."
+    exit 1
+  fi
+echo "Pinta successfully installed!"
 
+#Portugol Studio
+update
+change
+echo "Installing Portugol Studio..."
+  if ! (mkdir PortugolStudio && cd ~/Downloads/PortugolStudio/ && wget https://github.com/UNIVALI-LITE/Portugol-Studio/releases/download/v2.6.4/portugol-studio-2.6.4-linux-x64.run.zip && unzip portugol-studio-2.6.4-linux-x64.run.zip && chmod 755 portugol-studio-2.6.4-linux-x64.run)
+  then
+    echo "Unable to download Portugol Studio file."
+    exit 1
+  elif ! (sudo ./portugol-studio-2.6.4-linux-x64.run && cd ~/Downloads/ && rm -rf PortugolStudio/)
+    echo "Unable to install Portugol Studio."
+    exit 1
+  fi
+echo "Portugol Studio successfully installed!"
 
+#Project Libre
+update
+change
+echo "Installing Project Libre..."
+  if ! (wget https://ufpr.dl.sourceforge.net/project/projectlibre/ProjectLibre/1.8/projectlibre_1.8.0-1.deb -O projectlibre.deb && sudo dpkg -i projectlibre.deb && sudo apt-get install -f)
+  then
+    echo "Unable to install Project Libre."
+    exit 1
+  fi
+echo "Project Libre successfully installed!"
+
+#Robo 3T
+update
+change
+echo "Installing Robo 3T..."
+  if ! (wget https://download.robomongo.org/1.2.1/linux/robo3t-1.2.1-linux-x86_64-3e50a65.tar.gz && tar -xvf robo3t-1.2.1-linux-x86_64-3e50a65.tar.gz && mv robo3t-1.2.1-linux-x86_64-3e50a65 Robo3T)
+  then
+    echo "Unable to download Robo3T."
+    exit 1
+  fi
+  mv Robo3T /home/${USERNAME}/
+  #Executing on cd Robo3T/bin -> ./robo3t
+  echo "Creating a .desktop file."
+echo "Robo3T successfully installed!"
+
+#RPGBoss
+#Missing install
+
+#RStudio
+update
+change
+echo "Installing RStudio..."
+  if ! (wget https://download1.rstudio.org/rstudio-xenial-1.1.463-amd64.deb && sudo dpkg -i rstudio-xenial-1.1.463-amd64.deb)
+  then
+    echo "Unable to install RStudio."
+    exit 1
+  fi
+echo "RStudio successfully installed!"
+
+#Scilab
+update
+change
+echo "Installing Scilab..."
+  if ! (wget https://www.scilab.org/download/6.0.1/scilab-6.0.1.bin.linux-x86_64.tar.gz && tar -xvf scilab-6.0.1.bin.linux-x86_64.tar.gz)
+  then
+    echo "Unable to install the requirements."
+    exit 1
+  fi
+  mv scilab-6.0.1 Scilab
+  mv Scilab /home/${USERNAME}/
+  echo "Creating a .desktop file."
+echo "Scilab successfully installed!"
+
+#VirtualBox
+update
+change
+echo "Installing VirtualBox..."
+  if ! (sudo add-apt-repository multiverse && update)
+  then
+    echo "Unable to install the requirements."
+    exit 1
+  elif ! (sudo apt-get install virtualbox -y)
+    echo "Unable to install VirtualBox."
+  fi
+echo "VirtualBox successfully installed!"
+
+#VLC
+update
+change
+echo "Installing VLC..."
+  if ! (sudo add-apt-repository ppa:videolan/master-daily)
+  then
+    echo "Unable to get the repository."
+    exit 1
+  elif ! (sudo apt-get install vlc -y)
+  then
+    echo "Unable to install VLC."
+    exit 1
+  fi
+echo "VLC successfully installed!"
+
+#Wireshark
+update
+change
+echo "Installing Wireshark..."
+  if ! (sudo add-apt-repository ppa:wireshark-dev/stable && update)
+  then
+    echo "Unable to get the repository."
+    exit 1
+  elif ! (sudo apt-get install wireshark -y) 
+    echo "Unable to install Wireshark."
+  fi
+echo "Wireshark successfully installed!"
+
+#XAMP
+#Silent install
+update
+change
+echo "Installing XAMP..."
+  if ! (wget https://www.apachefriends.org/xampp-files/7.3.1/xampp-linux-x64-7.3.1-0-installer.run && sudo chmod 755 xampp-linux-x64-7.3.1-0-installer.run && sudo ./xampp-linux-x64-7.3.1-0-installer.run)
+  then
+    echo "Unable to install XAMP."
+    exit 1
+  fi
+echo "XAMP successfully installed!"

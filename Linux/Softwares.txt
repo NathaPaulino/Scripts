@@ -35,32 +35,31 @@ Second Step - Other softwares
 ------------------------------------------------------------------
 OpenCV
 NetBeans
-Cisco Packett Tracer
-FileZilla
+Cisco Packett Tracer			(Missing on script)
 VSCode
 Blender
 SQLDeveloper
 Gradle Support (NetBeans Plugin)
 Eletric
 PostgreSQL
-IBM ILOG CPLEX
+IBM ILOG CPLEX				(Missing on script)
 XMind
 Arduino IDE
-Arquivos Eletrônica         
+Arquivos Eletrônica         		(Missing on script)
 CodeBlocks
 Eclipse
 MongoDB
 MyOpenLab
 NetLogo                     
-Pentaho
-Pinta
-Portugol Studio
-Project Libre
-Robo 3T
-RPGBoss
-RStudio
-Scilab
-Virtualbox
-VLC
-Wireshark
-XAMP
+Pentaho					
+Pinta					
+Portugol Studio				(Silent install)
+Project Libre				
+Robo 3T					(.desktop file)
+RPGBoss					(Verify)
+RStudio					
+Scilab					(.desktop file)
+Virtualbox				
+VLC					
+Wireshark				
+XAMP					(Silent install)
