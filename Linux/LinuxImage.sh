@@ -2,7 +2,7 @@
 
 # This script creates an image with the files present in Software.txt for Ubuntu 18.04.
 # This code presents parts that are properly commented out and separated by global variables,functions, and error issues.
-# Version 2.2 - All translated. Start the tests and verifying a few things
+# Version 2.2 - Start the tests and verifying a few things
 
 #--------------------------------------------------------------------------------------------------
 # Error Issues
@@ -49,6 +49,9 @@ function autoremove(){
 
 #Download function: Download files from the FTP server based on the script parameters and move those files to the Downloads folder.
 function download(){
+  echo "This script have ${#} arguments. (Used by function)"
+  echo "The arguments are: ${1} ${2} ${3} ${4}"
+  echo "$# é igual a $ARGC"
   if (${#} -eq ${ARGC})
   then
 	wget -r ftp://${1}:${2}@${3}/${4}
@@ -63,6 +66,8 @@ function download(){
 #------------------------------------------------------------------------------------------------
 # Installing requirements:
 
+echo "This script have ${#} arguments."
+#Verifying
 download
 change
 update
