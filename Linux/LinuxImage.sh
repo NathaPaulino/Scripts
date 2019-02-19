@@ -52,7 +52,7 @@ function download(){
   echo "This script have ${#} arguments. (Used by function)"
   echo "The arguments are: ${1} ${2} ${3} ${4}"
   echo "$# é igual a $ARGC"
-  if (${#} -eq ${ARGC})
+  if ($# -eq ${ARGC})
   then
 	wget -r ftp://${1}:${2}@${3}/${4}
 	mv /home/${USERNAME}/Downloads/${4} /home/${USERNAME}/Downloads
@@ -68,7 +68,7 @@ function download(){
 
 echo "This script have ${#} arguments."
 #Verifying
-download
+download $@
 change
 update
 
