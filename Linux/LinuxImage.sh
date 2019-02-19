@@ -264,7 +264,7 @@ cd /tmp
      exit 1
   fi
   echo "Configuring JDK..." #User interaction
-  if ! (sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/jdk-11.0.2/bin/java 2 && sudo update-alternatives --config java)
+  if ! (echo -e "2" | sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/jdk-11.0.2/bin/java 2 && sudo update-alternatives --config java)
   then
      echo "Couldn't configure JDK 11."
      exit 1
@@ -496,7 +496,7 @@ update
 change
 
 #------------------------------------------------------------------------------------------------
-# All remains softwares 
+# All remains softwares
 #------------------------------------------------------------------------------------------------
 
 #OpenCV
@@ -504,7 +504,7 @@ change
 # Using another version of libjasper. More information on: https://researchxuyc.wordpress.com/2018/09/26/install-libjasper-in-ubuntu-18-04/.
 echo "Installing OpenCV..."
   echo "Installing requirements..."
-    if ! (sudo apt-get install build-essential cmake git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev)
+    if ! (sudo apt-get install build-essential cmake git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev -y)
     then
 	    echo "Unable to install requirements."
     	exit 1
@@ -534,13 +534,13 @@ update
 change
 
 #NetBeans and Gradle Support
-# Installing Netbeans8.2 and Gradle Support. Failure on auto install Gradle Support Plugin 
+# Installing Netbeans8.2 and Gradle Support. Failure on auto install Gradle Support Plugin
 echo "Installing NetBeans 8.2..."
   if ! (cd /tmp && sudo wget -c http://download.netbeans.org/netbeans/8.2/final/bundles/netbeans-8.2-linux.sh)
   then
 	  echo "Unable to download the Netbeans script."
 	  exit 1
-  elif ! (chmod 755 netbeans-8.2-linux.sh && sudo ./netbeans-8.2-linux.sh --silent)
+  elif ! (chmod 755 netbeans-8.2-linux.sh && sudo ./netbeans-8.2-linux.sh --silent -y)
   then
 	  echo "Couldn't install NetBeans."
 	  exit 1
@@ -745,7 +745,7 @@ echo "NetLogo successfully installed!"
 #Pentaho
 update
 echo "Installing Pentaho..."
-		if ! (mkdir Pentaho && cd Pentaho && mkdir 3.1 && mkdir 3.2 && mkdir 3.3 && mkdir 3.4) 
+		if ! (mkdir Pentaho && cd Pentaho && mkdir 3.1 && mkdir 3.2 && mkdir 3.3 && mkdir 3.4)
     then
       echo "Unable to create files."
       exit 1
@@ -803,7 +803,7 @@ echo "Portugol Studio successfully installed!"
 update
 change
 echo "Installing Project Libre..."
-  if ! (wget https://ufpr.dl.sourceforge.net/project/projectlibre/ProjectLibre/1.8/projectlibre_1.8.0-1.deb -O projectlibre.deb && sudo dpkg -i projectlibre.deb && sudo apt-get install -f)
+  if ! (sudo wget https://ufpr.dl.sourceforge.net/project/projectlibre/ProjectLibre/1.8/projectlibre_1.8.0-1.deb -O projectlibre.deb && sudo dpkg -i projectlibre.deb && sudo apt-get install -f)
   then
     echo "Unable to install Project Libre."
     exit 1
@@ -814,7 +814,7 @@ echo "Project Libre successfully installed!"
 update
 change
 echo "Installing Robo 3T..."
-  if ! (wget https://download.robomongo.org/1.2.1/linux/robo3t-1.2.1-linux-x86_64-3e50a65.tar.gz && tar -xvf robo3t-1.2.1-linux-x86_64-3e50a65.tar.gz && mv robo3t-1.2.1-linux-x86_64-3e50a65 Robo3T)
+  if ! (sudo wget https://download.robomongo.org/1.2.1/linux/robo3t-1.2.1-linux-x86_64-3e50a65.tar.gz && tar -xvf robo3t-1.2.1-linux-x86_64-3e50a65.tar.gz && mv robo3t-1.2.1-linux-x86_64-3e50a65 Robo3T)
   then
     echo "Unable to download Robo3T."
     exit 1
@@ -831,7 +831,7 @@ echo "Robo3T successfully installed!"
 update
 change
 echo "Installing RStudio..."
-  if ! (wget https://download1.rstudio.org/rstudio-xenial-1.1.463-amd64.deb && sudo dpkg -i rstudio-xenial-1.1.463-amd64.deb)
+  if ! (sudo wget https://download1.rstudio.org/rstudio-xenial-1.1.463-amd64.deb && sudo dpkg -i rstudio-xenial-1.1.463-amd64.deb)
   then
     echo "Unable to install RStudio."
     exit 1
@@ -842,7 +842,7 @@ echo "RStudio successfully installed!"
 update
 change
 echo "Installing Scilab..."
-  if ! (wget https://www.scilab.org/download/6.0.1/scilab-6.0.1.bin.linux-x86_64.tar.gz && tar -xvf scilab-6.0.1.bin.linux-x86_64.tar.gz)
+  if ! (sudo wget https://www.scilab.org/download/6.0.1/scilab-6.0.1.bin.linux-x86_64.tar.gz && tar -xvf scilab-6.0.1.bin.linux-x86_64.tar.gz)
   then
     echo "Unable to install the requirements."
     exit 1
@@ -888,7 +888,7 @@ echo "Installing Wireshark..."
   then
     echo "Unable to get the repository."
     exit 1
-  elif ! (sudo apt-get install wireshark -y) 
+  elif ! (sudo apt-get install wireshark -y)
     echo "Unable to install Wireshark."
   fi
 echo "Wireshark successfully installed!"
@@ -898,7 +898,7 @@ echo "Wireshark successfully installed!"
 update
 change
 echo "Installing XAMP..."
-  if ! (wget https://www.apachefriends.org/xampp-files/7.3.1/xampp-linux-x64-7.3.1-0-installer.run && sudo chmod 755 xampp-linux-x64-7.3.1-0-installer.run && sudo ./xampp-linux-x64-7.3.1-0-installer.run)
+  if ! (sudo wget https://www.apachefriends.org/xampp-files/7.3.1/xampp-linux-x64-7.3.1-0-installer.run && sudo chmod 755 xampp-linux-x64-7.3.1-0-installer.run && sudo ./xampp-linux-x64-7.3.1-0-installer.run)
   then
     echo "Unable to install XAMP."
     exit 1
