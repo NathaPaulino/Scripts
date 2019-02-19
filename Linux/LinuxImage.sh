@@ -52,7 +52,7 @@ function download(){
   echo "This script have ${#} arguments. (Used by function)"
   echo "The arguments are: ${1} ${2} ${3} ${4}"
   echo "$# é igual a $ARGC"
-  if ($# -eq ${ARGC})
+  if [ $# -eq ${ARGC} ];
   then
 	wget -r ftp://${1}:${2}@${3}/${4}
 	mv /home/${USERNAME}/Downloads/${4} /home/${USERNAME}/Downloads
@@ -67,18 +67,18 @@ function download(){
 # Installing requirements:
 
 echo "This script have ${#} arguments."
-#Verifying
+#Works until here
 download $@
 change
 update
 
 #Flash Player
 echo "Installing Flash Player..."
-  if ! sudo sh -c "echo 'deb http://archive.canonical.com/ubuntu $(lsb_release -cs) partner' >> /etc/apt/sources.list" -y
+  if ! [ sudo sh -c "echo 'deb http://archive.canonical.com/ubuntu $(lsb_release -cs) partner' >> /etc/apt/sources.list" -y ];
   then
     echo "The package containing the Flash Player couldn't be downloaded.."
     exit 1
-  elif ! (update && sudo apt-get install adobe-flashplugin -y)
+  elif ! [ update && sudo apt-get install adobe-flashplugin -y ];
   then
     echo "Couldn't install Flash Player plugin."
     exit 1
