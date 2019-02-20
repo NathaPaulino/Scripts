@@ -2,7 +2,7 @@
 
 # This script creates an image with the files present in Software.txt for Ubuntu 18.04.
 # This code presents parts that are properly commented out and separated by global variables,functions, and error issues.
-# Version 2.3 - Starting tests
+# Version 2.3 - Starting tests - So much bugs
 
 #--------------------------------------------------------------------------------------------------
 # Error Issues
@@ -15,8 +15,13 @@
 # Conda list problem solved: echo "PATH=$PATH:$HOME/anaconda3/bin" >> /home/${USERNAME}/.bashrc and normal execution.
 # Line 637 introduces the creation of a .desktop file.
 # All requirements have been successfully installed.
+# Robo3T have a snap file. Solved the problem changing the install mode. [sudo snap install robo3t-snap]
+# XAMPP successfully installed. Execute like sudo /opt/lampp/lampp start
+# 
 # Softwares problems:
-#    - Cisco Packett Tracer and IBM ILOG CPLEX. (Lines 662 and 669)
+#    - Cisco Packett Tracer (Silent install)
+#    - Portugol Studio	    (Bug on silent install)
+#    - Scilab		    (.desktop file)
 #------------------------------------------------------------------------------------------------
 # Global variables
 #------------------------------------------------------------------------------------------------
@@ -28,7 +33,7 @@ ARGC=4
 
 function update(){
   echo "Updating all repositories..."
-  if ! [ sudo apt-get update -y && sudo apt-get dist-upgrade -y ];
+  if ! [[ sudo apt-get update -y && sudo apt-get dist-upgrade -y ]];
   then
       echo "Couldn't update all repositories and packages."
       exit 1
@@ -54,7 +59,7 @@ function download(){
   if [ $# -eq ${ARGC} ];
   then
 	wget -r ftp://${1}:${2}@${3}/${4}
-	mv /home/${USERNAME}/Downloads/${4} /home/${USERNAME}/Downloads
+	mv /home/${USERNAME}/Downloads/${3}/${4} /home/${USERNAME}/Downloads
   else
    	echo "Four arguments are required, respectively: Username,password,FTP server ip address and path file."
 	exit 1
@@ -243,13 +248,15 @@ rm -rf google-chrome-stable_current_amd64.deb
 
 #Interpretador Prolog
 update
-echo "Installing Prolog interpreter..."
+echo "Installing Prolog interpreter..."sudo su 
+echo "${USERNAME}"
+
   if ! [ sudo apt-get install swi-prolog -y ];
   then
     echo "Couldn't install Prolog interpreter."
     exit 1
   fi;
-echo "Prolog interpreter successfully installed!"
+echo "Prolog interpreter successfully installed!"Starting tests
 
 #JDK 11
 echo "Installing JDK 11..."
@@ -316,7 +323,9 @@ echo "Installing Java3D..."
 echo "Java3D successfully installed!"
 
 #LibreOffice
-update
+updatesudo su 
+echo "${USERNAME}"
+
 echo "Installing LibreOffice..."
   echo "Purging LibreOffice!"
   if ! [ sudo apt-get remove libreoffice-core --purge -y ];
@@ -449,7 +458,9 @@ update
 echo "Installing R..."
   if ! [ sudo apt-get install r-base -y ];
   then
-    echo "Couldn't install R."
+    echo "Couldn't install R."sudo su 
+echo "${USERNAME}"
+
     exit 1
   fi;
 echo "R successfully installed!"
@@ -494,7 +505,7 @@ echo "Installing Grub Customizer..."
 echo "Grub Customizer successfully installed!"
 
 remover
-update
+update 
 change
 
 #------------------------------------------------------------------------------------------------
@@ -509,7 +520,7 @@ echo "Installing OpenCV..."
     if ! [ sudo apt-get install build-essential cmake git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev -y ];
     then
 	    echo "Unable to install requirements."
-    	exit 1
+    	    exit 1
     elif ! [ sudo apt-get install python3.7-dev python3-numpy libtbb2 libtbb-dev -y ];
     then
 	    echo "Unable to install requirements."
@@ -619,8 +630,35 @@ echo "PostgreSQL successfully installed!"
 update
 change
 
-#Cisco Packett Tracer
-echo "Installing Cisco Packett Tracer..."
+#Cisco Packet Tracer
+#Error on silent install: Enter Space Y Enter Enter Enter
+echo "Installing Cisco Packet Tracer..."
+  if ! [ mkdir CiscoPacketTracer && cd CiscoPacketTracer/  && sudo tar -xzvf Packet*.tar.gz ];
+  then
+	echo "Unable to tar Cisco Packet Tracer."
+	exit 1
+  elif ! [ sudo ./install ] #Need quiet install
+  then
+	echo "Unable to install Cisco Packet Tracer."
+	exit 1
+  elif ! [ cd /opt/bin/pt && ldd PacketTracer7 | grep "not found" ];
+  then
+	echo "Not missing files or links."
+  elif ! [ sudo sh -c "echo 'deb http://security.ubuntu.com/ubuntu xenial-security main ' >> /etc/apt/sources.list" && update && sudo apt-get install libpng12-0 -y && sudo apt-get install libpng12-dev -y ] 
+  then
+	echo "Solved the problem."
+	exit 1
+  fi;
+  echo "Creating a .desktop file"
+  echo "[Desktop Entry]
+        Name= Packettracer
+        Comment=Networking
+        GenericName=Cisco Packet Tracer
+        Exec=/opt/packettracer/packettracer
+        Icon=/usr/share/icons/packettracer.jpeg
+        StartupNotify=true
+        Terminal=false
+        Type=Application" >> /home/${USERNAME}/.local/share/applications/PacketTracer.desktop 
 echo "Cisco Packett Tracer successfully installed!"
 
 update
@@ -628,6 +666,11 @@ change
 
 #IBM ILOG CPLEX
 echo "Installing IBM ILOG CPLEX..."
+  if ! [ chmod 755 cplex_studio128.linux-x86-64.bin && sudo ./cplex*.bin ];
+  then
+	echo "Couldn't install IBM ILOG CPLEX."
+	exit 1
+  fi;
 echo "IBM ILOG CPLEX successfully installed!"
 
 update
@@ -678,7 +721,10 @@ echo "Installing Arduino IDE..."
 echo "Arduino IDE successfully installed!"
 
 #Arquivos de Eletrônica
-#Wget over FTP
+echo "Files already present only move them from directory."
+  mv /home/${USERNAME}/Downloads/ArquivosEletrotécnica /home/${USERNAME}/
+  mv ArquivosEletrotécnica Arquivos\ Eletrotécnica
+echo "Files on the right directory."
 
 #Codeblocks
 update
@@ -736,18 +782,34 @@ echo "Installing NetLogo..."
   then
     echo "Unable to download the file NetLogo."
     exit 1
-  elif ! [ tar -xf NetLogo-6.0.4-64.tgz -C /home/${USERNAME}/ ];
+  elif ! [tar -xzvf NetLogo-6.0.4-64.tgz -C /home/${USERNAME}/ && cd ~/NetLogo\ 6.0.4/ && wget http://netlogoweb.org/assets/images/desktopicon.png ];
   then
     echo "Unable to extract the NetLogo file."
     exit 1
   fi;
   echo "Creating a .desktop file..."
+  echo "[Desktop Entry]
+        Name= NetLogo
+        GenericName=NetLogo
+	Path=/home/${USERNAME}/NetLogo\ 6.0.4/
+	Exec=/home/${USERNAME}/NetLogo\ 6.0.4/NetLogo
+        Icon=/home/${USERNAME}/NetLogo\ 6.0.4/desktopicon.png
+        Terminal=false
+        Type=Application" >> /home/${USERNAME}/.local/share/applications/NetLogo.desktop 
+  echo "[Desktop Entry]
+        Name= NetLogo3D
+        GenericName=NetLogo
+	Path=/home/${USERNAME}/NetLogo\ 6.0.4/        
+	Exec=/home/${USERNAME}/NetLogo\ 6.0.4/NetLogo
+        Icon=/home/${USERNAME}/NetLogo\ 6.0.4/desktopicon.png
+        Terminal=false
+        Type=Application" >> /home/${USERNAME}/.local/share/applications/NetLogo3D.desktop 
 echo "NetLogo successfully installed!"
 
 #Pentaho
 update
 echo "Installing Pentaho..."
-		if ! [ mkdir Pentaho && cd Pentaho && mkdir 3.1 && mkdir 3.2 && mkdir 3.3 && mkdir 3.4 ];
+    if ! [ mkdir Pentaho && cd Pentaho && mkdir 3.1 && mkdir 3.2 && mkdir 3.3 && mkdir 3.4 ];
     then
       echo "Unable to create files."
       exit 1
@@ -795,7 +857,7 @@ echo "Installing Portugol Studio..."
   then
     echo "Unable to download Portugol Studio file."
     exit 1
-  elif ! [ sudo ./portugol-studio-2.6.4-linux-x64.run && cd ~/Downloads/ && rm -rf PortugolStudio/ ];
+  elif ! [ sudo ./portugol-studio-2.6.4-linux-x64.run --mode unattended && cd ~/Downloads/ && rm -rf PortugolStudio/ ];
     echo "Unable to install Portugol Studio."
     exit 1
   fi;
@@ -816,18 +878,34 @@ echo "Project Libre successfully installed!"
 update
 change
 echo "Installing Robo 3T..."
-  if ! [ sudo wget https://download.robomongo.org/1.2.1/linux/robo3t-1.2.1-linux-x86_64-3e50a65.tar.gz && tar -xvf robo3t-1.2.1-linux-x86_64-3e50a65.tar.gz && mv robo3t-1.2.1-linux-x86_64-3e50a65 Robo3T ];
+  if ! [ sudo snap install robo3t-snap ]; 
   then
-    echo "Unable to download Robo3T."
-    exit 1
+	echo "Unable to install Robo3T."
+	exit 1
   fi;
-  mv Robo3T /home/${USERNAME}/
-  #Executing on cd Robo3T/bin -> ./robo3t
-  echo "Creating a .desktop file."
 echo "Robo3T successfully installed!"
 
+update
 #RPGBoss
-#Missing install
+echo "Installing RPGBoss..."
+  cd /home/${USERNAME}/
+  if ! [ sudo wget https://github.com/rpgboss/rpgboss/archive/v0.9.8.tar.gz && tar -xvf v0.9.8.tar.gz && cd rpgboss-0.9.8/ && ./gradlew run ];
+  then
+	echo "Unable to install RPGBoss."
+	exit 1
+  elif ! [ mv package/linux/rpgboss.desktop  ~/.local/share/applications/ ];
+  then
+	echo "Preparing a .desktop file."
+	exit 1
+  fi;
+  echo "Updating the .desktop file."
+  echo "[Desktop Entry]
+        Name= RPGBoss game editor
+        Exec=sh /home/${USERNAME}/rpgboss-0.9.8/package/linux/launch.sh
+        Icon=/home/${USERNAME}/rpgboss-0.9.8/package/linux/icon.png
+        Terminal=false
+        Type=Application" > /home/${USERNAME}/.local/share/applications/rpgboss.desktop
+echo "RPGBoss successfully installed!"
 
 #RStudio
 update
@@ -843,6 +921,7 @@ echo "RStudio successfully installed!"
 #Scilab
 update
 change
+#Have sudo apt-get install scilab
 echo "Installing Scilab..."
   if ! [ sudo wget https://www.scilab.org/download/6.0.1/scilab-6.0.1.bin.linux-x86_64.tar.gz && tar -xvf scilab-6.0.1.bin.linux-x86_64.tar.gz ];
   then
@@ -852,6 +931,12 @@ echo "Installing Scilab..."
   mv scilab-6.0.1 Scilab
   mv Scilab /home/${USERNAME}/
   echo "Creating a .desktop file."
+  echo "[Desktop Entry]
+        Name= Scilab
+        Exec=/home/${USERNAME}/Scilab/bin/scilab
+        Icon=/home/${USERNAME}/share/icons/hicolor/256x256/apps/scilab.png
+        Terminal=true
+        Type=Application" >> /home/${USERNAME}/.local/share/applications/scilab.desktop
 echo "Scilab successfully installed!"
 
 #VirtualBox
@@ -900,9 +985,11 @@ echo "Wireshark successfully installed!"
 update
 change
 echo "Installing XAMP..."
-  if ! [ sudo wget https://www.apachefriends.org/xampp-files/7.3.1/xampp-linux-x64-7.3.1-0-installer.run && sudo chmod 755 xampp-linux-x64-7.3.1-0-installer.run && sudo ./xampp-linux-x64-7.3.1-0-installer.run ];
+  if ! [ sudo wget https://www.apachefriends.org/xampp-files/7.3.1/xampp-linux-x64-7.3.1-0-installer.run && sudo chmod 755 xampp-linux-x64-7.3.1-0-installer.run && sudo ./xampp-linux-x64-7.3.1-0-installer.run --mode unattended --disable-components xampp_developer_files && sudo apt-get install net-tools -y ];
   then
     echo "Unable to install XAMP."
     exit 1
   fi;
 echo "XAMP successfully installed!"
+
+

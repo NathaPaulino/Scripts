@@ -35,17 +35,17 @@ Second Step - Other softwares
 ------------------------------------------------------------------
 OpenCV
 NetBeans
-Cisco Packett Tracer			(Missing on script - In FTP)
+Cisco Packett Tracer			(Silent install)
 VSCode
 Blender
 SQLDeveloper
 Gradle Support (NetBeans Plugin)
 Eletric
 PostgreSQL
-IBM ILOG CPLEX				(Missing on script - Put in FTP)
+IBM ILOG CPLEX				
 XMind
 Arduino IDE
-Arquivos Eletrônica         		(Missing on script - In FTP)
+Arquivos Eletrônica         		
 CodeBlocks
 Eclipse
 MongoDB
