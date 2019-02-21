@@ -2,7 +2,7 @@
 
 # This script creates an image with the files present in Software.txt for Ubuntu 18.04.
 # This code presents parts that are properly commented out and separated by global variables,functions, and error issues.
-# Version 2.3.1 - Starting tests
+# Version 2.3.2 - Tests, setting bugs on Software.txt
 
 #--------------------------------------------------------------------------------------------------
 # Error Issues
@@ -24,8 +24,8 @@
 # Softwares problems:
 #    - Cisco Packett Tracer (Silent install - Try unattended mode)
 #    - Scilab		    (.desktop file or another way to install - Soft Link)
-#    - Line 281 - Using echo for enter input
-#    - Line 
+#    - Line 281 - 	    Using echo for enter input
+#    - Line 311		    Using echo for enter input 
 #------------------------------------------------------------------------------------------------
 # Global variables
 #------------------------------------------------------------------------------------------------
@@ -79,7 +79,6 @@ function erase(){
 
 download $@
 change
-#Issues Here
 update
 
 #Flash Player
