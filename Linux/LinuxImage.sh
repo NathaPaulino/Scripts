@@ -2,7 +2,7 @@
 
 # This script creates an image with the files present in Software.txt for Ubuntu 18.04.
 # This code presents parts that are properly commented out and separated by global variables,functions, and error issues.
-# Version 2.3 - Starting tests - So much bugs
+# Version 2.3.1 - Starting tests
 
 #--------------------------------------------------------------------------------------------------
 # Error Issues
@@ -22,11 +22,11 @@
 # Still looking for ways to download scilab
 #
 # Softwares problems:
-#    - Cisco Packett Tracer (Silent install)
+#    - Cisco Packett Tracer (Silent install - Try unattended mode)
 #    - Portugol Studio	    (Bug on silent install)
-#    - Scilab		            (.desktop file)
+#    - Scilab		    (.desktop file or another way to install)
 #    - Line 281 - Using echo for enter input
-# 
+#
 #------------------------------------------------------------------------------------------------
 # Global variables
 #------------------------------------------------------------------------------------------------
@@ -58,12 +58,12 @@ function autoremove(){
 
 #Download function: Download files from the FTP server based on the script parameters and move those files to the Downloads folder.
 function download(){
-  if [ $# -eq ${ARGC}) ]];
+  if [[ $# -eq ${ARGC}) ]];
   then
 	   wget -r ftp://${1}:${2}@${3}/${4}
 	   mv /home/${USERNAME}/Downloads/${3}/${4} /home/${USERNAME}/Downloads
   else
-   	echo "Four arguments are required, respectively: Username,password,FTP server ip address and path file."
+   	echo "Four arguments are required, respectively: User name, password, FTP server IP address and path file. All arguments must be separated by space."
 	exit 1
   fi;
 }
@@ -461,9 +461,7 @@ update
 echo "Installing R..."
   if [[ ! (sudo apt-get install r-base -y) ]];
   then
-    echo "Couldn't install R."sudo su
-echo "${USERNAME}"
-
+    echo "Couldn't install R."
     exit 1
   fi;
 echo "R successfully installed!"

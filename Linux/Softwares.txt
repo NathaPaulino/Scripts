@@ -53,13 +53,13 @@ MyOpenLab
 NetLogo                     
 Pentaho					
 Pinta					
-Portugol Studio				(Silent install)
+Portugol Studio				(Silent install bug)
 Project Libre				
-Robo 3T					(.desktop file)
-RPGBoss					(Verify)
+Robo 3T					
+RPGBoss					
 RStudio					
 Scilab					(.desktop file)
 Virtualbox				
 VLC					
 Wireshark				
-XAMP					(Silent install)
+XAMP					
