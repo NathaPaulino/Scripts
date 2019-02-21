@@ -25,7 +25,7 @@
 #    - Cisco Packett Tracer (Silent install - Try unattended mode)
 #    - Scilab		    (.desktop file or another way to install - Soft Link)
 #    - Line 281 - Using echo for enter input
-#
+#    - Line 
 #------------------------------------------------------------------------------------------------
 # Global variables
 #------------------------------------------------------------------------------------------------
@@ -35,9 +35,10 @@ ARGC=4
 #------------------------------------------------------------------------------------------------
 #Update function: Update all repositories and packages.
 
+sudo echo
 function update(){
   echo "Updating all repositories..."
-  if [[ ! (sudo apt-get update -y && sudo apt-get dist-upgrade -y) ]];
+  if ! (sudo apt-get update -y && sudo apt-get dist-upgrade -y)
   then
       echo "Couldn't update all repositories and packages."
       exit 1
@@ -57,7 +58,7 @@ function autoremove(){
 
 #Download function: Download files from the FTP server based on the script parameters and move those files to the Downloads folder.
 function download(){
-  if [[ $# -eq ${ARGC}) ]];
+  if [[ $# -eq ${ARGC} ]];
   then
 	   wget -r ftp://${1}:${2}@${3}/${4}
 	   mv /home/${USERNAME}/Downloads/${3}/${4} /home/${USERNAME}/Downloads
@@ -78,15 +79,16 @@ function erase(){
 
 download $@
 change
+#Issues Here
 update
 
 #Flash Player
 echo "Installing Flash Player..."
-  if  [[ ! (sudo sh -c "echo 'deb http://archive.canonical.com/ubuntu $(lsb_release -cs) partner' >> /etc/apt/sources.list" -y) ]];
+  if ! (sudo sh -c "echo 'deb http://archive.canonical.com/ubuntu $(lsb_release -cs) partner' >> /etc/apt/sources.list" -y)
   then
     echo "The package containing the Flash Player couldn't be downloaded.."
     exit 1
-  elif  [[ ! (update && sudo apt-get install adobe-flashplugin -y) ]];
+  elif ! (update && sudo apt-get install adobe-flashplugin -y)
   then
     echo "Couldn't install Flash Player plugin."
     exit 1
@@ -96,9 +98,9 @@ echo "Flash Player successfully installed!"
 #Node.js
 update
 echo "Installing Node.js and Npm..."
-  if [[ ! (sudo apt-get install nodejs -y && sudo apt-get install npm -y) ]];
+  if ! (sudo apt-get install nodejs -y && sudo apt-get install npm -y)
   then
-    if [[ ! (nodejs --version && npm --version) ]];
+    if ! (nodejs --version && npm --version)
     then
       echo "Couldn't install Node.js and Npm."
       exit 1
@@ -109,7 +111,7 @@ echo "Node.js and Npm successfully installed!"
 #Alien
 update
 echo "Installing Alien..."
-  if [[ ! (sudo apt-get install alien -y) ]];
+  if ! (sudo apt-get install alien -y)
     then
       echo "Couldn't install Alien."
       exit 1
@@ -119,7 +121,7 @@ echo "Alien successfully installed!"
 #Curl
 update
 echo "Installing Curl..."
-  if [[ ! (sudo apt-get install curl -y) ]];
+  if ! (sudo apt-get install curl -y)
   then
     echo "Couldn't install the Curl package."
     exit 1
@@ -129,7 +131,7 @@ echo "Curl successfully installed!"
 #Git
 update
 echo "Installing Git..."
-  if [[ ! (sudo apt-get install git -y) ]];
+  if ! (sudo apt-get install git -y)
   then
     echo "Couldn't install git."
     exit 1
@@ -140,11 +142,11 @@ echo "Git successfully installed!"
 update
 echo "Installing Atom..."
   echo "Installing dependencies..."
-  if [[ ! (sudo apt-get install gconf2 -y && sudo apt-get install gconf-service -y) ]];
+  if ! (sudo apt-get install gconf2 -y && sudo apt-get install gconf-service -y)
   then
     echo "Couldn't download the dependencies."
     exit 1
-  elif [[ ! (sudo wget https://atom.io/download/deb && sudo dpkg -i deb) ]];
+  elif ! (sudo wget https://atom.io/download/deb && sudo dpkg -i deb)
   then
     echo "Couldn't install Atom."
     exit 1
@@ -155,11 +157,11 @@ rm -rf deb
 #Cmake
 update
 echo "Installing Cmake..."
-  if [[ ! (sudo wget https://github.com/Kitware/CMake/releases/download/v3.12.4/cmake-3.12.4.tar.gz && tar -xvf cmake-3.12.4.tar.gz) ]];
+  if ! (sudo wget https://github.com/Kitware/CMake/releases/download/v3.12.4/cmake-3.12.4.tar.gz && tar -xvf cmake-3.12.4.tar.gz)
   then
     echo "Couldn't download and unzip the Cmake file."
     exit 1
-  elif [[ ! (cd cmake-3.12.4/ && sudo ./bootstrap && sudo make && sudo make install) ]];
+  elif ! (cd cmake-3.12.4/ && sudo ./bootstrap && sudo make && sudo make install)
   then
     echo "Couldn't install Cmake."
     exit 1
@@ -170,7 +172,7 @@ echo "Cmake successfully installed!"
 update
 change
 echo "Installing Haskell compiler..."
-  if [[ ! (sudo apt-get install ghc -y) ]];
+  if ! (sudo apt-get install ghc -y)
   then
     echo "Couldn't install Haskell compiler."
     exit 1
@@ -180,7 +182,7 @@ echo "Haskell compiler successfully installed!"
 #Freeglut
 update
 echo "Installing Freeglut..."
-  if [[ ! (sudo apt-get install freeglut3 freeglut3-dev libglew1.5-dev libglew-dev libsoil-dev libsdl2-dev libsdl2-mixer-dev -y) ]];
+  if ! (sudo apt-get install freeglut3 freeglut3-dev libglew1.5-dev libglew-dev libsoil-dev libsdl2-dev libsdl2-mixer-dev -y)
   then
     echo "Couldn't install Freeglut."
     exit 1
@@ -190,7 +192,7 @@ echo "Freeglut successfully installed!"
 #G++
 update
 echo "Installing g++..."
-  if [[ ! (sudo apt-get install g++ -y) ]];
+  if ! (sudo apt-get install g++ -y)
   then
     echo "Couldn't install g++."
     exit 1
@@ -200,7 +202,7 @@ echo "G++ successfully installed!"
 #Gcc
 update
 echo "Installing gcc..."
-  if [[ ! (sudo apt-get install gcc -y) ]];
+  if ! (sudo apt-get install gcc -y)
   then
     echo "Couldn't install gcc."
     exit 1
@@ -210,7 +212,7 @@ echo "Gcc successfully installed!"
 #Gedit
 update
 echo "Installing gedit..."
-  if [[ ! (sudo apt-get install gedit -y) ]];
+  if ! (sudo apt-get install gedit -y)
   then
     echo "Couldn't install gedit."
     exit 1
@@ -220,7 +222,7 @@ echo "Gedit successfully installed!"
 #GIMP
 update
 echo "Installing GIMP..."
-  if [[ ! (sudo apt-get install gimp -y) ]];
+  if ! (sudo apt-get install gimp -y)
   then
     echo "Couldn't install GIMP."
     exit 1
@@ -230,7 +232,7 @@ echo "GIMP successfully installed!"
 #Golang
 update
 echo "Installing Go compiler..."
-  if [[ ! (sudo apt-get install golang-go -y && sudo apt-get install gccgo-go -y) ]];
+  if ! (sudo apt-get install golang-go -y && sudo apt-get install gccgo-go -y)
   then
     echo "Couldn't install Go compiler."
     exit 1
@@ -240,11 +242,11 @@ echo "Golang successfully installed!"
 #Google Chrome
 update
 echo "Installing Google Chrome..."
-  if [[ ! (sudo wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb) ]];
+  if ! (sudo wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb)
   then
 	echo "Couldn't add Google Chrome repository."
   	exit 1
-  elif [[ ! (update && sudo dpkg -i google-chrome-stable_current_amd64.deb) ]];
+  elif ! (update && sudo dpkg -i google-chrome-stable_current_amd64.deb)
   then
 	echo "Couldn't install Google Chrome."
   	exit 1
@@ -255,7 +257,7 @@ rm -rf google-chrome-stable_current_amd64.deb
 #Interpretador Prolog
 update
 echo "Installing Prolog interpreter..."
-  if [[ ! (sudo apt-get install swi-prolog -y) ]];
+  if ! (sudo apt-get install swi-prolog -y)
   then
     echo "Couldn't install Prolog interpreter."
     exit 1
@@ -266,18 +268,18 @@ echo "Prolog interpreter successfully installed!"
 echo "Installing JDK 11..."
 cd /tmp
   echo "Installing requirements..."
-  if [[ ! (sudo wget --no-cookies --no-check-certificate --header "Cookie: oraclelicense=accept-securebackup-cookie" \
-  http://download.oracle.com/otn-pub/java/jdk/11.0.2+9/f51449fcd52f4d52b93a989c5c56ed3c/jdk-11.0.2_linux-x64_bin.deb) ]];
+  if ! (sudo wget --no-cookies --no-check-certificate --header "Cookie: oraclelicense=accept-securebackup-cookie" \
+  http://download.oracle.com/otn-pub/java/jdk/11.0.2+9/f51449fcd52f4d52b93a989c5c56ed3c/jdk-11.0.2_linux-x64_bin.deb)
   then
      echo "Couldn't install the requirements."
      exit 1
-  elif [[ ! (sudo dpkg -i jdk-11.0.2_linux-x64_bin.deb) ]];
+  elif ! (sudo dpkg -i jdk-11.0.2_linux-x64_bin.deb)
   then
      echo "Couldn't install JDK 11."
      exit 1
   fi;
-  echo "Configuring JDK..." #User interaction
-  if [[ ! (echo -e "2" | sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/jdk-11.0.2/bin/java 2 && sudo update-alternatives --config java) ]];
+  echo "Configuring JDK..."
+  if ! (echo -e "2" | sudo update-alternatives --install /usr/bin/java java /usr/lib/jvm/jdk-11.0.2/bin/java 2 && sudo update-alternatives --config java)
   then
      echo "Couldn't configure JDK 11."
      exit 1
@@ -302,11 +304,11 @@ echo "JDK 11 successfully installed!"
 #JDK 8
 update
 echo "Installing JDK 8..."
-  if [[ ! (sudo add-apt-repository ppa:webupd8team/java -y) ]];
+  if ! (sudo add-apt-repository ppa:webupd8team/java -y)
   then
      echo "Couldn't install the requirement."
      exit 1
-  elif [[ ! (update && sudo apt-get install oracle-java8-installer -y && sudo apt-get install oracle-java8-set-default -y) ]];
+  elif ! (update && sudo apt-get install oracle-java8-installer -y && echo "Y" | sudo apt-get install oracle-java8-set-default -y)
   then
      echo "Couldn't install JDK 8."
      exit 1
@@ -319,7 +321,7 @@ echo "JDK 8 successfully installed!"
 update
 change
 echo "Installing Java3D..."
-  if [[ ! (sudo apt-get install libjava3d-java -y) ]];
+  if ! (sudo apt-get install libjava3d-java -y)
   then
     echo "Couldn't install Java3D."
     exit 1
@@ -327,18 +329,19 @@ echo "Installing Java3D..."
 echo "Java3D successfully installed!"
 
 #LibreOffice
+#Bug in here
 update
 echo "Installing LibreOffice..."
   echo "Purging LibreOffice!"
-  if [[ ! (sudo apt-get remove libreoffice-core --purge -y) ]];
+  if ! (sudo apt-get remove libreoffice-core --purge -y)
   then
     echo "Unable to uninstall LibreOffice."
     exit 1
-  elif [[ ! (sudo wget https://download.documentfoundation.org/libreoffice/stable/6.1.4/deb/x86_64/LibreOffice_6.1.4_Linux_x86-64_deb.tar.gz && tar -xvzf LibreOffice_6.1.4_Linux_x86-64_deb.tar.gz) ]];
+  elif ! (sudo wget https://download.documentfoundation.org/libreoffice/stable/6.1.4/deb/x86_64/LibreOffice_6.1.4_Linux_x86-64_deb.tar.gz && tar -xvzf LibreOffice_6.1.4_Linux_x86-64_deb.tar.gz)
   then
     echo "Couldn't download LibreOffice."
     exit 1
-  elif [[ ! (LibreOffice_6.1.4.2_Linux_x86-64_deb/DEBS && sudo dpkg -i *.deb) ]];
+  elif ! (cd LibreOffice_6.1.4.2_Linux_x86-64_deb/DEBS && sudo dpkg -i *.deb)
   then
     echo "Couldn't install LibreOffice."
     exit 1
@@ -350,11 +353,11 @@ change
 update
 echo "Installing Mozilla Firefox..."
 echo "Purging Mozilla Firefox!"
-  if [[ ! (sudo apt-get remove firefox --purge -y) ]];
+  if ! (sudo apt-get remove firefox --purge -y)
   then
     echo "Unable to uninstall Mozilla Firefox."
     exit 1
-  elif [[ ! (update && sudo apt-get install firefox -y) ]];
+  elif ! (update && sudo apt-get install firefox -y)
   then
     echo "Couldn't install  Mozilla Firefox."
     exit 1
@@ -364,7 +367,7 @@ echo "Mozilla Firefox successfully installed!"
 #Octave
 update
 echo "Installing Octave..."
-  if [[ ! (sudo apt-get install octave -y) ]];
+  if ! (sudo apt-get install octave -y)
   then
     echo "Couldn't install  Octave."
     exit 1
@@ -375,12 +378,12 @@ echo "Octave successfully installed!"
 update
 echo "Installing Anaconda..."
   cd /tmp/
-  if [[ ! (sudo curl -O https://repo.anaconda.com/archive/Anaconda3-5.2.0-Linux-x86_64.sh) ]];
+  if ! (sudo curl -O https://repo.anaconda.com/archive/Anaconda3-5.2.0-Linux-x86_64.sh)
   then
     echo "Unable to donwload Anaconda's script."
     exit 1
   fi;
-  if [[ ! (bash Anaconda3-5.2.0-Linux-x86_64.sh -b) ]];
+  if ! (bash Anaconda3-5.2.0-Linux-x86_64.sh -b)
   then
     echo "Unable to run Anaconda's script."
     exit 1
@@ -444,11 +447,11 @@ Controller.prototype.ReadyForInstallationPageCallback = function()
 Controller.prototype.FinishedPageCallback = function() {
     gui.clickButton(buttons.FinishButton);
 }" >> /home/ntic/Downloads/qt-installer-noninteractive.qs
-  if [[ ! (sudo wget http://download.qt.io/official_releases/qt/5.12/5.12.1/qt-opensource-linux-x64-5.12.1.run && sudo chmod 755 qt-opensource-linux-x64-5.12.1.run) ]];
+  if ! (sudo wget http://download.qt.io/official_releases/qt/5.12/5.12.1/qt-opensource-linux-x64-5.12.1.run && sudo chmod 755 qt-opensource-linux-x64-5.12.1.run)
   then
     echo "Unable to download Qt's script."
     exit 1
-  elif [[ ! (sudo ./qt-opensource-linux-x64-5.12.1.run --script qt-installer-noninteractive.qs) ]];
+  elif ! (sudo ./qt-opensource-linux-x64-5.12.1.run --script qt-installer-noninteractive.qs)
   then
     echo "Unable to run Qt's script."
     exit 1
@@ -458,7 +461,7 @@ echo "Qt successfully installed!"
 #R
 update
 echo "Installing R..."
-  if [[ ! (sudo apt-get install r-base -y) ]];
+  if ! (sudo apt-get install r-base -y)
   then
     echo "Couldn't install R."
     exit 1
@@ -469,11 +472,11 @@ echo "R successfully installed!"
 update
 change
 echo "Installing Sublime..."
-  if [[ ! ((sudo wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | sudo apt-key add -) && (echo "deb https://download.sublimetext.com/ apt/stable/" | sudo tee /etc/apt/sources.list.d/sublime-text.list)) ]];
+  if ! ((sudo wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | sudo apt-key add -) && (echo "deb https://download.sublimetext.com/ apt/stable/" | sudo tee /etc/apt/sources.list.d/sublime-text.list))
   then
     echo "Unable to install the requirements."
     exit 1
-  elif [[ ! (update && sudo apt-get install sublime-text -y) ]];
+  elif ! (update && sudo apt-get install sublime-text -y)
   then
     echo "Couldn't install Sublime."
     exit 1
@@ -483,7 +486,7 @@ echo "Sublime successfully installed!"
 #TexStudio
 update
 echo "Installing TexStudio..."
-  if [[ ! (sudo apt-get install texstudio -y) ]];
+  if ! (sudo apt-get install texstudio -y)
   then
     echo "Couldn't install TexStudio."
     exit 1
@@ -493,11 +496,11 @@ echo "TexStudio successfully installed!"
 #Grub Customizer
 update
 echo "Installing Grub Customizer..."
-  if [[ ! (sudo add-apt-repository ppa:danielrichter2007/grub-customizer -y) ]];
+  if ! (sudo add-apt-repository ppa:danielrichter2007/grub-customizer -y)
   then
     echo "Unable to install the requirements."
     exit 1
-  elif [[ ! (update && sudo apt-get install grub-customizer -y) ]];
+  elif ! (update && sudo apt-get install grub-customizer -y)
   then
     echo "Couldn't install Grub Customizer."
     exit 1
@@ -517,26 +520,26 @@ change
 # Using another version of libjasper. More information on: https://researchxuyc.wordpress.com/2018/09/26/install-libjasper-in-ubuntu-18-04/.
 echo "Installing OpenCV..."
   echo "Installing requirements..."
-    if [[ ! (sudo apt-get install build-essential cmake git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev -y) ]];
+    if ! (sudo apt-get install build-essential cmake git libgtk2.0-dev pkg-config libavcodec-dev libavformat-dev libswscale-dev -y)
     then
 	    echo "Unable to install requirements."
     	    exit 1
-    elif [[ ! (sudo apt-get install python3.7-dev python3-numpy libtbb2 libtbb-dev -y) ]];
+    elif ! (sudo apt-get install python3.7-dev python3-numpy libtbb2 libtbb-dev -y)
     then
 	    echo "Unable to install requirements."
 	    exit 1
-    elif [[ ! (sudo add-apt-repository "deb http://security.ubuntu.com/ubuntu xenial-security main" && update && sudo apt-get install libjasper1 libjasper-dev -y) ]];
+    elif ! (sudo add-apt-repository "deb http://security.ubuntu.com/ubuntu xenial-security main" && update && sudo apt-get install libjasper1 libjasper-dev -y)
     then
 	    echo "Unable to install requirements."
 	    exit 1
-    elif [[ ! (sudo apt-get install libjpeg-dev libpng-dev libtiff5-dev libdc1394-22-dev libeigen3-dev libtheora-dev libvorbis-dev libxvidcore-dev libx264-dev sphinx-common libtbb-dev yasm libfaac-dev libopencore-amrnb-dev libopencore-amrwb-dev libopenexr-dev libgstreamer-plugins-base1.0-dev libavutil-dev libavfilter-dev libavresample-dev -y) ]];
+    elif ! (sudo apt-get install libjpeg-dev libpng-dev libtiff5-dev libdc1394-22-dev libeigen3-dev libtheora-dev libvorbis-dev libxvidcore-dev libx264-dev sphinx-common libtbb-dev yasm libfaac-dev libopencore-amrnb-dev libopencore-amrwb-dev libopenexr-dev libgstreamer-plugins-base1.0-dev libavutil-dev libavfilter-dev libavresample-dev -y)
     then
 	    echo "Unable to install requirements."
 	    exit 1
     fi;
   echo "Requirements successfully installed!"
   echo "Running install routine."
-  if [[ ! (sudo -s && cd /opt && git clone https://github.com/Itseez/opencv.git && git clone https://github.com/Itseez/opencv_contrib.git && cd opencv && mkdir release && cd release && cmake -D BUILD_TIFF=ON -D WITH_CUDA=OFF -D ENABLE_AVX=OFF -D WITH_OPENGL=OFF -D WITH_OPENCL=OFF -D WITH_IPP=OFF -D WITH_TBB=ON -D BUILD_TBB=ON -D WITH_EIGEN=OFF -D WITH_V4L=OFF -D WITH_VTK=OFF -D BUILD_TESTS=OFF -D BUILD_PERF_TESTS=OFF -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D OPENCV_EXTRA_MODULES_PATH=/opt/opencv_contrib/modules /opt/opencv/ && make -j4 && make install && ldconfig && change && pkg-config --modversion opencv) ]];
+  if ! (sudo -s && cd /opt && git clone https://github.com/Itseez/opencv.git && git clone https://github.com/Itseez/opencv_contrib.git && cd opencv && mkdir release && cd release && cmake -D BUILD_TIFF=ON -D WITH_CUDA=OFF -D ENABLE_AVX=OFF -D WITH_OPENGL=OFF -D WITH_OPENCL=OFF -D WITH_IPP=OFF -D WITH_TBB=ON -D BUILD_TBB=ON -D WITH_EIGEN=OFF -D WITH_V4L=OFF -D WITH_VTK=OFF -D BUILD_TESTS=OFF -D BUILD_PERF_TESTS=OFF -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D OPENCV_EXTRA_MODULES_PATH=/opt/opencv_contrib/modules /opt/opencv/ && make -j4 && make install && ldconfig && change && pkg-config --modversion opencv)
   then
     	echo "Couldn't install OpenCV."
 	exit 1
@@ -549,17 +552,17 @@ change
 #NetBeans and Gradle Support
 # Installing Netbeans8.2 and Gradle Support. Failure on auto install Gradle Support Plugin
 echo "Installing NetBeans 8.2..."
-  if [[ ! (cd /tmp && sudo wget -c http://download.netbeans.org/netbeans/8.2/final/bundles/netbeans-8.2-linux.sh) ]];
+  if ! (cd /tmp && sudo wget -c http://download.netbeans.org/netbeans/8.2/final/bundles/netbeans-8.2-linux.sh)
   then
 	  echo "Unable to download the Netbeans script."
 	  exit 1
-  elif [[ ! (chmod 755 netbeans-8.2-linux.sh && sudo ./netbeans-8.2-linux.sh --silent -y) ]];
+  elif ! (chmod 755 netbeans-8.2-linux.sh && sudo ./netbeans-8.2-linux.sh --silent -y)
   then
 	  echo "Couldn't install NetBeans."
 	  exit 1
   fi;
   echo "Downloading Gradle Support."
-  if [[ ! (sudo wget https://github.com/kelemen/netbeans-gradle-project/releases/download/v2.0.2/netbeans-gradle-plugin-2.0.2.nbm) ]];
+  if ! (sudo wget https://github.com/kelemen/netbeans-gradle-project/releases/download/v2.0.2/netbeans-gradle-plugin-2.0.2.nbm)
   then
 	  echo "Unable to download the plugin."
 	  exit 1
@@ -572,7 +575,7 @@ change
 #Blender
 #Simple install.
 echo "Installing Blender..."
-  if [[ ! (sudo apt-get install blender) ]];
+  if ! (sudo apt-get install blender)
   then
 	  echo "Unable to download blender."
 	  exit 1
@@ -586,7 +589,7 @@ change
 #Visual Code
 #Simple install.
 echo "Installing VSCode..."
-  if [[ ! (sudo wget https://go.microsoft.com/fwlink/?LinkID=760868 -O visualstudio.deb && sudo dpkg -i visualstudio.deb)
+  if ! (sudo wget https://go.microsoft.com/fwlink/?LinkID=760868 -O visualstudio.deb && sudo dpkg -i visualstudio.deb)
   then
 	  echo "Unable to install VSCode."
 	  exit 1
@@ -600,7 +603,7 @@ change
 echo "Installing Eletric..."
   mkdir /home/${USERNAME}/Eletric
   cd /home/${USERNAME}/Eletric
-  if [[ ! (sudo wget https://ftp.gnu.org/pub/gnu/electric/electricBinary-9.07.jar -O electric.jar) ]];
+  if ! (sudo wget https://ftp.gnu.org/pub/gnu/electric/electricBinary-9.07.jar -O electric.jar)
   then
    	echo "Unable to download Electric Java machine."
 	  exit 1
@@ -608,7 +611,7 @@ echo "Installing Eletric..."
   cp electric.jar /usr/share/java/
   unzip electric.jar
   echo "Creating a .desktop file..."
-  if [[ ! (echo "[Desktop Entry]" >> /home/${USERNAME}/.local/share/applications/Electric.desktop && echo "Type=Application" >> /home/${USERNAME}/.local/share/applications/Electric.desktop && echo "Name=Electric" >> /home/${USERNAME}/.local/share/applications/Electric.desktop && echo "GenericName=Electric" >> /home/${USERNAME}/.local/share/applications/Electric.desktop && echo "Path=/usr/share/java/" >> /home/${USERNAME}/.local/share/applications/Electric.desktop && echo "Exec=java -jar /usr/share/java/electric.jar" >> /home/${USERNAME}/.local/share/applications/Electric.desktop && echo "Icon=/home/${USERNAME}/Eletric/ElectricIcon64x64.png" >> /home/${USERNAME}/.local/share/applications/Electric.desktop && echo "Terminal=False" >> /home/${USERNAME}/.local/share/applications/Electric.desktop) ]];
+  if ! (echo "[Desktop Entry]" >> /home/${USERNAME}/.local/share/applications/Electric.desktop && echo "Type=Application" >> /home/${USERNAME}/.local/share/applications/Electric.desktop && echo "Name=Electric" >> /home/${USERNAME}/.local/share/applications/Electric.desktop && echo "GenericName=Electric" >> /home/${USERNAME}/.local/share/applications/Electric.desktop && echo "Path=/usr/share/java/" >> /home/${USERNAME}/.local/share/applications/Electric.desktop && echo "Exec=java -jar /usr/share/java/electric.jar" >> /home/${USERNAME}/.local/share/applications/Electric.desktop && echo "Icon=/home/${USERNAME}/Eletric/ElectricIcon64x64.png" >> /home/${USERNAME}/.local/share/applications/Electric.desktop && echo "Terminal=False" >> /home/${USERNAME}/.local/share/applications/Electric.desktop)
   then
 	  echo "Unable to create a .desktop file."
 	  exit 1
@@ -620,7 +623,7 @@ change
 
 #PostgreSQL
 echo "Installing PostgreSQL..."
-  if [[ ! (chmod 755 postgresql-10.6-1-linux-x64.run && sudo ./postgresql-10.6-1-linux-x64.run --unattendedmodeui minimalWithDialogs --superaccount aluno --serviceaccount aluno --superpassword 123456 --mode unattended --prefix /opt/PostgreSQL/10 --datadir /opt/PostgreSQL/10/data) ]];
+  if ! (chmod 755 postgresql-10.6-1-linux-x64.run && sudo ./postgresql-10.6-1-linux-x64.run --unattendedmodeui minimalWithDialogs --superaccount aluno --serviceaccount aluno --superpassword 123456 --mode unattended --prefix /opt/PostgreSQL/10 --datadir /opt/PostgreSQL/10/data)
   then
   	echo "Couldn't install PostgreSQL."
   	exit 1
@@ -633,18 +636,18 @@ change
 #Cisco Packet Tracer
 #Error on silent install: Enter Space Y Enter Enter Enter
 echo "Installing Cisco Packet Tracer..."
-  if [[ ! (mkdir CiscoPacketTracer && cd CiscoPacketTracer/  && sudo tar -xzvf Packet*.tar.gz) ]];
+  if ! (mkdir CiscoPacketTracer && cd CiscoPacketTracer/  && sudo tar -xzvf Packet*.tar.gz)
   then
   	echo "Unable to tar Cisco Packet Tracer."
   	exit 1
-  elif [[ ! (sudo ./install ] #Need quiet install
+  elif ! (sudo ./install ) #Need quiet install
   then
   	echo "Unable to install Cisco Packet Tracer."
   	exit 1
-  elif [[ ! (cd /opt/bin/pt && ldd PacketTracer7 | grep "not found") ]];
+  elif ! (cd /opt/bin/pt && ldd PacketTracer7 | grep "not found")
   then
   	echo "Not missing files or links."
-  elif [[ ! (sudo sh -c "echo 'deb http://security.ubuntu.com/ubuntu xenial-security main ' >> /etc/apt/sources.list" && update && sudo apt-get install libpng12-0 -y && sudo apt-get install libpng12-dev -y ]
+  elif ! (sudo sh -c "echo 'deb http://security.ubuntu.com/ubuntu xenial-security main ' >> /etc/apt/sources.list" && update && sudo apt-get install libpng12-0 -y && sudo apt-get install libpng12-dev -y)
   then
   	echo "Solved the problem."
   	exit 1
@@ -666,7 +669,7 @@ change
 
 #IBM ILOG CPLEX
 echo "Installing IBM ILOG CPLEX..."
-  if [[ ! (chmod 755 cplex_studio128.linux-x86-64.bin && sudo ./cplex*.bin) ]];
+  if ! (chmod 755 cplex_studio128.linux-x86-64.bin && sudo ./cplex*.bin)
   then
 	echo "Couldn't install IBM ILOG CPLEX."
 	exit 1
@@ -678,11 +681,11 @@ change
 
 #XMind
 echo "Installing XMind..."
-  if [[ ! (sudo apt-get install libwebkitgtk-1.0-0 -y && sudo apt-get install lame -y) ]];
+  if ! (sudo apt-get install libwebkitgtk-1.0-0 -y && sudo apt-get install lame -y)
   then
 	  echo "Unable to install the requirements."
 	  exit 1
-  elif [[ ! (sudo dpkg -i xmind-8-beta-linux_amd64.deb -y) ]];
+  elif ! (sudo dpkg -i xmind-8-beta-linux_amd64.deb -y)
   then
 	  echo "Couldn't install  XMind."
     exit 1
@@ -694,7 +697,7 @@ change
 
 #SQLDeveloper
 echo "Installing SQLDeveloper..."
-  if [[ ! (sudo alien --scripts sqldeveloper*.rpm && sudo dpkg -i sqldeveloper*.deb && remover && sudo apt-get remove icedtea-*-plugin) ]];
+  if ! (sudo alien --scripts sqldeveloper*.rpm && sudo dpkg -i sqldeveloper*.deb && remover && sudo apt-get remove icedtea-*-plugin)
   then
 	echo "Couldn't install SQLDeveloper."
 	exit 1
@@ -709,11 +712,11 @@ remove
 
 #Arduino IDE
 echo "Installing Arduino IDE..."
-  if [[ ! (sudo wget https://downloads.arduino.cc/arduino-1.8.8-linux64.tar.xz && tar xvf arduino-1.8.8-linux64.tar.xz) ]];
+  if ! (sudo wget https://downloads.arduino.cc/arduino-1.8.8-linux64.tar.xz && tar xvf arduino-1.8.8-linux64.tar.xz)
   then
     echo "Unable to download the package for Arduino IDE."
     exit 1
-  elif [[ ! (cd arduino*/ && sudo sh ./install.sh) ]];
+  elif ! (cd arduino*/ && sudo sh ./install.sh)
   then
     echo "Couldn't install Arduino IDE."
     exit 1
@@ -729,7 +732,7 @@ echo "Files on the right directory."
 #Codeblocks
 update
 echo "Installing CodeBlocks..."
-  if [[ ! (sudo apt-get install codeblocks -y) ]];
+  if ! (sudo apt-get install codeblocks -y)
   then
     echo "Couldn't install CodeBlocks."
     exit 1
@@ -739,7 +742,7 @@ echo "CodeBlocks successfully installed!"
 #Eclipse
 update
 echo "Installing Eclipse..."
-  if [[ ! (sudo apt-get install eclipse -y) ]];
+  if ! (sudo apt-get install eclipse -y)
   then
     echo "Couldn't install Eclipse."
     exit 1
@@ -749,7 +752,7 @@ echo "Eclipse successfully installed!"
 #MongoDB
 update
 echo "Installing MongoDB..."
-  if [[ ! (sudo apt-get install mongodb -y && sudo systemctl status mongodb && mongo --eval 'db.runCOmmand({ connectionStatus: 1 })') ]];
+  if ! (sudo apt-get install mongodb -y && sudo systemctl status mongodb && mongo --eval 'db.runCOmmand({ connectionStatus: 1 })')
   then
     echo "Couldn't install  MongoDB."
     exit 1
@@ -759,15 +762,15 @@ echo "MongoDB successfully installed!"
 #MyOpenLab
 change
 echo "Installing MyOpenLab..."
-  if [[ ! (sudo wget https://myopenlab.org/distribution_linux_3.11.0.zip -y && unzip distribution_linux_3.11.0.zip -d distribution_linux_3.11.0) ]];
+  if ! (sudo wget https://myopenlab.org/distribution_linux_3.11.0.zip -y && unzip distribution_linux_3.11.0.zip -d distribution_linux_3.11.0)
   then
     echo "Couldn't install  MongoDB."
     exit 1
-  elif [[ ! (cd distribution_linux_3.11.0/ && sudo sh ./start_linux) ]];
+  elif ! (cd distribution_linux_3.11.0/ && sudo sh ./start_linux)
   then
     echo "Couldn't install  MongoDB."
     exit 1
-  elif [[ ! (sudo update-java-alternatives --set \java-1.8.0-openjdk-$(dpkg --print-architecture)) ]];
+  elif ! (sudo update-java-alternatives --set \java-1.8.0-openjdk-$(dpkg --print-architecture))
   then
     echo "Couldn't configurate MongoDB with JDK 8."
     exit 1
@@ -778,11 +781,11 @@ echo "MyOpenLab successfully installed!"
 update
 change
 echo "Installing NetLogo..."
-  if [[ ! (sudo wget https://ccl.northwestern.edu/netlogo/6.0.4/NetLogo-6.0.4-64.tgz) ]];
+  if ! (sudo wget https://ccl.northwestern.edu/netlogo/6.0.4/NetLogo-6.0.4-64.tgz)
   then
     echo "Unable to download the file NetLogo."
     exit 1
-  elif [[ ! (tar -xzvf NetLogo-6.0.4-64.tgz -C /home/${USERNAME}/ && cd ~/NetLogo\ 6.0.4/ && wget http://netlogoweb.org/assets/images/desktopicon.png) ]];
+  elif ! (tar -xzvf NetLogo-6.0.4-64.tgz -C /home/${USERNAME}/ && cd ~/NetLogo\ 6.0.4/ && wget http://netlogoweb.org/assets/images/desktopicon.png)
   then
     echo "Unable to extract the NetLogo file."
     exit 1
@@ -809,23 +812,23 @@ echo "NetLogo successfully installed!"
 #Pentaho
 update
 echo "Installing Pentaho..."
-    if [[ ! (mkdir Pentaho && cd Pentaho && mkdir 3.1 && mkdir 3.2 && mkdir 3.3 && mkdir 3.4) ]];
+    if ! (mkdir Pentaho && cd Pentaho && mkdir 3.1 && mkdir 3.2 && mkdir 3.3 && mkdir 3.4)
     then
       echo "Unable to create files."
       exit 1
-    elif [[ ! (cd 3.1 && wget https://sourceforge.net/projects/pentaho/files/Business%20Intelligence%20Server/6.1/biserver-ce-6.1.0.1-196.zip && unzip biserver-ce-6.1.0.1-196.zip && rm biserver-ce-6.1.0.1-196.zip) ]];
+    elif ! (cd 3.1 && wget https://sourceforge.net/projects/pentaho/files/Business%20Intelligence%20Server/6.1/biserver-ce-6.1.0.1-196.zip && unzip biserver-ce-6.1.0.1-196.zip && rm biserver-ce-6.1.0.1-196.zip)
 		then
       echo "Unable to download Pentaho version 3.1."
       exit 1
-    elif [[ ! (cd ~/Downloads/Pentaho/3.2/ && wget https://sourceforge.net/projects/pentaho/files/Report%20Designer/6.1/prd-ce-6.1.0.1-196.zip && unzip prd-ce-6.1.0.1-196.zip && rm prd-ce-6.1.0.1-196.zip) ]];
+    elif ! (cd ~/Downloads/Pentaho/3.2/ && wget https://sourceforge.net/projects/pentaho/files/Report%20Designer/6.1/prd-ce-6.1.0.1-196.zip && unzip prd-ce-6.1.0.1-196.zip && rm prd-ce-6.1.0.1-196.zip)
     then
       echo "Unable to download Pentaho version 3.2."
       exit 1
-    elif [[ ! (cd ~/Downloads/Pentaho/3.3/ && wget https://sourceforge.net/projects/mondrian/files/schema%20workbench/3.12.0/psw-ce-3.12.0.1-196.zip && unzip psw-ce-3.12.0.1-196.zip && rm psw-ce-3.12.0.1-196.zip &&) ]];
+    elif ! (cd ~/Downloads/Pentaho/3.3/ && wget https://sourceforge.net/projects/mondrian/files/schema%20workbench/3.12.0/psw-ce-3.12.0.1-196.zip && unzip psw-ce-3.12.0.1-196.zip && rm psw-ce-3.12.0.1-196.zip &&)
     then
       echo "Unable to download Pentaho version 3.3."
       exit 1
-    elif [[ ! (cd ~/Downloads/Pentaho/3.4 && wget https://sourceforge.net/projects/pentaho/files/Data%20Integration/6.1/pdi-ce-6.1.0.1-196.zip && unzip pdi-ce-6.1.0.1-196.zip && rm pdi-ce-6.1.0.1-196.zip) ]];
+    elif ! (cd ~/Downloads/Pentaho/3.4 && wget https://sourceforge.net/projects/pentaho/files/Data%20Integration/6.1/pdi-ce-6.1.0.1-196.zip && unzip pdi-ce-6.1.0.1-196.zip && rm pdi-ce-6.1.0.1-196.zip)
     then
       echo "Unable to download Pentaho version 3.4."
       exit 1
@@ -838,11 +841,11 @@ echo "Pentaho successfully installed!"
 update
 change
 echo "Installing Pinta..."
-  if [[ ! (sudo add-apt-repository ppa:pinta-maintainers/pinta-stable && update) ]];
+  if ! (sudo add-apt-repository ppa:pinta-maintainers/pinta-stable && update)
   then
     echo "Unable to install the requirements."
     exit 1
-  elif [[ ! (sudo apt-get install pinta -y) ]];
+  elif ! (sudo apt-get install pinta -y)
   then
     echo "Unable to install Pinta."
     exit 1
@@ -853,11 +856,11 @@ echo "Pinta successfully installed!"
 update
 change
 echo "Installing Portugol Studio..."
-  if [[ ! (mkdir PortugolStudio && cd ~/Downloads/PortugolStudio/ && wget https://github.com/UNIVALI-LITE/Portugol-Studio/releases/download/v2.7.1/portugol-studio-2.7.1-linux-x64.run.zip && unzip portugol-studio-2.7.1-linux-x64.run.zip && chmod 755 portugol-studio-2.7.1-linux-x64.run) ]];
+  if ! (mkdir PortugolStudio && cd ~/Downloads/PortugolStudio/ && wget https://github.com/UNIVALI-LITE/Portugol-Studio/releases/download/v2.7.1/portugol-studio-2.7.1-linux-x64.run.zip && unzip portugol-studio-2.7.1-linux-x64.run.zip && chmod 755 portugol-studio-2.7.1-linux-x64.run)
   then
     echo "Unable to download Portugol Studio file."
     exit 1
-  elif [[ ! (sudo ./portugol-studio-2.7.1-linux-x64.run --mode unattended && cd ~/Downloads/ && rm -rf PortugolStudio/) ]];
+  elif ! (sudo ./portugol-studio-2.7.1-linux-x64.run --mode unattended && cd ~/Downloads/ && rm -rf PortugolStudio/)
     echo "Unable to install Portugol Studio."
     exit 1
   fi;
@@ -867,7 +870,7 @@ echo "Portugol Studio successfully installed!"
 update
 change
 echo "Installing Project Libre..."
-  if [[ ! (sudo wget https://ufpr.dl.sourceforge.net/project/projectlibre/ProjectLibre/1.8/projectlibre_1.8.0-1.deb -O projectlibre.deb && sudo dpkg -i projectlibre.deb && sudo apt-get install -f) ]];
+  if ! (sudo wget https://ufpr.dl.sourceforge.net/project/projectlibre/ProjectLibre/1.8/projectlibre_1.8.0-1.deb -O projectlibre.deb && sudo dpkg -i projectlibre.deb && sudo apt-get install -f)
   then
     echo "Unable to install Project Libre."
     exit 1
@@ -878,7 +881,7 @@ echo "Project Libre successfully installed!"
 update
 change
 echo "Installing Robo 3T..."
-  if [[ ! (sudo snap install robo3t-snap) ]];
+  if ! (sudo snap install robo3t-snap)
   then
 	echo "Unable to install Robo3T."
 	exit 1
@@ -889,11 +892,11 @@ update
 #RPGBoss
 echo "Installing RPGBoss..."
   cd /home/${USERNAME}/
-  if [[ ! (sudo wget https://github.com/rpgboss/rpgboss/archive/v0.9.8.tar.gz && tar -xvf v0.9.8.tar.gz && cd rpgboss-0.9.8/ && ./gradlew run) ]];
+  if ! (sudo wget https://github.com/rpgboss/rpgboss/archive/v0.9.8.tar.gz && tar -xvf v0.9.8.tar.gz && cd rpgboss-0.9.8/ && ./gradlew run)
   then
   	echo "Unable to install RPGBoss."
   	exit 1
-  elif [[ ! (mv package/linux/rpgboss.desktop  ~/.local/share/applications/) ]];
+  elif ! (mv package/linux/rpgboss.desktop  ~/.local/share/applications/)
   then
   	echo "Preparing a .desktop file."
   	exit 1
@@ -911,7 +914,7 @@ echo "RPGBoss successfully installed!"
 update
 change
 echo "Installing RStudio..."
-  if [[ ! (sudo wget https://download1.rstudio.org/rstudio-xenial-1.1.463-amd64.deb && sudo dpkg -i rstudio-xenial-1.1.463-amd64.deb) ]];
+  if ! (sudo wget https://download1.rstudio.org/rstudio-xenial-1.1.463-amd64.deb && sudo dpkg -i rstudio-xenial-1.1.463-amd64.deb)
   then
     echo "Unable to install RStudio."
     exit 1
@@ -923,7 +926,7 @@ update
 change
 #Libjava.so is missing ->
 echo "Installing Scilab..."
-  if [[ ! (sudo wget http://www.scilab.org/download/5.1.1/scilab-5.1.1.bin.linux-x86_64.tar.gz && tar -xvf scilab-5.1.1.bin.linux-x86_64.tar.gz) ]];
+  if ! (sudo wget http://www.scilab.org/download/5.1.1/scilab-5.1.1.bin.linux-x86_64.tar.gz && tar -xvf scilab-5.1.1.bin.linux-x86_64.tar.gz)
   then
     echo "Unable to install the requirements."
     exit 1
@@ -937,11 +940,11 @@ echo "Scilab successfully installed!"
 update
 change
 echo "Installing VirtualBox..."
-  if [[ ! (sudo add-apt-repository multiverse && update) ]];
+  if ! (sudo add-apt-repository multiverse && update)
   then
     echo "Unable to install the requirements."
     exit 1
-  elif [[ ! (sudo apt-get install virtualbox -y) ]];
+  elif ! (sudo apt-get install virtualbox -y)
     echo "Unable to install VirtualBox."
     exit 1
   fi;
@@ -951,11 +954,11 @@ echo "VirtualBox successfully installed!"
 update
 change
 echo "Installing VLC..."
-  if [[ ! (sudo add-apt-repository ppa:videolan/master-daily) ]];
+  if ! (sudo add-apt-repository ppa:videolan/master-daily)
   then
     echo "Unable to get the repository."
     exit 1
-  elif [[ ! (sudo apt-get install vlc -y) ]];
+  elif ! (sudo apt-get install vlc -y)
   then
     echo "Unable to install VLC."
     exit 1
@@ -966,11 +969,11 @@ echo "VLC successfully installed!"
 update
 change
 echo "Installing Wireshark..."
-  if [[ ! (sudo add-apt-repository ppa:wireshark-dev/stable && update) ]];
+  if ! (sudo add-apt-repository ppa:wireshark-dev/stable && update)
   then
     echo "Unable to get the repository."
     exit 1
-  elif [[ ! (sudo apt-get install wireshark -y) ]];
+  elif ! (sudo apt-get install wireshark -y)
     echo "Unable to install Wireshark."
   fi;
 echo "Wireshark successfully installed!"
@@ -979,7 +982,7 @@ echo "Wireshark successfully installed!"
 update
 change
 echo "Installing XAMPP..."
-  if [[ ! (sudo wget https://www.apachefriends.org/xampp-files/7.3.1/xampp-linux-x64-7.3.1-0-installer.run && sudo chmod 755 xampp-linux-x64-7.3.1-0-installer.run && sudo ./xampp-linux-x64-7.3.1-0-installer.run --mode unattended --disable-components xampp_developer_files && sudo apt-get install net-tools -y) ]];
+  if ! (sudo wget https://www.apachefriends.org/xampp-files/7.3.1/xampp-linux-x64-7.3.1-0-installer.run && sudo chmod 755 xampp-linux-x64-7.3.1-0-installer.run && sudo ./xampp-linux-x64-7.3.1-0-installer.run --mode unattended --disable-components xampp_developer_files && sudo apt-get install net-tools -y)
   then
     echo "Unable to install XAMPP."
     exit 1

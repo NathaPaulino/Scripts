@@ -20,9 +20,9 @@ Golang
 Google Chrome
 Interpretador Prolog
 JDK 11
-JDK 8				
+JDK 8					(Try use echo to run the file)				
 Java3D
-LibreOffice
+LibreOffice				(Fixing the bug)
 Mozilla Firefox
 Octave				
 Anaconda (Python)
@@ -53,7 +53,7 @@ MyOpenLab
 NetLogo                     
 Pentaho					
 Pinta					
-Portugol Studio				(Silent install bug)
+Portugol Studio				
 Project Libre				
 Robo 3T					
 RPGBoss					
