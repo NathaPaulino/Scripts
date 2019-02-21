@@ -18,13 +18,12 @@
 # Robo3T have a snap file. Solved the problem changing the install mode. [sudo snap install robo3t-snap]
 # XAMPP successfully installed. Execute like sudo /opt/lampp/lampp start
 # Cisco has to be the last one.
-# PortugolStudio have a bug on silent install (does not finish)
-# Still looking for ways to download scilab
+# PortugolStudio have another version (2.7.1) and works silent install.
+# Still looking for ways to download scilab 
 #
 # Softwares problems:
 #    - Cisco Packett Tracer (Silent install - Try unattended mode)
-#    - Portugol Studio	    (Bug on silent install)
-#    - Scilab		    (.desktop file or another way to install)
+#    - Scilab		    (.desktop file or another way to install - Soft Link)
 #    - Line 281 - Using echo for enter input
 #
 #------------------------------------------------------------------------------------------------
@@ -854,11 +853,11 @@ echo "Pinta successfully installed!"
 update
 change
 echo "Installing Portugol Studio..."
-  if [[ ! (mkdir PortugolStudio && cd ~/Downloads/PortugolStudio/ && wget https://github.com/UNIVALI-LITE/Portugol-Studio/releases/download/v2.6.4/portugol-studio-2.6.4-linux-x64.run.zip && unzip portugol-studio-2.6.4-linux-x64.run.zip && chmod 755 portugol-studio-2.6.4-linux-x64.run) ]];
+  if [[ ! (mkdir PortugolStudio && cd ~/Downloads/PortugolStudio/ && wget https://github.com/UNIVALI-LITE/Portugol-Studio/releases/download/v2.7.1/portugol-studio-2.7.1-linux-x64.run.zip && unzip portugol-studio-2.7.1-linux-x64.run.zip && chmod 755 portugol-studio-2.7.1-linux-x64.run) ]];
   then
     echo "Unable to download Portugol Studio file."
     exit 1
-  elif [[ ! (sudo ./portugol-studio-2.6.4-linux-x64.run --mode unattended && cd ~/Downloads/ && rm -rf PortugolStudio/) ]];
+  elif [[ ! (sudo ./portugol-studio-2.7.1-linux-x64.run --mode unattended && cd ~/Downloads/ && rm -rf PortugolStudio/) ]];
     echo "Unable to install Portugol Studio."
     exit 1
   fi;
@@ -922,23 +921,16 @@ echo "RStudio successfully installed!"
 #Scilab
 update
 change
-#Have sudo apt-get install scilab
-#Libjava.so is missing
+#Libjava.so is missing ->
 echo "Installing Scilab..."
-  if [[ ! (sudo wget https://www.scilab.org/download/6.0.1/scilab-6.0.1.bin.linux-x86_64.tar.gz && tar -xvf scilab-6.0.1.bin.linux-x86_64.tar.gz) ]];
+  if [[ ! (sudo wget http://www.scilab.org/download/5.1.1/scilab-5.1.1.bin.linux-x86_64.tar.gz && tar -xvf scilab-5.1.1.bin.linux-x86_64.tar.gz) ]];
   then
     echo "Unable to install the requirements."
     exit 1
   fi;
-  mv scilab-6.0.1 Scilab
+  mv scilab-5.1.1 Scilab
   mv Scilab /home/${USERNAME}/
   echo "Creating a .desktop file."
-  echo "[Desktop Entry]
-        Name= Scilab
-        Exec=/home/${USERNAME}/Scilab/bin/scilab
-        Icon=/home/${USERNAME}/share/icons/hicolor/256x256/apps/scilab.png
-        Terminal=true
-        Type=Application" >> /home/${USERNAME}/.local/share/applications/scilab.desktop
 echo "Scilab successfully installed!"
 
 #VirtualBox
@@ -951,6 +943,7 @@ echo "Installing VirtualBox..."
     exit 1
   elif [[ ! (sudo apt-get install virtualbox -y) ]];
     echo "Unable to install VirtualBox."
+    exit 1
   fi;
 echo "VirtualBox successfully installed!"
 
