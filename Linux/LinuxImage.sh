@@ -307,19 +307,14 @@ echo "Installing JDK 8..."
   then
      echo "Couldn't install the requirement."
      exit 1
-  elif ! (update && sudo apt-get install apt-get remove libreoffice-core --purge -y)
+  elif ! (update && sudo apt-get install oracle-java8-installer -y)
   then
-    echo "Unable to uninstall LibreOffice."
+    echo "Unable to install JDK 8."
     exit 1
-  elif ! (sudo wget https://download.documentfoundation.org/libreoffice/stable/6.1.4/deb/x86_64/LibreOffice_6.1.4_Linux_x86-64_deb.tar.gz && tar -xvzf LibreOffice_6.1.4_Linux_x86-64_deb.tar.gz)
+  elif ! (echo -e "Y" | sudo apt-get install oracle-java8-set-default -y)
   then
-    echo "Couldn't download LibreOffice."
+    echo "Couldn't configure JDK8."
     exit 1
-  elif ! (cd LibreOffice_6.1.4.2_Linux_x86-64_deb/DEBS && sudo dpkg -i *.deb)
-  thencle-java8-installer -y && echo "Y" | sudo apt-get install oracle-java8-set-default -y)
-  then
-     echo "Couldn't install JDK 8."
-     exit 1
   fi;
   echo "Verifying installation."
   java -version
@@ -473,16 +468,7 @@ echo "Installing R..."
   then
     echo "Couldn't install R."
     exit 1
-  fi;o apt-get remove libreoffice-core --purge -y)
-  then
-    echo "Unable to uninstall LibreOffice."
-    exit 1
-  elif ! (sudo wget https://download.documentfoundation.org/libreoffice/stable/6.1.4/deb/x86_64/LibreOffice_6.1.4_Linux_x86-64_deb.tar.gz && tar -xvzf LibreOffice_6.1.4_Linux_x86-64_deb.tar.gz)
-  then
-    echo "Couldn't download LibreOffice."
-    exit 1
-  elif ! (cd LibreOffice_6.1.4.2_Linux_x86-64_deb/DEBS && sudo dpkg -i *.deb)
-  then
+  fi;
 echo "R successfully installed!"
 
 #Sublime
@@ -524,10 +510,11 @@ echo "Installing Grub Customizer..."
   fi;
 echo "Grub Customizer successfully installed!"
 
-remover
+autoremove
 update
 change
 
+echo "All requirements are successfully installed!"
 #------------------------------------------------------------------------------------------------
 # All remains softwares
 #------------------------------------------------------------------------------------------------
@@ -646,40 +633,6 @@ echo "Installing PostgreSQL..."
   	exit 1
   fi;
 echo "PostgreSQL successfully installed!"
-
-update
-change
-
-#Cisco Packet Tracer
-#Error on silent install: Enter Space Y Enter Enter Enter
-echo "Installing Cisco Packet Tracer..."
-  if ! (mkdir CiscoPacketTracer && cd CiscoPacketTracer/  && sudo tar -xzvf Packet*.tar.gz)
-  then
-  	echo "Unable to tar Cisco Packet Tracer."
-  	exit 1
-  elif ! (sudo ./install ) #Need quiet install
-  then
-  	echo "Unable to install Cisco Packet Tracer."
-  	exit 1
-  elif ! (cd /opt/bin/pt && ldd PacketTracer7 | grep "not found")
-  then
-  	echo "Not missing files or links."
-  elif ! (sudo sh -c "echo 'deb http://security.ubuntu.com/ubuntu xenial-security main ' >> /etc/apt/sources.list" && update && sudo apt-get install libpng12-0 -y && sudo apt-get install libpng12-dev -y)
-  then
-  	echo "Solved the problem."
-  	exit 1
-  fi;
-  echo "Creating a .desktop file"
-  echo "[Desktop Entry]
-        Name= Packettracer
-        Comment=Networking
-        GenericName=Cisco Packet Tracer
-        Exec=/opt/packettracer/packettracer
-        Icon=/usr/share/icons/packettracer.jpeg
-        StartupNotify=true
-        Terminal=false
-        Type=Application" >> /home/${USERNAME}/.local/share/applications/PacketTracer.desktop
-echo "Cisco Packett Tracer successfully installed!"
 
 update
 change
@@ -1019,5 +972,37 @@ echo "Installing XAMPP..."
   fi;
 echo "XAMPP successfully installed!"
 
+update
+change
+#Cisco Packet Tracer
+#Error on silent install: Enter Space Y Enter Enter Enter
+echo "Installing Cisco Packet Tracer..."
+  if ! (mkdir CiscoPacketTracer && cd CiscoPacketTracer/  && sudo tar -xzvf Packet*.tar.gz)
+  then
+  	echo "Unable to tar Cisco Packet Tracer."
+  	exit 1
+  elif ! (sudo ./install ) #Need quiet install
+  then
+  	echo "Unable to install Cisco Packet Tracer."
+  	exit 1
+  elif ! (cd /opt/bin/pt && ldd PacketTracer7 | grep "not found")
+  then
+  	echo "Not missing files or links."
+  elif ! (sudo sh -c "echo 'deb http://security.ubuntu.com/ubuntu xenial-security main ' >> /etc/apt/sources.list" && update && sudo apt-get install libpng12-0 -y && sudo apt-get install libpng12-dev -y)
+  then
+  	echo "Solved the problem."
+  	exit 1
+  fi;
+  echo "Creating a .desktop file"
+  echo "[Desktop Entry]
+        Name= Packettracer
+        Comment=Networking
+        GenericName=Cisco Packet Tracer
+        Exec=/opt/packettracer/packettracer
+        Icon=/usr/share/icons/packettracer.jpeg
+        StartupNotify=true
+        Terminal=false
+        Type=Application" >> /home/${USERNAME}/.local/share/applications/PacketTracer.desktop
+echo "Cisco Packett Tracer successfully installed!"
 update
 erase
