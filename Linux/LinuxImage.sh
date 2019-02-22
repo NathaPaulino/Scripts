@@ -20,10 +20,10 @@
 # Cisco has to be the last one.
 # PortugolStudio have another version (2.7.1) and works silent install.
 # Still looking for ways to download scilab 
+# Scilab is working now (any doubts use the link) - THIS GUY IS A GENIUS:  https://askubuntu.com/questions/1052962/scilab-5-5-2-on-ubuntu-18-04
 #
 # Softwares problems:
 #    - Cisco Packett Tracer (Silent install - Try unattended mode)
-#    - Scilab		    (.desktop file or another way to install - Soft Link)
 #    - Line 281 - 	    Using echo for enter input
 #    - Line 311		    Using echo for enter input 
 #------------------------------------------------------------------------------------------------
@@ -307,7 +307,16 @@ echo "Installing JDK 8..."
   then
      echo "Couldn't install the requirement."
      exit 1
-  elif ! (update && sudo apt-get install oracle-java8-installer -y && echo "Y" | sudo apt-get install oracle-java8-set-default -y)
+  elif ! (update && sudo apt-get install apt-get remove libreoffice-core --purge -y)
+  then
+    echo "Unable to uninstall LibreOffice."
+    exit 1
+  elif ! (sudo wget https://download.documentfoundation.org/libreoffice/stable/6.1.4/deb/x86_64/LibreOffice_6.1.4_Linux_x86-64_deb.tar.gz && tar -xvzf LibreOffice_6.1.4_Linux_x86-64_deb.tar.gz)
+  then
+    echo "Couldn't download LibreOffice."
+    exit 1
+  elif ! (cd LibreOffice_6.1.4.2_Linux_x86-64_deb/DEBS && sudo dpkg -i *.deb)
+  thencle-java8-installer -y && echo "Y" | sudo apt-get install oracle-java8-set-default -y)
   then
      echo "Couldn't install JDK 8."
      exit 1
@@ -464,7 +473,16 @@ echo "Installing R..."
   then
     echo "Couldn't install R."
     exit 1
-  fi;
+  fi;o apt-get remove libreoffice-core --purge -y)
+  then
+    echo "Unable to uninstall LibreOffice."
+    exit 1
+  elif ! (sudo wget https://download.documentfoundation.org/libreoffice/stable/6.1.4/deb/x86_64/LibreOffice_6.1.4_Linux_x86-64_deb.tar.gz && tar -xvzf LibreOffice_6.1.4_Linux_x86-64_deb.tar.gz)
+  then
+    echo "Couldn't download LibreOffice."
+    exit 1
+  elif ! (cd LibreOffice_6.1.4.2_Linux_x86-64_deb/DEBS && sudo dpkg -i *.deb)
+  then
 echo "R successfully installed!"
 
 #Sublime
@@ -921,18 +939,31 @@ echo "Installing RStudio..."
 echo "RStudio successfully installed!"
 
 #Scilab
+
 update
 change
-#Libjava.so is missing ->
 echo "Installing Scilab..."
-  if ! (sudo wget http://www.scilab.org/download/5.1.1/scilab-5.1.1.bin.linux-x86_64.tar.gz && tar -xvf scilab-5.1.1.bin.linux-x86_64.tar.gz)
+  if ! (mkdir Scilab && cd Scilab)
+  then 
+	echo "Unable to create a Scilab folder."
+	exit 1
+  elif ! (wget http://mirrors.kernel.org/ubuntu/pool/universe/s/scilab/scilab_5.5.2-2ubuntu3_all.deb && wget http://mirrors.kernel.org/ubuntu/pool/universe/s/scilab/scilab-cli_5.5.2-2ubuntu3_all.deb && wget http://mirrors.kernel.org/ubuntu/pool/universe/s/scilab/scilab-data_5.5.2-2ubuntu3_all.deb && wget http://mirrors.kernel.org/ubuntu/pool/universe/s/scilab/scilab-doc_5.5.2-2ubuntu3_all.deb && wget http://mirrors.kernel.org/ubuntu/pool/universe/s/scilab/scilab-full-bin_5.5.2-2ubuntu3_amd64.deb && wget http://mirrors.kernel.org/ubuntu/pool/universe/s/scilab/scilab-include_5.5.2-2ubuntu3_amd64.deb && wget http://mirrors.kernel.org/ubuntu/pool/universe/s/scilab/scilab-minimal-bin_5.5.2-2ubuntu3_amd64.deb && wget http://mirrors.kernel.org/ubuntu/pool/universe/s/scilab/scilab-test_5.5.2-2ubuntu3_all.deb)
   then
-    echo "Unable to install the requirements."
-    exit 1
+	echo "Unable to download scilab files."
+	exit 1
+  elif ! (wget http://security.ubuntu.com/ubuntu/pool/universe/h/hdf5/libhdf5-10_1.8.16+docs-4ubuntu1.1_amd64.deb && wget http://mirrors.kernel.org/ubuntu/pool/main/s/suitesparse/libsuitesparseconfig4.4.6_4.4.6-1_amd64.deb && wget http://mirrors.kernel.org/ubuntu/pool/main/s/suitesparse/libamd2.4.1_4.4.6-1_amd64.deb && wget http://mirrors.kernel.org/ubuntu/pool/universe/libm/libmatio/libmatio2_1.5.3-1_amd64.deb && wget http://mirrors.kernel.org/ubuntu/pool/main/s/suitesparse/libcamd2.4.1_4.4.6-1_amd64.deb && wget http://mirrors.kernel.org/ubuntu/pool/main/s/suitesparse/libccolamd2.9.1_4.4.6-1_amd64.deb && wget http://mirrors.kernel.org/ubuntu/pool/main/s/suitesparse/libcolamd2.9.1_4.4.6-1_amd64.deb && wget http://mirrors.kernel.org/ubuntu/pool/main/s/suitesparse/libcholmod3.0.6_4.4.6-1_amd64.deb && wget http://mirrors.kernel.org/ubuntu/pool/main/s/suitesparse/libumfpack5.7.1_4.4.6-1_amd64.deb)
+  then
+	echo "Unable to download scilab dependencies."
+	exit 1
+  elif ! (update && sudo apt-get install libcurl3 -y && sudo apt-get install ./lib*.deb -y && sudo apt-get install ./scilab*.deb -y && sudo apt-get install openjdk-8-jre openjdk-8-jre-headless -y)
+  then
+	echo "Unable to install the downloaded files."
+	exit 1
+  elif ! (sudo sed -i "s/^Exec=scilab -f$/Exec=env JAVA_HOME=\/usr\/lib\/jvm\/java-8-openjdk-$(dpkg --print-architecture)\/jre scilab -f/" /usr/share/applications/scilab.desktop && sudo sed -i "s/^Exec=scilab-adv-cli$/Exec=env JAVA_HOME=\/usr\/lib\/jvm\/java-8-openjdk-$(dpkg --print-architecture)\/jre scilab-adv-cli/" /usr/share/applications/scilab-adv-cli.desktop)
+  then
+	echo "Unable to install scilab."
+	exit 1
   fi;
-  mv scilab-5.1.1 Scilab
-  mv Scilab /home/${USERNAME}/
-  echo "Creating a .desktop file."
 echo "Scilab successfully installed!"
 
 #VirtualBox
