@@ -63,7 +63,7 @@ function download(){
 	   wget -r ftp://${1}:${2}@${3}/${4}
 	   mv /home/${USERNAME}/Downloads/${3}/${4} /home/${USERNAME}/Downloads
   else
-   	echo "Four arguments are required, respectively: User name, password, FTP server IP address and path file. All arguments must be separated by space."
+   	echo "Four arguments are required, respectively: Username, password, FTP server IP address and path file. All arguments must be separated by space."
 	exit 1
   fi;
 }
