@@ -10,9 +10,9 @@ then
     exit 1
  fi;
 #Editing /etc/proftpd/proftpd.conf
-  sed -s -E s/^[[:space:]][[:space:]]DenyALL$/\ \ AllowUser\ ${1}\\n\ \ DenyALL/g /etc/proftpd/proftpd.conf
+  sed -s -E s/^[[:space:]][[:space:]]DenyALL$/\ \ AllowUser\ ${1}\\n\ \ DenyALL/g /etc/proftpd/proftpd.conf > /etc/proftpd/proftpd.conf
 #Editing /etc/group
-  sed -s -E s/\(^ftp[[:punct:]][[:alnum:]]\(\([[:punct:]]\)*\([[:alnum:]]\)*\)*\)/\\1,${1}/g /etc/group
+  sed -s -E s/\(^ftp[[:punct:]][[:alnum:]]\(\([[:punct:]]\)*\([[:alnum:]]\)*\)*\)/\\1,${1}/g /etc/group > /etc/group
 else
   echo "Use as root:./ftpuser <username>"
 exit 1
