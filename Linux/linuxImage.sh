@@ -377,7 +377,7 @@ echo "Installing Anaconda..."
   fi;
   echo "PATH=$PATH:$HOME/anaconda3/bin" >> /home/${USERNAME}/.bashrc
   source ~/.bashrc
-  conda -version
+  conda --version
 echo "Anaconda successfully installed!" 
 
 #Qt
@@ -499,6 +499,7 @@ update
 change
 
 echo "All requirements are successfully installed!" 
+exit 0
 #------------------------------------------------------------------------------------------------
 # All remains softwares
 #------------------------------------------------------------------------------------------------
