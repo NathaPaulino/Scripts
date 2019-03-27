@@ -60,6 +60,7 @@ function autoremove(){
 function download(){
   if [[ $# -eq ${ARGC} ]];
   then
+	   change
 	   wget -r ftp://${1}:${2}@${3}/${4}
 	   mv /home/${USERNAME}/Downloads/${3}/${4} /home/${USERNAME}/Downloads
   else
