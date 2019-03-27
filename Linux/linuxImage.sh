@@ -499,8 +499,8 @@ autoremove
 update
 change
 
-echo "All requirements are successfully installed!" 
-exit 0
+echo "All requirements are successfully installed!"
+echo "Functional until here!" 
 #------------------------------------------------------------------------------------------------
 # All remains softwares
 #------------------------------------------------------------------------------------------------
@@ -665,6 +665,9 @@ echo "SQLDeveloper successfully installed!"
 update
 change
 remove
+
+echo "First step successfully installed!"
+exit 0
 
 #Arduino IDE
 echo "Installing Arduino IDE..." 
