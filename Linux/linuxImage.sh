@@ -21,6 +21,7 @@
 # PortugolStudio have another version (2.7.1) and works silent install.
 # Still looking for ways to download scilab 
 # Scilab is working now (any doubts use the link) - THIS GUY IS A GENIUS:  https://askubuntu.com/questions/1052962/scilab-5-5-2-on-ubuntu-18-04
+# Must have running at root user 
 #
 # Softwares problems:
 #    - Cisco Packett Tracer (Silent install - Try unattended mode)
@@ -78,429 +79,429 @@ function erase(){
 #------------------------------------------------------------------------------------------------
 # Installing requirements:
 
-download $@
-change
-update
+# download $@
+# change
+# update
 
-#Flash Player
-echo "Installing Flash Player..." 
-  if ! (sudo sh -c "echo 'deb http://archive.canonical.com/ubuntu $(lsb_release -cs) partner' >> /etc/apt/sources.list" -y)
-  then
-    echo "The package containing the Flash Player couldn't be downloaded." 
-    exit 1
-  elif ! (update && sudo apt-get install adobe-flashplugin -y)
-  then
-    echo "Couldn't install Flash Player plugin." 
-    exit 1
-  fi;
-echo "Flash Player successfully installed!" 
+# #Flash Player
+# echo "Installing Flash Player..." 
+#   if ! (sudo sh -c "echo 'deb http://archive.canonical.com/ubuntu $(lsb_release -cs) partner' >> /etc/apt/sources.list" -y)
+#   then
+#     echo "The package containing the Flash Player couldn't be downloaded." 
+#     exit 1
+#   elif ! (update && sudo apt-get install adobe-flashplugin -y)
+#   then
+#     echo "Couldn't install Flash Player plugin." 
+#     exit 1
+#   fi;
+# echo "Flash Player successfully installed!" 
 
-#Node.js
-update
-echo "Installing Node.js and Npm..." 
-  if ! (sudo apt-get install nodejs -y && sudo apt-get install npm -y)
-  then
-    if ! (nodejs --version && npm --version)
-    then
-      echo "Couldn't install Node.js and Npm." 
-      exit 1
-    fi;
-  fi;
-echo "Node.js and Npm successfully installed!" 
+# #Node.js
+# update
+# echo "Installing Node.js and Npm..." 
+#   if ! (sudo apt-get install nodejs -y && sudo apt-get install npm -y)
+#   then
+#     if ! (nodejs --version && npm --version)
+#     then
+#       echo "Couldn't install Node.js and Npm." 
+#       exit 1
+#     fi;
+#   fi;
+# echo "Node.js and Npm successfully installed!" 
 
-#Alien
-update
-echo "Installing Alien..." 
-  if ! (sudo apt-get install alien -y)
-    then
-      echo "Couldn't install Alien." 
-      exit 1
-  fi;
-echo "Alien successfully installed!" 
+# #Alien
+# update
+# echo "Installing Alien..." 
+#   if ! (sudo apt-get install alien -y)
+#     then
+#       echo "Couldn't install Alien." 
+#       exit 1
+#   fi;
+# echo "Alien successfully installed!" 
 
-#Curl
-update
-echo "Installing Curl..." 
-  if ! (sudo apt-get install curl -y)
-  then
-    echo "Couldn't install the Curl package." 
-    exit 1
-  fi;
-echo "Curl successfully installed!" 
+# #Curl
+# update
+# echo "Installing Curl..." 
+#   if ! (sudo apt-get install curl -y)
+#   then
+#     echo "Couldn't install the Curl package." 
+#     exit 1
+#   fi;
+# echo "Curl successfully installed!" 
 
-#Git
-update
-echo "Installing Git..." 
-  if ! (sudo apt-get install git -y)
-  then
-    echo "Couldn't install git." 
-    exit 1
-  fi;
-echo "Git successfully installed!" 
+# #Git
+# update
+# echo "Installing Git..." 
+#   if ! (sudo apt-get install git -y)
+#   then
+#     echo "Couldn't install git." 
+#     exit 1
+#   fi;
+# echo "Git successfully installed!" 
 
-#Atom
-update
-echo "Installing Atom..." 
-  echo "Installing dependencies..." 
-  if ! (sudo apt-get install gconf2 -y && sudo apt-get install gconf-service -y)
-  then
-    echo "Couldn't download the dependencies." 
-    exit 1
-  elif ! (sudo wget https://atom.io/download/deb && sudo dpkg -i deb)
-  then
-    echo "Couldn't install Atom." 
-    exit 1
-  fi;
-echo "Atom successfully installed!" 
-rm -rf deb
+# #Atom
+# update
+# echo "Installing Atom..." 
+#   echo "Installing dependencies..." 
+#   if ! (sudo apt-get install gconf2 -y && sudo apt-get install gconf-service -y)
+#   then
+#     echo "Couldn't download the dependencies." 
+#     exit 1
+#   elif ! (sudo wget https://atom.io/download/deb && sudo dpkg -i deb)
+#   then
+#     echo "Couldn't install Atom." 
+#     exit 1
+#   fi;
+# echo "Atom successfully installed!" 
+# rm -rf deb
 
-#Cmake
-update
-echo "Installing Cmake..." 
-  if ! (sudo wget https://github.com/Kitware/CMake/releases/download/v3.12.4/cmake-3.12.4.tar.gz && tar -xvf cmake-3.12.4.tar.gz)
-  then
-    echo "Couldn't download and unzip the Cmake file." 
-    exit 1
-  elif ! (cd cmake-3.12.4/ && sudo ./bootstrap && sudo make && sudo make install)
-  then
-    echo "Couldn't install Cmake." 
-    exit 1
-  fi;
-echo "Cmake successfully installed!" 
+# #Cmake
+# update
+# echo "Installing Cmake..." 
+#   if ! (sudo wget https://github.com/Kitware/CMake/releases/download/v3.12.4/cmake-3.12.4.tar.gz && tar -xvf cmake-3.12.4.tar.gz)
+#   then
+#     echo "Couldn't download and unzip the Cmake file." 
+#     exit 1
+#   elif ! (cd cmake-3.12.4/ && sudo ./bootstrap && sudo make && sudo make install)
+#   then
+#     echo "Couldn't install Cmake." 
+#     exit 1
+#   fi;
+# echo "Cmake successfully installed!" 
 
-#Haskell compiler
-update
-change
-echo "Installing Haskell compiler..." 
-  if ! (sudo apt-get install ghc -y)
-  then
-    echo "Couldn't install Haskell compiler." 
-    exit 1
-  fi;
-echo "Haskell compiler successfully installed!" 
+# #Haskell compiler
+# update
+# change
+# echo "Installing Haskell compiler..." 
+#   if ! (sudo apt-get install ghc -y)
+#   then
+#     echo "Couldn't install Haskell compiler." 
+#     exit 1
+#   fi;
+# echo "Haskell compiler successfully installed!" 
 
-#Freeglut
-update
-echo "Installing Freeglut..." 
-  if ! (sudo apt-get install freeglut3 freeglut3-dev libglew1.5-dev libglew-dev libsoil-dev libsdl2-dev libsdl2-mixer-dev -y)
-  then
-    echo "Couldn't install Freeglut." 
-    exit 1
-  fi;
-echo "Freeglut successfully installed!" 
+# #Freeglut
+# update
+# echo "Installing Freeglut..." 
+#   if ! (sudo apt-get install freeglut3 freeglut3-dev libglew1.5-dev libglew-dev libsoil-dev libsdl2-dev libsdl2-mixer-dev -y)
+#   then
+#     echo "Couldn't install Freeglut." 
+#     exit 1
+#   fi;
+# echo "Freeglut successfully installed!" 
 
-#G++
-update
-echo "Installing g++..." 
-  if ! (sudo apt-get install g++ -y)
-  then
-    echo "Couldn't install g++." 
-    exit 1
-  fi;
-echo "G++ successfully installed!" 
+# #G++
+# update
+# echo "Installing g++..." 
+#   if ! (sudo apt-get install g++ -y)
+#   then
+#     echo "Couldn't install g++." 
+#     exit 1
+#   fi;
+# echo "G++ successfully installed!" 
 
-#Gcc
-update
-echo "Installing gcc..." 
-  if ! (sudo apt-get install gcc -y)
-  then
-    echo "Couldn't install gcc." 
-    exit 1
-  fi;
-echo "Gcc successfully installed!" 
+# #Gcc
+# update
+# echo "Installing gcc..." 
+#   if ! (sudo apt-get install gcc -y)
+#   then
+#     echo "Couldn't install gcc." 
+#     exit 1
+#   fi;
+# echo "Gcc successfully installed!" 
 
-#Gedit
-update
-echo "Installing gedit..." 
-  if ! (sudo apt-get install gedit -y)
-  then
-    echo "Couldn't install gedit." 
-    exit 1
-  fi;
-echo "Gedit successfully installed!" 
+# #Gedit
+# update
+# echo "Installing gedit..." 
+#   if ! (sudo apt-get install gedit -y)
+#   then
+#     echo "Couldn't install gedit." 
+#     exit 1
+#   fi;
+# echo "Gedit successfully installed!" 
 
-#GIMP
-update
-echo "Installing GIMP..." 
-  if ! (sudo apt-get install gimp -y)
-  then
-    echo "Couldn't install GIMP." 
-    exit 1
-  fi;
-echo "GIMP successfully installed!" 
+# #GIMP
+# update
+# echo "Installing GIMP..." 
+#   if ! (sudo apt-get install gimp -y)
+#   then
+#     echo "Couldn't install GIMP." 
+#     exit 1
+#   fi;
+# echo "GIMP successfully installed!" 
 
-#Golang
-update
-echo "Installing Go compiler..." 
-  if ! (sudo apt-get install golang-go -y && sudo apt-get install gccgo-go -y)
-  then
-    echo "Couldn't install Go compiler." 
-    exit 1
-  fi;
-echo "Golang successfully installed!" 
+# #Golang
+# update
+# echo "Installing Go compiler..." 
+#   if ! (sudo apt-get install golang-go -y && sudo apt-get install gccgo-go -y)
+#   then
+#     echo "Couldn't install Go compiler." 
+#     exit 1
+#   fi;
+# echo "Golang successfully installed!" 
 
-#Google Chrome
-update
-echo "Installing Google Chrome..." 
-  if ! (sudo wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb)
-  then
-	echo "Couldn't add Google Chrome repository." 
-  	exit 1
-  elif ! (update && sudo dpkg -i google-chrome-stable_current_amd64.deb)
-  then
-	echo "Couldn't install Google Chrome." 
-  	exit 1
-  fi;
-echo "Google Chrome sucessfully installed!" 
-rm -rf google-chrome-stable_current_amd64.deb
+# #Google Chrome
+# update
+# echo "Installing Google Chrome..." 
+#   if ! (sudo wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb)
+#   then
+# 	echo "Couldn't add Google Chrome repository." 
+#   	exit 1
+#   elif ! (update && sudo dpkg -i google-chrome-stable_current_amd64.deb)
+#   then
+# 	echo "Couldn't install Google Chrome." 
+#   	exit 1
+#   fi;
+# echo "Google Chrome sucessfully installed!" 
+# rm -rf google-chrome-stable_current_amd64.deb
 
-#Interpretador Prolog
-update
-echo "Installing Prolog interpreter..." 
-  if ! (sudo apt-get install swi-prolog -y)
-  then
-    echo "Couldn't install Prolog interpreter." 
-    exit 1
-  fi;
-echo "Prolog interpreter successfully installed!" 
+# #Interpretador Prolog
+# update
+# echo "Installing Prolog interpreter..." 
+#   if ! (sudo apt-get install swi-prolog -y)
+#   then
+#     echo "Couldn't install Prolog interpreter." 
+#     exit 1
+#   fi;
+# echo "Prolog interpreter successfully installed!" 
 
-#JDK 11
-echo "Installing JDK 11..." 
-cd /tmp
-  echo "Installing requirements..." 
-  if ! (sudo add-apt-repository ppa:linuxuprising/java && update && sudo apt-get install oracle-java11-installer -y && sudo apt-get install oracle-java11-set-default -y)
-  then
-    echo "Couldn't install JDK 11."
-    exit 1
-  fi;
-  echo "Configuration successfully completed!" 
-  java -version
-  echo "Configuring environment variables..." 
-     echo 'export J2SDKDIR=/usr/lib/jvm/jdk-11.0.2' >> /home/${USERNAME}/jdk.sh
-     echo 'export J2REDIR=/usr/lib/jvm/jdk-11.0.2' >> /home/${USERNAME}/jdk.sh
-     echo 'export PATH=$PATH:/usr/lib/jvm/jdk-11.0.2/bin:/usr/lib/jvm/jdk-11.0.2/db/bin' >> /home/${USERNAME}/jdk.sh
-     echo 'export JAVA_HOME=/usr/lib/jvm/jdk-11.0.2' >> /home/${USERNAME}/jdk.sh
-     echo 'export DERBY_HOME=/usr/lib/jvm/jdk-11.0.2/db' >> /home/${USERNAME}/jdk.sh
-     sudo mv /home/${USERNAME}/jdk.sh /etc/profile.d/
-     source /etc/profile.d/jdk.sh
-  echo "Configuration of environment variables performed successfully!" 
-echo "JDK 11 successfully installed!" 
+# #JDK 11
+# echo "Installing JDK 11..." 
+# cd /tmp
+#   echo "Installing requirements..." 
+#   if ! (sudo add-apt-repository ppa:linuxuprising/java && update && sudo apt-get install oracle-java11-installer -y && sudo apt-get install oracle-java11-set-default -y)
+#   then
+#     echo "Couldn't install JDK 11."
+#     exit 1
+#   fi;
+#   echo "Configuration successfully completed!" 
+#   java -version
+#   echo "Configuring environment variables..." 
+#      echo 'export J2SDKDIR=/usr/lib/jvm/jdk-11.0.2' >> /home/${USERNAME}/jdk.sh
+#      echo 'export J2REDIR=/usr/lib/jvm/jdk-11.0.2' >> /home/${USERNAME}/jdk.sh
+#      echo 'export PATH=$PATH:/usr/lib/jvm/jdk-11.0.2/bin:/usr/lib/jvm/jdk-11.0.2/db/bin' >> /home/${USERNAME}/jdk.sh
+#      echo 'export JAVA_HOME=/usr/lib/jvm/jdk-11.0.2' >> /home/${USERNAME}/jdk.sh
+#      echo 'export DERBY_HOME=/usr/lib/jvm/jdk-11.0.2/db' >> /home/${USERNAME}/jdk.sh
+#      sudo mv /home/${USERNAME}/jdk.sh /etc/profile.d/
+#      source /etc/profile.d/jdk.sh
+#   echo "Configuration of environment variables performed successfully!" 
+# echo "JDK 11 successfully installed!" 
 
-#JDK 8
-update
-echo "Installing JDK 8..." 
-  if ! (sudo add-apt-repository ppa:webupd8team/java -y)
-  then
-     echo "Couldn't install the requirement." 
-     exit 1
-  elif ! (update && sudo apt-get install oracle-java8-installer -y)
-  then
-    echo "Unable to install JDK 8." 
-    exit 1
-  elif ! (sudo apt-get install oracle-java8-set-default -y)
-  then
-    echo "Couldn't configure JDK8." 
-    exit 1
-  fi;
-  echo "Verifying installation." 
-  java -version
-echo "JDK 8 successfully installed!" 
+# #JDK 8
+# update
+# echo "Installing JDK 8..." 
+#   if ! (sudo add-apt-repository ppa:webupd8team/java -y)
+#   then
+#      echo "Couldn't install the requirement." 
+#      exit 1
+#   elif ! (update && sudo apt-get install oracle-java8-installer -y)
+#   then
+#     echo "Unable to install JDK 8." 
+#     exit 1
+#   elif ! (sudo apt-get install oracle-java8-set-default -y)
+#   then
+#     echo "Couldn't configure JDK8." 
+#     exit 1
+#   fi;
+#   echo "Verifying installation." 
+#   java -version
+# echo "JDK 8 successfully installed!" 
 
-#Java3D
-update
-change
-echo "Installing Java3D..." 
-  if ! (sudo apt-get install libjava3d-java -y)
-  then
-    echo "Couldn't install Java3D." 
-    exit 1
-  fi;
-echo "Java3D successfully installed!" 
+# #Java3D
+# update
+# change
+# echo "Installing Java3D..." 
+#   if ! (sudo apt-get install libjava3d-java -y)
+#   then
+#     echo "Couldn't install Java3D." 
+#     exit 1
+#   fi;
+# echo "Java3D successfully installed!" 
 
-#LibreOffice
-update
-echo "Installing LibreOffice..." 
-  echo "Purging LibreOffice!" 
-  if ! (sudo apt-get remove libreoffice-core --purge -y)
-  then
-    echo "Unable to uninstall LibreOffice." 
-    exit 1
-  elif ! (sudo wget https://download.documentfoundation.org/libreoffice/stable/6.1.5/deb/x86_64/LibreOffice_6.1.5_Linux_x86-64_deb.tar.gz && tar -xvzf LibreOffice_6.1.5_Linux_x86-64_deb.tar.gz)
-  then
-    echo "Couldn't download LibreOffice." 
-    exit 1
-  elif ! (cd LibreOffice_6.1.5.2_Linux_x86-64_deb/DEBS && sudo dpkg -i *.deb)
-  then
-    echo "Couldn't install LibreOffice." 
-    exit 1
-  fi;
-echo "LibreOffice successfully installed!" 
+# #LibreOffice
+# update
+# echo "Installing LibreOffice..." 
+#   echo "Purging LibreOffice!" 
+#   if ! (sudo apt-get remove libreoffice-core --purge -y)
+#   then
+#     echo "Unable to uninstall LibreOffice." 
+#     exit 1
+#   elif ! (sudo wget https://download.documentfoundation.org/libreoffice/stable/6.1.5/deb/x86_64/LibreOffice_6.1.5_Linux_x86-64_deb.tar.gz && tar -xvzf LibreOffice_6.1.5_Linux_x86-64_deb.tar.gz)
+#   then
+#     echo "Couldn't download LibreOffice." 
+#     exit 1
+#   elif ! (cd LibreOffice_6.1.5.2_Linux_x86-64_deb/DEBS && sudo dpkg -i *.deb)
+#   then
+#     echo "Couldn't install LibreOffice." 
+#     exit 1
+#   fi;
+# echo "LibreOffice successfully installed!" 
 
-#Mozilla Firefox
-change
-update
-echo "Installing Mozilla Firefox..." 
-echo "Purging Mozilla Firefox!" 
-  if ! (sudo apt-get remove firefox --purge -y)
-  then
-    echo "Unable to uninstall Mozilla Firefox." 
-    exit 1
-  elif ! (update && sudo apt-get install firefox -y)
-  then
-    echo "Couldn't install  Mozilla Firefox." 
-    exit 1
-  fi;
-echo "Mozilla Firefox successfully installed!" 
+# #Mozilla Firefox
+# change
+# update
+# echo "Installing Mozilla Firefox..." 
+# echo "Purging Mozilla Firefox!" 
+#   if ! (sudo apt-get remove firefox --purge -y)
+#   then
+#     echo "Unable to uninstall Mozilla Firefox." 
+#     exit 1
+#   elif ! (update && sudo apt-get install firefox -y)
+#   then
+#     echo "Couldn't install  Mozilla Firefox." 
+#     exit 1
+#   fi;
+# echo "Mozilla Firefox successfully installed!" 
 
-#Octave
-update
-echo "Installing Octave..." 
-  if ! (sudo apt-get install octave -y)
-  then
-    echo "Couldn't install  Octave." 
-    exit 1
-  fi;
-echo "Octave successfully installed!" 
+# #Octave
+# update
+# echo "Installing Octave..." 
+#   if ! (sudo apt-get install octave -y)
+#   then
+#     echo "Couldn't install  Octave." 
+#     exit 1
+#   fi;
+# echo "Octave successfully installed!" 
 
-#Python Anaconda
-update
-echo "Installing Anaconda..." 
-  cd /tmp/
-  if ! (sudo curl -O https://repo.anaconda.com/archive/Anaconda3-5.2.0-Linux-x86_64.sh)
-  then
-    echo "Unable to donwload Anaconda's script." 
-    exit 1
-  fi;
-  if ! (bash Anaconda3-5.2.0-Linux-x86_64.sh -b)
-  then
-    echo "Unable to run Anaconda's script." 
-    exit 1
-  fi;
-  echo "PATH=$PATH:$HOME/anaconda3/bin" >> /home/${USERNAME}/.bashrc
-  source ~/.bashrc
-  conda --version
-echo "Anaconda successfully installed!" 
+# #Python Anaconda
+# update
+# echo "Installing Anaconda..." 
+#   cd /tmp/
+#   if ! (sudo curl -O https://repo.anaconda.com/archive/Anaconda3-5.2.0-Linux-x86_64.sh)
+#   then
+#     echo "Unable to donwload Anaconda's script." 
+#     exit 1
+#   fi;
+#   if ! (bash Anaconda3-5.2.0-Linux-x86_64.sh -b)
+#   then
+#     echo "Unable to run Anaconda's script." 
+#     exit 1
+#   fi;
+#   echo "PATH=$PATH:$HOME/anaconda3/bin" >> /home/${USERNAME}/.bashrc
+#   source ~/.bashrc
+#   conda --version
+# echo "Anaconda successfully installed!" 
 
-#Qt
-change
-update
-echo "Installing Qt..." 
-#Creating a .qs script for no interaction of user
-  echo "function Controller() {
-    installer.autoRejectMessageBoxes();
-    installer.installationFinished.connect(function() {
-        gui.clickButton(buttons.NextButton);
-    })
-}
+# #Qt
+# change
+# update
+# echo "Installing Qt..." 
+# #Creating a .qs script for no interaction of user
+#   echo "function Controller() {
+#     installer.autoRejectMessageBoxes();
+#     installer.installationFinished.connect(function() {
+#         gui.clickButton(buttons.NextButton);
+#     })
+# }
 
-Controller.prototype.WelcomePageCallback = function() {
-    // click delay here because the next button is initially disabled for ~1 second
-    gui.clickButton(buttons.NextButton, 3000);
-}
+# Controller.prototype.WelcomePageCallback = function() {
+#     // click delay here because the next button is initially disabled for ~1 second
+#     gui.clickButton(buttons.NextButton, 3000);
+# }
 
-Controller.prototype.CredentialsPageCallback = function() {
-    gui.clickButton(buttons.NextButton);
-}
+# Controller.prototype.CredentialsPageCallback = function() {
+#     gui.clickButton(buttons.NextButton);
+# }
 
-Controller.prototype.IntroductionPageCallback = function() {
-    gui.clickButton(buttons.NextButton);
-}
+# Controller.prototype.IntroductionPageCallback = function() {
+#     gui.clickButton(buttons.NextButton);
+# }
 
-Controller.prototype.TargetDirectoryPageCallback = function()
-{
-    gui.currentPageWidget().TargetDirectoryLineEdit.setText(installer.value(\"HomeDir\") + \"/Qt\");
-    gui.clickButton(buttons.NextButton);
-}
+# Controller.prototype.TargetDirectoryPageCallback = function()
+# {
+#     gui.currentPageWidget().TargetDirectoryLineEdit.setText(installer.value(\"HomeDir\") + \"/Qt\");
+#     gui.clickButton(buttons.NextButton);
+# }
 
-Controller.prototype.ComponentSelectionPageCallback = function() {
-    var widget = gui.currentPageWidget();
+# Controller.prototype.ComponentSelectionPageCallback = function() {
+#     var widget = gui.currentPageWidget();
 
-    widget.selectAll();
-    gui.clickButton(buttons.NextButton);
-}
+#     widget.selectAll();
+#     gui.clickButton(buttons.NextButton);
+# }
 
-Controller.prototype.LicenseAgreementPageCallback = function() {
-    gui.currentPageWidget().AcceptLicenseRadioButton.setChecked(true);
-    gui.clickButton(buttons.NextButton);
-}
+# Controller.prototype.LicenseAgreementPageCallback = function() {
+#     gui.currentPageWidget().AcceptLicenseRadioButton.setChecked(true);
+#     gui.clickButton(buttons.NextButton);
+# }
 
-Controller.prototype.StartMenuDirectoryPageCallback = function() {
-    gui.clickButton(buttons.NextButton);
-}
+# Controller.prototype.StartMenuDirectoryPageCallback = function() {
+#     gui.clickButton(buttons.NextButton);
+# }
 
-Controller.prototype.ReadyForInstallationPageCallback = function()
-{
-    gui.clickButton(buttons.NextButton);
-}
-Controller.prototype.FinishedPageCallback = function() {
-    gui.clickButton(buttons.FinishButton);
-}" >> /home/ntic/Downloads/qt-installer-noninteractive.qs
-  if ! (sudo wget http://download.qt.io/official_releases/qt/5.12/5.12.1/qt-opensource-linux-x64-5.12.1.run && sudo chmod 755 qt-opensource-linux-x64-5.12.1.run)
-  then
-    echo "Unable to download Qt's script." 
-    exit 1
-  elif ! (sudo ./qt-opensource-linux-x64-5.12.1.run --script qt-installer-noninteractive.qs)
-  then
-    echo "Unable to run Qt's script." 
-    exit 1
-  fi;
-echo "Qt successfully installed!" 
+# Controller.prototype.ReadyForInstallationPageCallback = function()
+# {
+#     gui.clickButton(buttons.NextButton);
+# }
+# Controller.prototype.FinishedPageCallback = function() {
+#     gui.clickButton(buttons.FinishButton);
+# }" >> /home/ntic/Downloads/qt-installer-noninteractive.qs
+#   if ! (sudo wget http://download.qt.io/official_releases/qt/5.12/5.12.1/qt-opensource-linux-x64-5.12.1.run && sudo chmod 755 qt-opensource-linux-x64-5.12.1.run)
+#   then
+#     echo "Unable to download Qt's script." 
+#     exit 1
+#   elif ! (sudo ./qt-opensource-linux-x64-5.12.1.run --script qt-installer-noninteractive.qs)
+#   then
+#     echo "Unable to run Qt's script." 
+#     exit 1
+#   fi;
+# echo "Qt successfully installed!" 
 
-#R
-update
-echo "Installing R..." 
-  if ! (sudo apt-get install r-base -y)
-  then
-    echo "Couldn't install R." 
-    exit 1
-  fi;
-echo "R successfully installed!" 
+# #R
+# update
+# echo "Installing R..." 
+#   if ! (sudo apt-get install r-base -y)
+#   then
+#     echo "Couldn't install R." 
+#     exit 1
+#   fi;
+# echo "R successfully installed!" 
 
-#Sublime
-update
-change
-echo "Installing Sublime..." 
-  if ! ((sudo wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | sudo apt-key add -) && (echo "deb https://download.sublimetext.com/ apt/stable/" | sudo tee /etc/apt/sources.list.d/sublime-text.list))
-  then
-    echo "Unable to install the requirements." 
-    exit 1
-  elif ! (update && sudo apt-get install sublime-text -y)
-  then
-    echo "Couldn't install Sublime." 
-    exit 1
-  fi;
-echo "Sublime successfully installed!" 
+# #Sublime
+# update
+# change
+# echo "Installing Sublime..." 
+#   if ! ((sudo wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | sudo apt-key add -) && (echo "deb https://download.sublimetext.com/ apt/stable/" | sudo tee /etc/apt/sources.list.d/sublime-text.list))
+#   then
+#     echo "Unable to install the requirements." 
+#     exit 1
+#   elif ! (update && sudo apt-get install sublime-text -y)
+#   then
+#     echo "Couldn't install Sublime." 
+#     exit 1
+#   fi;
+# echo "Sublime successfully installed!" 
 
-#TexStudio
-update
-echo "Installing TexStudio..." 
-  if ! (sudo apt-get install texstudio -y)
-  then
-    echo "Couldn't install TexStudio." 
-    exit 1
-  fi;
-echo "TexStudio successfully installed!" 
+# #TexStudio
+# update
+# echo "Installing TexStudio..." 
+#   if ! (sudo apt-get install texstudio -y)
+#   then
+#     echo "Couldn't install TexStudio." 
+#     exit 1
+#   fi;
+# echo "TexStudio successfully installed!" 
 
-#Grub Customizer
-update
-echo "Installing Grub Customizer..." 
-  if ! (sudo add-apt-repository ppa:danielrichter2007/grub-customizer -y)
-  then
-    echo "Unable to install the requirements." 
-    exit 1
-  elif ! (update && sudo apt-get install grub-customizer -y)
-  then
-    echo "Couldn't install Grub Customizer." 
-    exit 1
-  fi;
-echo "Grub Customizer successfully installed!" 
+# #Grub Customizer
+# update
+# echo "Installing Grub Customizer..." 
+#   if ! (sudo add-apt-repository ppa:danielrichter2007/grub-customizer -y)
+#   then
+#     echo "Unable to install the requirements." 
+#     exit 1
+#   elif ! (update && sudo apt-get install grub-customizer -y)
+#   then
+#     echo "Couldn't install Grub Customizer." 
+#     exit 1
+#   fi;
+# echo "Grub Customizer successfully installed!" 
 
-autoremove
-update
-change
+# autoremove
+# update
+# change
 
-echo "All requirements are successfully installed!"
-echo "Functional until here!" 
+# echo "All requirements are successfully installed!"
+# echo "Functional until here!" 
 #------------------------------------------------------------------------------------------------
 # All remains softwares
 #------------------------------------------------------------------------------------------------
@@ -529,7 +530,8 @@ echo "Installing OpenCV..."
     fi;
   echo "Requirements successfully installed!" 
   echo "Running install routine." 
-  if ! (sudo -s && cd /opt && git clone https://github.com/Itseez/opencv.git && git clone https://github.com/Itseez/opencv_contrib.git && cd opencv && mkdir release && cd release && cmake -D BUILD_TIFF=ON -D WITH_CUDA=OFF -D ENABLE_AVX=OFF -D WITH_OPENGL=OFF -D WITH_OPENCL=OFF -D WITH_IPP=OFF -D WITH_TBB=ON -D BUILD_TBB=ON -D WITH_EIGEN=OFF -D WITH_V4L=OFF -D WITH_VTK=OFF -D BUILD_TESTS=OFF -D BUILD_PERF_TESTS=OFF -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D OPENCV_EXTRA_MODULES_PATH=/opt/opencv_contrib/modules /opt/opencv/ && make -j4 && make install && ldconfig && change && pkg-config --modversion opencv)
+  #Bug on here - Fixing on next update
+  if ! (cd /opt && git clone https://github.com/Itseez/opencv.git && git clone https://github.com/Itseez/opencv_contrib.git && cd opencv && mkdir release && cd release && cmake -D BUILD_TIFF=ON -D WITH_CUDA=OFF -D ENABLE_AVX=OFF -D WITH_OPENGL=OFF -D WITH_OPENCL=OFF -D WITH_IPP=OFF -D WITH_TBB=ON -D BUILD_TBB=ON -D WITH_EIGEN=OFF -D WITH_V4L=OFF -D WITH_VTK=OFF -D BUILD_TESTS=OFF -D BUILD_PERF_TESTS=OFF -D CMAKE_BUILD_TYPE=RELEASE -D CMAKE_INSTALL_PREFIX=/usr/local -D OPENCV_EXTRA_MODULES_PATH=/opt/opencv_contrib/modules /opt/opencv/ && make -j4 && make install && ldconfig && change && pkg-config --modversion opencv)
   then
     	echo "Couldn't install OpenCV." 
 	exit 1
