@@ -2,7 +2,7 @@
 
 # Script de configuração.
 # Programas instalados:
-#   - Git e configuração global na máquina
+#   - Git 
 #   - Sistemas de pacotes Snap
 #   - Spotify
 #   - Python 
